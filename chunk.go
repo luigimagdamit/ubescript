@@ -1,9 +1,5 @@
 package main
 
-import (
-	"encoding/binary"
-)
-
 // opcode enum
 
 const (
@@ -40,24 +36,18 @@ func writeChunk(c *Chunk, inst uint8, line int) {
 
 // to handle long operands
 func writeConstant(c *Chunk, val Value, line int) {
-	//b1 := uint8()
 	var index uint32 = uint32(addContant(c, val))
+	var arr [4]uint8 = splitUInt32(index)
 
-	var arr [4]byte
-	binary.BigEndian.PutUint32(arr[0:4], uint32(index))
-
-	writeChunk(c, OP_CONSTANT_LONG, line)
-	writeChunk(c, arr[0], 123)
-	writeChunk(c, arr[1], 123)
-	writeChunk(c, arr[2], 123)
-	writeChunk(c, arr[3], 123)
-
-	a := (uint32(arr[2]) << 8)
-	b := (uint32(arr[3]) << 0)
-
-	if a|b != index {
+	if combineUInt8Array(arr) != index {
 		panic("conversion failed")
 	}
+	writeChunk(c, OP_CONSTANT_LONG, 42)
+	// This just the index but split up
+	for i := 0; i < 4; i++ {
+		writeChunk(c, arr[i], line)
+	}
+
 }
 
 func addContant(c *Chunk, val Value) int {

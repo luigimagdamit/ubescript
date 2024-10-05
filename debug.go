@@ -39,7 +39,7 @@ func simpleInstruction(name string, offset int) int {
 
 func constantInstruction(name string, c *Chunk, offset int) int {
 	var constant uint8 = c.Code[offset+1] // obtain the operand
-	fmt.Printf("%-16s Constant Pool Index: %4d ' Value: ", name, constant)
+	fmt.Printf("%-16s C.Index %4d ' Value: ", name, constant)
 
 	printValue(c.Constants.Values[constant]) // print the actual value from within the constant pool
 	fmt.Printf("\n")
@@ -49,8 +49,12 @@ func constantInstruction(name string, c *Chunk, offset int) int {
 func constantInstructionLong(name string, c *Chunk, offset int) int {
 	//var constant uint8 = c.Code[offset+1] // obtain the operand
 
-	long_con := uint32(uint32(c.Code[offset+3])<<8) | uint32((c.Code[offset+4]))
-	fmt.Printf("%-16s Constant Pool Index: %4d ' Value: ", name, long_con)
+	var arr [4]uint8 = [4]uint8{}
+	for i := 0; i < 4; i++ {
+		arr[i] = c.Code[1+offset+i]
+	}
+	long_con := combineUInt8Array(arr)
+	fmt.Printf("%s C.Index: %4d ' Value: ", name, long_con)
 
 	printValue(c.Constants.Values[long_con]) // print the actual value from within the constant pool
 	fmt.Printf("\n")
