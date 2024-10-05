@@ -12,8 +12,10 @@ type Chunk struct {
 	Count    int
 	Capacity int
 
-	Code      []uint8
-	Lines     []int
+	Code         []uint8
+	Lines        []int
+	LinesEncoded string
+
 	Constants ValueArray
 }
 
@@ -24,12 +26,21 @@ func initChunk(c *Chunk) {
 
 	c.Code = []uint8{} // initialize an empty slice
 	c.Lines = []int{}
+	c.LinesEncoded = ""
 	initValueArray(&c.Constants) // initialize constant pool
 }
 
 func writeChunk(c *Chunk, inst uint8, line int) {
 	c.Code = append(c.Code, inst)
 	c.Lines = append(c.Lines, line)
+
+	tmp := decodeToOriginal(c.LinesEncoded)
+	tmp = appendSubstring(tmp, line)
+	tmp = encodeRunLengthString(tmp)
+	c.LinesEncoded = tmp
+	// a := encodeRunLengthString(c.LinesEncoded)
+	// fmt.Println("cle", c.LinesEncoded)
+	// fmt.Println(decodeToOriginal(a))
 	c.Capacity++
 	c.Count++
 }
@@ -42,7 +53,7 @@ func writeConstant(c *Chunk, val Value, line int) {
 	if combineUInt8Array(arr) != index {
 		panic("conversion failed")
 	}
-	writeChunk(c, OP_CONSTANT_LONG, 42)
+	writeChunk(c, OP_CONSTANT_LONG, line)
 	// This just the index but split up
 	for i := 0; i < 4; i++ {
 		writeChunk(c, arr[i], line)

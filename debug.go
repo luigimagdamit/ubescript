@@ -12,6 +12,13 @@ func disassembleChunk(c *Chunk, name string) {
 func disassembleInstruction(c *Chunk, offset int) int {
 	fmt.Printf("%04d ", offset)
 
+	if offset > 0 {
+		curLine := c.Lines[offset]
+		prevLine := c.Lines[offset-1]
+		fmt.Println(curLine == prevLine, []int{curLine, prevLine}, []int{offset, offset - 1})
+
+	}
+
 	if offset > 0 && c.Lines[offset] == c.Lines[offset-1] {
 		fmt.Println("   | ") // this is done for any other instructions that come from the same source line
 	} else {
@@ -34,7 +41,7 @@ func disassembleInstruction(c *Chunk, offset int) int {
 
 func simpleInstruction(name string, offset int) int {
 	fmt.Printf("%s\n", name)
-	return offset + 1
+	return offset + 1 // Thiinggss  liikeeee  RET
 }
 
 func constantInstruction(name string, c *Chunk, offset int) int {
@@ -43,7 +50,7 @@ func constantInstruction(name string, c *Chunk, offset int) int {
 
 	printValue(c.Constants.Values[constant]) // print the actual value from within the constant pool
 	fmt.Printf("\n")
-	return offset + 2
+	return offset + 2 // since the original constant implementation is [01] [02] = [OP_CONSTANT][CONST_INDEX]
 }
 
 func constantInstructionLong(name string, c *Chunk, offset int) int {

@@ -7,19 +7,25 @@ func main() {
 	c := new(Chunk)
 	initChunk(c)
 
-	for i := 0; i < 10000; i++ {
-		//writeChunk(c, OP_CONSTANT_LONG, 42)
-		writeConstant(c, float64(2*i), 42)
-
-	}
-
 	fmt.Println(c.Constants.Values)
-	// constant := addContant(c, 1.2)
-	// writeChunk(c, OP_CONSTANT, 123)
-	// writeChunk(c, uint8(constant), 123)
-	// writeChunk(c, OP_RETURN, 123)
+	constant := addContant(c, 1.2)
+	writeChunk(c, OP_CONSTANT, 14)
+	writeChunk(c, OP_CONSTANT, 14)
+	writeChunk(c, uint8(constant), 127)
+	writeChunk(c, uint8(constant), 127)
+	writeChunk(c, OP_RETURN, 444)
+	writeChunk(c, OP_RETURN, 444)
+	// s := "}}}{{[."
 
+	// fmt.Println(encodeRunLengthString(s))
 	disassembleChunk(c, "genesis")
+
+	fmt.Println(c.LinesEncoded)
+	decodeRunLengthString(c.LinesEncoded)
+	// p := (encodeRunLengthString(c.LinesEncoded))
+	// a := encodeRunLengthString(c.LinesEncoded)
+	// decodeRunLengthString(a)
+	// decodeRunLengthString(p)
 	//freeChunk(c)
 
 }
