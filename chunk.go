@@ -1,59 +1,73 @@
 package main
 
-import "fmt"
+import (
+	"encoding/binary"
+)
 
 // opcode enum
 
 const (
-	OP_RETURN = iota
+	OP_CONSTANT      = iota
+	OP_CONSTANT_LONG = iota
+	OP_RETURN        = iota
 )
 
 type Chunk struct {
 	Count    int
 	Capacity int
 
-	Code []uint8
+	Code      []uint8
+	Lines     []int
+	Constants ValueArray
 }
 
 // tbh this is isn't really needed i'll just  do it since we likely will need it later
 func initChunk(c *Chunk) {
 	c.Capacity = 0
 	c.Count = 0
+
 	c.Code = []uint8{} // initialize an empty slice
+	c.Lines = []int{}
+	initValueArray(&c.Constants) // initialize constant pool
 }
 
-func writeChunk(c *Chunk, inst uint8) {
+func writeChunk(c *Chunk, inst uint8, line int) {
 	c.Code = append(c.Code, inst)
+	c.Lines = append(c.Lines, line)
 	c.Capacity++
 	c.Count++
+}
+
+// to handle long operands
+func writeConstant(c *Chunk, val Value, line int) {
+	//b1 := uint8()
+	var index uint32 = uint32(addContant(c, val))
+
+	var arr [4]byte
+	binary.BigEndian.PutUint32(arr[0:4], uint32(index))
+
+	writeChunk(c, OP_CONSTANT_LONG, line)
+	writeChunk(c, arr[0], 123)
+	writeChunk(c, arr[1], 123)
+	writeChunk(c, arr[2], 123)
+	writeChunk(c, arr[3], 123)
+
+	a := (uint32(arr[2]) << 8)
+	b := (uint32(arr[3]) << 0)
+
+	if a|b != index {
+		panic("conversion failed")
+	}
+}
+
+func addContant(c *Chunk, val Value) int {
+	writeValueArray(&c.Constants, val)
+	return c.Constants.Count - 1 // accessing the count field in the ValueArray
 }
 
 func freeChunk(c *Chunk) {
 	c.Code = []uint8{}
 	initChunk(c)
+	freeValueArray(&c.Constants)
 
-}
-
-func disassembleChunk(c *Chunk, name string) {
-	fmt.Printf("== %s ==\n", name)
-	for offset := 0; offset < c.Count; {
-		offset = disassembleInstruction(c, offset)
-	}
-}
-func disassembleInstruction(c *Chunk, offset int) int {
-	fmt.Printf("%04d ", offset)
-
-	var inst uint8 = c.Code[offset]
-	switch inst {
-	case OP_RETURN:
-		return simpleInstruction("OP_RETURN", offset)
-	default:
-		fmt.Printf("Unknown OpCode %d at offset %04d\n", inst, offset)
-		return offset + 1
-	}
-}
-
-func simpleInstruction(name string, offset int) int {
-	fmt.Printf("%s\n", name)
-	return offset + 1
 }

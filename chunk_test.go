@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -23,7 +24,7 @@ func TestInitChunk(t *testing.T) {
 func TestWriteChunk(t *testing.T) {
 	c := new(Chunk)
 	initChunk(c)
-	writeChunk(c, OP_RETURN)
+	writeChunk(c, OP_RETURN, 123)
 
 	if c.Capacity != 1 {
 		t.Errorf("Capacity should be 0")
@@ -42,7 +43,7 @@ func TestMultipleWriteChunk(t *testing.T) {
 	initChunk(c)
 
 	for i := 0; i < 100; i++ {
-		writeChunk(c, OP_RETURN)
+		writeChunk(c, OP_RETURN, 123)
 	}
 	if c.Capacity != 100 {
 		t.Errorf("Capacity should be 0")
@@ -57,4 +58,20 @@ func TestMultipleWriteChunk(t *testing.T) {
 		t.Errorf("OpCode Should be OP_RETURN (0)")
 	}
 
+}
+
+func TestWriteConstant(t *testing.T) {
+	c := new(Chunk)
+	initChunk(c)
+	for i := 0; i < 10000; i++ {
+		writeConstant(c, float64(i), 123)
+	}
+
+	for i := 0; i < 10000; i++ {
+		if c.Constants.Values[i] != float64(i) {
+			fmt.Println(c, c.Constants.Values[i])
+			t.Errorf("Constant Value Mismatch")
+		}
+
+	}
 }
