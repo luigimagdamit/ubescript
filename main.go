@@ -1,27 +1,28 @@
 package main
 
-import "fmt"
-
 func main() {
-	splitUInt32(0xdeadbeef)
+	initVM()
 	c := new(Chunk)
 	initChunk(c)
 
-	fmt.Println(c.Constants.Values)
+	writeConstant(c, float64(1000), 123)
 	constant := addContant(c, 1.2)
 	writeChunk(c, OP_CONSTANT, 14)
-	writeChunk(c, OP_CONSTANT, 14)
 	writeChunk(c, uint8(constant), 127)
-	writeChunk(c, uint8(constant), 127)
+
+	writeChunk(c, OP_RETURN, 444)
 	writeChunk(c, OP_RETURN, 444)
 	writeChunk(c, OP_RETURN, 444)
 	// s := "}}}{{[."
 
 	// fmt.Println(encodeRunLengthString(s))
-	disassembleChunk(c, "genesis")
+	vm.chunk = c
+	vm.ip = 0
 
-	fmt.Println(c.LinesEncoded)
-	decodeRunLengthString(c.LinesEncoded)
+	run()
+	//disassembleChunk(c, "genesis")
+
+	freeVM()
 	// p := (encodeRunLengthString(c.LinesEncoded))
 	// a := encodeRunLengthString(c.LinesEncoded)
 	// decodeRunLengthString(a)

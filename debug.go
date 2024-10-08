@@ -12,12 +12,12 @@ func disassembleChunk(c *Chunk, name string) {
 func disassembleInstruction(c *Chunk, offset int) int {
 	fmt.Printf("%04d ", offset)
 
-	if offset > 0 {
-		curLine := c.Lines[offset]
-		prevLine := c.Lines[offset-1]
-		fmt.Println(curLine == prevLine, []int{curLine, prevLine}, []int{offset, offset - 1})
+	// if offset > 0 {
+	// 	curLine := c.Lines[offset]
+	// 	prevLine := c.Lines[offset-1]
+	// 	fmt.Println(curLine == prevLine, []int{curLine, prevLine}, []int{offset, offset - 1})
 
-	}
+	// }
 
 	if offset > 0 && c.Lines[offset] == c.Lines[offset-1] {
 		fmt.Println("   | ") // this is done for any other instructions that come from the same source line
