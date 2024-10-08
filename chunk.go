@@ -5,9 +5,10 @@ package main
 // Operands such as constant pool indexes should be multiples of 2, or combinations of multiple bytes
 
 const (
-	OP_CONSTANT      = iota
-	OP_CONSTANT_LONG = iota
-	OP_RETURN        = iota
+	OP_CONSTANT = iota
+	OP_CONSTANT_LONG
+	OP_NEGATE
+	OP_RETURN
 )
 
 // Chunk struct will hold all the information for an array of OpCOdes

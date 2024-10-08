@@ -5,14 +5,10 @@ func main() {
 	c := new(Chunk)
 	initChunk(c)
 
-	writeConstant(c, float64(1000), 123)
-	constant := addContant(c, 1.2)
-	writeChunk(c, OP_CONSTANT, 14)
-	writeChunk(c, uint8(constant), 127)
+	writeConstant(c, 23, 2)
+	writeChunk(c, OP_NEGATE, 2)
+	writeChunk(c, OP_RETURN, 2)
 
-	writeChunk(c, OP_RETURN, 444)
-	writeChunk(c, OP_RETURN, 444)
-	writeChunk(c, OP_RETURN, 444)
 	// s := "}}}{{[."
 
 	// fmt.Println(encodeRunLengthString(s))
