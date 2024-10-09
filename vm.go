@@ -77,10 +77,9 @@ func READ_LONG_CONSTANT() Value {
 }
 
 // interpret() takes a chunk pointer as an input, runs it in the VM and returns the output
-func interpret(c *Chunk) InterpretResult {
-	vm.chunk = c
-	vm.ip = 0 // should just hold the offset of the current byte
-	return 0
+func interpret(source *string) InterpretResult {
+	compile(source)
+	return INTERPRET_OK
 }
 
 func run() InterpretResult {

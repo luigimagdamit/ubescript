@@ -1,12 +1,12 @@
-let a = 0
-let b = 1
+let a = 0;
+let b = 1;
 
 fn a(b int, c int) {
     let c = 12; let b = 13;
-    if (cond) { true }
+    if (cond) { true };
     n = [
         1,
         2,
         3,
-    ]
-}
+    ];
+};

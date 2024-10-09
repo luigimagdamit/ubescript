@@ -1,55 +1,45 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 func main() {
-	initVM()
-	c := new(Chunk)
-	initChunk(c)
-
-	// for i := 0; i < 1000; i++ {
-	// 	writeConstant(c, float64(i), 2)
-	// 	// writeChunk(c, OP_NEGATE, 2)
-	// 	// writeChunk(c, OP_RETURN, 2)
-	// }
-	// for i := 0; i < 1000; i++ {
-	// 	writeConstant(c, 2*float64(i), 2)
-	// 	// writeChunk(c, OP_NEGATE, 2)
-	// 	// writeChunk(c, OP_RETURN, 2)
-	// }
-	writeConstant(c, float64(3), 123)
-	writeConstant(c, float64(1), 123)
-	// writeConstant(c, float64(900), 123)
-	writeChunk(c, OP_SUBTRACT, 123)
-	writeConstant(c, 4.0, 123)
-	writeChunk(c, OP_DIVIDE, 123)
-
-	writeConstant(c, 5.0, 123)
-	writeChunk(c, OP_MULTIPLY, 123)
-	// writeConstant(c, float64(600), 123)
-	// writeChunk(c, OP_SUBTRACT, 123)
-	writeChunk(c, OP_RETURN, 123)
-
-	// s := "}}}{{[."
-
-	// fmt.Println(encodeRunLengthString(s))
-	vm.chunk = c
-	vm.ip = 0
-
-	run()
-	disassembleChunk(c, "genesis")
-	c.LinesEncoded = encodeRunLengthString(c.LinesEncoded)
-	fmt.Println(decodeRunLengthString(c.LinesEncoded))
-	freeVM()
-	res, err := preprocessFile("example.txt")
-	if err != nil {
-		fmt.Println("could not open file")
+	args := os.Args
+	if len(args) == 1 {
+		repl()
+	} else if len(args) == 2 {
+		readFile(args[1])
+	} else if len(args) == 3 {
+		fmt.Println("Usage: ube [path]")
+		os.Exit(64)
 	}
-	fmt.Println(res)
-	// p := (encodeRunLengthString(c.LinesEncoded))
-	// a := encodeRunLengthString(c.LinesEncoded)
-	// decodeRunLengthString(a)
-	// decodeRunLengthString(p)
-	//freeChunk(c)
+}
+func readFile(path string) {
+	source, err := preprocessFile(path)
+	if err != nil {
+		fmt.Println("Error reading file from main")
+		os.Exit(65)
+	}
+	var result InterpretResult = interpret(&source)
+	if result == INTERPRET_COMPILE_ERROR {
+		os.Exit(65)
+	}
+	if result == INTERPRET_RUNTIME_ERROR {
+		os.Exit(70)
+	}
 
+}
+func repl() {
+	reader := bufio.NewReader(os.Stdin)
+	var line string
+	for {
+		fmt.Printf(">")
+		line, _ = reader.ReadString('\n')
+
+		fmt.Println(line)
+
+	}
 }
