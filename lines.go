@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -25,7 +24,7 @@ func encodeRunLengthString(s string) string {
 
 		if num != int(rs[i-1]) {
 
-			fmt.Println(res)
+			//fmt.Println(res)
 			res += string(rune(count)) + string((rs[i-1]))
 			count = 1
 		} else {
@@ -43,7 +42,7 @@ func encodeRunLengthString(s string) string {
 
 func decodeRunLengthString(s string) string {
 	rs := []rune(s)
-	fmt.Println(len(rs))
+	//fmt.Println(len(rs))
 	res := ""
 	original := ""
 	for i := 0; i < len(rs); i += 2 {
@@ -52,9 +51,9 @@ func decodeRunLengthString(s string) string {
 		for j := 0; j < count; j++ {
 			original += string(rune(line))
 		}
-		fmt.Printf("(%d %d)", count, line)
+		//fmt.Printf("(%d %d)", count, line)
 
-		fmt.Println(count, line)
+		//fmt.Println(count, line)
 		res += "(" + strconv.Itoa(count) + " " + strconv.Itoa(line) + ")"
 
 	}
@@ -64,7 +63,7 @@ func decodeRunLengthString(s string) string {
 
 func decodeToOriginal(s string) string {
 	rs := []rune(s)
-	fmt.Println(len(rs))
+	//fmt.Println(len(rs))
 	res := ""
 	original := ""
 	for i := 0; i < len(rs); i += 2 {
@@ -73,12 +72,12 @@ func decodeToOriginal(s string) string {
 		for j := 0; j < count; j++ {
 			original += string(rune(line))
 		}
-		fmt.Printf("(%d %d)", count, line)
+		//fmt.Printf("(%d %d)", count, line)
 
-		fmt.Println(count, line)
+		//fmt.Println(count, line)
 		res += "(" + strconv.Itoa(count) + " " + strconv.Itoa(line) + ")"
 
 	}
-	fmt.Println(original)
+	//fmt.Println(original)
 	return original
 }

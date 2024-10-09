@@ -5,18 +5,19 @@ func main() {
 	c := new(Chunk)
 	initChunk(c)
 
-	writeConstant(c, 23, 2)
-	writeChunk(c, OP_NEGATE, 2)
-	writeChunk(c, OP_RETURN, 2)
-
+	for i := 0; i < 3000; i++ {
+		writeConstant(c, float64(i), 2)
+		// writeChunk(c, OP_NEGATE, 2)
+		// writeChunk(c, OP_RETURN, 2)
+	}
 	// s := "}}}{{[."
 
 	// fmt.Println(encodeRunLengthString(s))
 	vm.chunk = c
 	vm.ip = 0
 
-	run()
-	//disassembleChunk(c, "genesis")
+	// run()
+	disassembleChunk(c, "genesis")
 
 	freeVM()
 	// p := (encodeRunLengthString(c.LinesEncoded))

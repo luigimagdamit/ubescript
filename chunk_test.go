@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -61,17 +60,21 @@ func TestMultipleWriteChunk(t *testing.T) {
 }
 
 func TestWriteConstant(t *testing.T) {
+	var test int = 10000
 	c := new(Chunk)
 	initChunk(c)
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < test; i++ {
 		writeConstant(c, float64(i), 123)
 	}
 
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < test; i++ {
+		// i need this to test the actual index values as well
 		if c.Constants.Values[i] != float64(i) {
-			fmt.Println(c, c.Constants.Values[i])
 			t.Errorf("Constant Value Mismatch")
 		}
 
+	}
+	if len(c.Constants.Values) != test {
+		t.Errorf("Constant Pool Size Mismatch")
 	}
 }

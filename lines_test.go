@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -20,7 +19,7 @@ func TestRunLengthEncode(t *testing.T) {
 
 	}
 	actual := encodeRunLengthString(c.LinesEncoded)
-	fmt.Println(actual)
+	//fmt.Println(actual)
 	expected := "Ĭ*È✐ǴΛ"
 
 	if actual != expected {
@@ -48,7 +47,7 @@ func TestRunLengthDecode(t *testing.T) {
 		s = appendSubstring(s, 9223)
 	}
 	es := encodeRunLengthString(s)
-	fmt.Println(es)
+	//fmt.Println(es)
 	if es != "d*d✐eΛf␇" {
 		t.Errorf("Constant Value Mismatch")
 	}

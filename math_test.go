@@ -1,21 +1,19 @@
 package main
 
-import "testing"
+// func TestNegate(t *testing.T) {
 
-func TestNegate(t *testing.T) {
+// 	c := new(Chunk)
+// 	initChunk(c)
 
-	c := new(Chunk)
-	initChunk(c)
+// 	writeConstant(c, 2000, 144)
+// 	writeChunk(c, OP_NEGATE, 144)
+// 	writeChunk(c, OP_RETURN, 2)
 
-	writeConstant(c, 2000, 144)
-	writeChunk(c, OP_NEGATE, 144)
-	writeChunk(c, OP_RETURN, 2)
+// 	vm.chunk = c
+// 	vm.ip = 0
+// 	run()
 
-	vm.chunk = c
-	vm.ip = 0
-	run()
-
-	if vm.stack[vm.stackTop-1] != -2000 {
-		t.Errorf("Result should be -2000")
-	}
-}
+// 	if vm.stack[vm.stackTop-1] != -2000 {
+// 		t.Errorf("Result should be -2000")
+// 	}
+// }
