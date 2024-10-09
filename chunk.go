@@ -8,6 +8,10 @@ const (
 	OP_CONSTANT = iota
 	OP_CONSTANT_LONG
 	OP_NEGATE
+	OP_ADD
+	OP_SUBTRACT
+	OP_MULTIPLY
+	OP_DIVIDE
 	OP_RETURN
 )
 
@@ -45,9 +49,9 @@ func writeChunk(c *Chunk, inst uint8, line int) {
 	c.Code = append(c.Code, inst)
 	c.Lines = append(c.Lines, line)
 
-	tmp := decodeToOriginal(c.LinesEncoded)
-	tmp = appendSubstring(tmp, line)
-	tmp = encodeRunLengthString(tmp)
+	//tmp := decodeToOriginal(c.LinesEncoded)
+	tmp := appendSubstring(c.LinesEncoded, line)
+	//tmp = encodeRunLengthString(tmp)
 	c.LinesEncoded = tmp
 
 	c.Capacity++

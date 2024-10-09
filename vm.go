@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+var STACK_MAX int = 256
+
 // Interpret Result enum
 type InterpretResult int
 
@@ -15,7 +17,7 @@ type VM struct {
 	chunk *Chunk
 	ip    uint8 // will point to memory location of an OpCode, which is usually just a byte
 
-	stack    []Value
+	stack    [4096]Value
 	stackTop int
 }
 
@@ -23,7 +25,7 @@ type VM struct {
 var vm *VM = new(VM)
 
 func resetStack() {
-	vm.stack = []Value{}
+	vm.stack = [4096]Value{}
 	vm.stackTop = 0
 }
 func initVM() {
@@ -34,18 +36,12 @@ func freeVM() {
 }
 
 func push(val Value) {
-
-	if vm.stackTop == 0 && len(vm.stack) == 0 {
-		vm.stack = append(vm.stack, val)
-	} else {
-		vm.stack[vm.stackTop] = val
-	}
+	vm.stack[vm.stackTop] = val
 	vm.stackTop++
 }
 func pop() Value {
-	var popVal Value = vm.stack[vm.stackTop-1]
 	vm.stackTop--
-	return popVal
+	return vm.stack[vm.stackTop]
 
 }
 
@@ -56,6 +52,13 @@ func READ_BYTE() uint8 {
 	tmp := vm.chunk.Code[vm.ip-1]
 
 	return tmp
+}
+
+func BINARY_OP(op func(b float64, a float64) float64) {
+	var b float64 = pop()
+	var a float64 = pop()
+	fmt.Println(a, b)
+	push(op(b, a))
 }
 
 func READ_CONSTANT() Value {
@@ -103,6 +106,14 @@ func run() InterpretResult {
 			printValue(pop())
 			fmt.Println()
 			return INTERPRET_OK
+		case OP_ADD:
+			BINARY_OP(add)
+		case OP_SUBTRACT:
+			BINARY_OP(sub)
+		case OP_MULTIPLY:
+			BINARY_OP(mul)
+		case OP_DIVIDE:
+			BINARY_OP(div)
 
 		case OP_NEGATE:
 			fmt.Println(vm.stack, vm.stackTop)

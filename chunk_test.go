@@ -60,7 +60,7 @@ func TestMultipleWriteChunk(t *testing.T) {
 }
 
 func TestWriteConstant(t *testing.T) {
-	var test int = 10000
+	var test int = 100000
 	c := new(Chunk)
 	initChunk(c)
 	for i := 0; i < test; i++ {
