@@ -7,18 +7,21 @@ import (
 
 func compile(source *string) {
 	initScanner(source)
+	for i := 0; i < len(*source); i++ {
+		fmt.Println((*source)[i])
+	}
 	line := -1
 	for {
 		var token Token = scanToken()
 
 		if token.Line != line {
-			fmt.Printf("%4d", token.Line)
 			line = token.Line
 		} else {
 			fmt.Printf("   | ")
 		}
-		word := scanner.Source[scanner.Current : scanner.Current+1]
-		fmt.Printf("%d %d %s\n", token.Type, token.Length, word)
+		word := string(scanner.Source[token.Start : token.Start+token.Length])
+		fmt.Println(token.Type == TOKEN_PLUS)
+		fmt.Printf("Type: %2d | Length: %d | Lexeme: %s\n", token.Type, token.Length, word)
 		if token.Type == TOKEN_EOF || token.Type == TOKEN_ERROR {
 			os.Exit(64)
 		}

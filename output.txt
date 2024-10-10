@@ -1,20 +1,164 @@
-          offset 0-><-offset 0
-0000  123	OP_CONSTANT_LONG C.Index:    0 ' Value: 400
-
-          offset 0->[400]<-offset 1
-0005    | 
-OP_NEGATE
-[400] 1
-[400] 0 400
-[-400] 1 400
-          offset 0->[-400]<-offset 1
-0006    | 
-OP_RETURN
-Printed -400
-== genesis ==
-OFFS  LINE	OPCCODE
-0000  123	OP_CONSTANT_LONG C.Index:    0 ' Value: 400
-0005    | 
-OP_NEGATE
-0006    | 
-OP_RETURN
+{
+{
+t
+"
+3
+0
+}
+=
+=
+)
+{
+{
+// this is comment;
+"THIS IS A QUOTE";
+123;
+420.10;
+{}{};
+    !=;
+    >=;
+!+-+()();
+
+123
+10
+123
+10
+47
+47
+32
+116
+104
+105
+115
+32
+105
+115
+32
+99
+111
+109
+109
+101
+110
+116
+59
+10
+34
+84
+72
+73
+83
+32
+73
+83
+32
+65
+32
+81
+85
+79
+84
+69
+34
+59
+10
+49
+50
+51
+59
+10
+52
+50
+48
+46
+49
+48
+59
+10
+123
+125
+123
+125
+59
+10
+32
+32
+32
+32
+33
+61
+59
+10
+32
+32
+32
+32
+62
+61
+59
+10
+33
+43
+45
+43
+40
+41
+40
+41
+59
+10
+1
+false
+Type:  2 | Length: 1 | Lexeme: {
+false
+Type:  2 | Length: 1 | Lexeme: {
+false
+Type: 20 | Length: 17 | Lexeme: "THIS IS A QUOTE"
+   | false
+Type:  8 | Length: 1 | Lexeme: ;
+false
+Type: 21 | Length: 3 | Lexeme: 123
+   | false
+Type:  8 | Length: 1 | Lexeme: ;
+false
+Type: 21 | Length: 6 | Lexeme: 420.10
+   | false
+Type:  8 | Length: 1 | Lexeme: ;
+false
+Type:  2 | Length: 1 | Lexeme: {
+   | false
+Type:  3 | Length: 1 | Lexeme: }
+   | false
+Type:  2 | Length: 1 | Lexeme: {
+   | false
+Type:  3 | Length: 1 | Lexeme: }
+   | false
+Type:  8 | Length: 1 | Lexeme: ;
+false
+Type: 12 | Length: 2 | Lexeme: !=
+   | false
+Type:  8 | Length: 1 | Lexeme: ;
+false
+Type: 16 | Length: 2 | Lexeme: >=
+   | false
+Type:  8 | Length: 1 | Lexeme: ;
+false
+Type: 11 | Length: 1 | Lexeme: !
+   | true
+Type:  7 | Length: 1 | Lexeme: +
+   | false
+Type:  6 | Length: 1 | Lexeme: -
+   | true
+Type:  7 | Length: 1 | Lexeme: +
+   | false
+Type:  0 | Length: 1 | Lexeme: (
+   | false
+Type:  1 | Length: 1 | Lexeme: )
+   | false
+Type:  0 | Length: 1 | Lexeme: (
+   | false
+Type:  1 | Length: 1 | Lexeme: )
+   | false
+Type:  8 | Length: 1 | Lexeme: ;
+false
+Type: 39 | Length: 0 | Lexeme: 

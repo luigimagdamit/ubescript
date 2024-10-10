@@ -1,0 +1,10 @@
+{
+{
+// this is comment
+"THIS IS A QUOTE"
+123
+420.10
+{}{}
+    !=
+    >=
+!+-+()()
