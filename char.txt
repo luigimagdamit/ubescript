@@ -1,10 +1,15 @@
-{
-{
-// this is comment
-"THIS IS A QUOTE"
-123
-420.10
-{}{}
-    !=
-    >=
-!+-+()()
+let a = 20
+let c int = 24
+let greeting string = "hello there"
+
+let b = "hello world"
+
+let res = []
+fn add (b int, c int){
+    res[b] = a + b
+}
+
+show("hello world")
+let x int = 24
+struct
+string

@@ -21,7 +21,7 @@ func compile(source *string) {
 		}
 		word := string(scanner.Source[token.Start : token.Start+token.Length])
 		fmt.Println(token.Type == TOKEN_PLUS)
-		fmt.Printf("Type: %2d | Length: %d | Lexeme: %s\n", token.Type, token.Length, word)
+		fmt.Printf("Type: %2d %s| Length: %d | Lexeme: %s\n", token.Type, tokenName(token.Type), token.Length, word)
 		if token.Type == TOKEN_EOF || token.Type == TOKEN_ERROR {
 			os.Exit(64)
 		}

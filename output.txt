@@ -1,164 +1,394 @@
-{
-{
-t
-"
-3
 0
+4
+"
+
+
+"
+
+
+]
+{
+b
 }
-=
-=
+
+
 )
-{
-{
-// this is comment;
-"THIS IS A QUOTE";
-123;
-420.10;
-{}{};
-    !=;
-    >=;
-!+-+()();
+4
+t
+g
+let a = 20;
+let c int = 24;
+let greeting string = "hello there";
+
+let b = "hello world";
+
+let res = [];
+fn add (b int, c int){
+    res[b] = a + b;
+};
+
+show("hello world");
+let x int = 24;
+struct;
+string;
 
-123
+108
+101
+116
+32
+97
+32
+61
+32
+50
+48
+59
 10
-123
+108
+101
+116
+32
+99
+32
+105
+110
+116
+32
+61
+32
+50
+52
+59
 10
-47
-47
+108
+101
+116
+32
+103
+114
+101
+101
+116
+105
+110
+103
+32
+115
+116
+114
+105
+110
+103
+32
+61
+32
+34
+104
+101
+108
+108
+111
 32
 116
 104
-105
+101
+114
+101
+34
+59
+10
+10
+108
+101
+116
+32
+98
+32
+61
+32
+34
+104
+101
+108
+108
+111
+32
+119
+111
+114
+108
+100
+34
+59
+10
+10
+108
+101
+116
+32
+114
+101
 115
 32
+61
+32
+91
+93
+59
+10
+102
+110
+32
+97
+100
+100
+32
+40
+98
+32
 105
-115
+110
+116
+44
 32
 99
-111
-109
-109
-101
+32
+105
 110
+116
+41
+123
+10
+32
+32
+32
+32
+114
+101
+115
+91
+98
+93
+32
+61
+32
+97
+32
+43
+32
+98
+59
+10
+125
+59
+10
+10
+115
+104
+111
+119
+40
+34
+104
+101
+108
+108
+111
+32
+119
+111
+114
+108
+100
+34
+41
+59
+10
+108
+101
+116
+32
+120
+32
+105
+110
+116
+32
+61
+32
+50
+52
+59
+10
+115
+116
+114
+117
+99
 116
 59
 10
-34
-84
-72
-73
-83
-32
-73
-83
-32
-65
-32
-81
-85
-79
-84
-69
-34
-59
-10
-49
-50
-51
-59
-10
-52
-50
-48
-46
-49
-48
-59
-10
-123
-125
-123
-125
-59
-10
-32
-32
-32
-32
-33
-61
-59
-10
-32
-32
-32
-32
-62
-61
-59
-10
-33
-43
-45
-43
-40
-41
-40
-41
+115
+116
+114
+105
+110
+103
 59
 10
 1
+et
 false
-Type:  2 | Length: 1 | Lexeme: {
+Type: 38 TOKEN_VAR| Length: 3 | Lexeme: let
+ =
+   | false
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: a
+   | false
+Type: 15 TOKEN_EQUAL| Length: 1 | Lexeme: =
+   | false
+Type: 23 TOKEN_NUMBER| Length: 2 | Lexeme: 20
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+et
 false
-Type:  2 | Length: 1 | Lexeme: {
+Type: 38 TOKEN_VAR| Length: 3 | Lexeme: let
+ int
+   | false
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: c
+t
+   | false
+Type: 40 TOKEN_INT_TAG| Length: 3 | Lexeme: int
+   | false
+Type: 15 TOKEN_EQUAL| Length: 1 | Lexeme: =
+   | false
+Type: 23 TOKEN_NUMBER| Length: 2 | Lexeme: 24
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+et
 false
-Type: 20 | Length: 17 | Lexeme: "THIS IS A QUOTE"
+Type: 38 TOKEN_VAR| Length: 3 | Lexeme: let
    | false
-Type:  8 | Length: 1 | Lexeme: ;
+Type: 21 TOKEN_IDENTIFIER| Length: 8 | Lexeme: greeting
+i
+ng
+   | false
+Type: 42 TOKEN_STRING_TAG| Length: 6 | Lexeme: string
+   | false
+Type: 15 TOKEN_EQUAL| Length: 1 | Lexeme: =
+   | false
+Type: 22 TOKEN_STRING| Length: 13 | Lexeme: "hello there"
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+et
 false
-Type: 21 | Length: 3 | Lexeme: 123
+Type: 38 TOKEN_VAR| Length: 3 | Lexeme: let
    | false
-Type:  8 | Length: 1 | Lexeme: ;
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: b
+   | false
+Type: 15 TOKEN_EQUAL| Length: 1 | Lexeme: =
+   | false
+Type: 22 TOKEN_STRING| Length: 13 | Lexeme: "hello world"
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+et
 false
-Type: 21 | Length: 6 | Lexeme: 420.10
+Type: 38 TOKEN_VAR| Length: 3 | Lexeme: let
+es = 
    | false
-Type:  8 | Length: 1 | Lexeme: ;
+Type: 21 TOKEN_IDENTIFIER| Length: 3 | Lexeme: res
+   | false
+Type: 15 TOKEN_EQUAL| Length: 1 | Lexeme: =
+   | false
+Type:  4 TOKEN_LEFT_BRACKET| Length: 1 | Lexeme: [
+   | false
+Type:  5 TOKEN_RIGHT_BRACKET| Length: 1 | Lexeme: ]
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+
 false
-Type:  2 | Length: 1 | Lexeme: {
+Type: 29 TOKEN_FUN| Length: 2 | Lexeme: fn
+dd
    | false
-Type:  3 | Length: 1 | Lexeme: }
+Type: 21 TOKEN_IDENTIFIER| Length: 3 | Lexeme: add
    | false
-Type:  2 | Length: 1 | Lexeme: {
+Type:  0 TOKEN_LEFT_PAREN| Length: 1 | Lexeme: (
    | false
-Type:  3 | Length: 1 | Lexeme: }
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: b
+t
    | false
-Type:  8 | Length: 1 | Lexeme: ;
+Type: 40 TOKEN_INT_TAG| Length: 3 | Lexeme: int
+   | false
+Type:  6 TOKEN_COMMA| Length: 1 | Lexeme: ,
+ int
+   | false
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: c
+t
+   | false
+Type: 40 TOKEN_INT_TAG| Length: 3 | Lexeme: int
+   | false
+Type:  1 TOKEN_RIGHT_PAREN| Length: 1 | Lexeme: )
+   | false
+Type:  2 TOKEN_LEFT_BRACE| Length: 1 | Lexeme: {
+es[b]
 false
-Type: 12 | Length: 2 | Lexeme: !=
+Type: 21 TOKEN_IDENTIFIER| Length: 3 | Lexeme: res
    | false
-Type:  8 | Length: 1 | Lexeme: ;
-false
-Type: 16 | Length: 2 | Lexeme: >=
+Type:  4 TOKEN_LEFT_BRACKET| Length: 1 | Lexeme: [
    | false
-Type:  8 | Length: 1 | Lexeme: ;
-false
-Type: 11 | Length: 1 | Lexeme: !
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: b
+   | false
+Type:  5 TOKEN_RIGHT_BRACKET| Length: 1 | Lexeme: ]
+   | false
+Type: 15 TOKEN_EQUAL| Length: 1 | Lexeme: =
+ +
+   | false
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: a
    | true
-Type:  7 | Length: 1 | Lexeme: +
+Type:  9 TOKEN_PLUS| Length: 1 | Lexeme: +
    | false
-Type:  6 | Length: 1 | Lexeme: -
-   | true
-Type:  7 | Length: 1 | Lexeme: +
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: b
    | false
-Type:  0 | Length: 1 | Lexeme: (
-   | false
-Type:  1 | Length: 1 | Lexeme: )
-   | false
-Type:  0 | Length: 1 | Lexeme: (
-   | false
-Type:  1 | Length: 1 | Lexeme: )
-   | false
-Type:  8 | Length: 1 | Lexeme: ;
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
 false
-Type: 39 | Length: 0 | Lexeme: 
+Type:  3 TOKEN_RIGHT_BRACE| Length: 1 | Lexeme: }
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+ow
+false
+Type: 33 TOKEN_PRINT| Length: 4 | Lexeme: show
+   | false
+Type:  0 TOKEN_LEFT_PAREN| Length: 1 | Lexeme: (
+   | false
+Type: 22 TOKEN_STRING| Length: 13 | Lexeme: "hello world"
+   | false
+Type:  1 TOKEN_RIGHT_PAREN| Length: 1 | Lexeme: )
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+et
+false
+Type: 38 TOKEN_VAR| Length: 3 | Lexeme: let
+   | false
+Type: 21 TOKEN_IDENTIFIER| Length: 1 | Lexeme: x
+t
+   | false
+Type: 40 TOKEN_INT_TAG| Length: 3 | Lexeme: int
+   | false
+Type: 15 TOKEN_EQUAL| Length: 1 | Lexeme: =
+   | false
+Type: 23 TOKEN_NUMBER| Length: 2 | Lexeme: 24
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+u
+ct
+false
+Type: 43 TOKEN_STRUCT| Length: 6 | Lexeme: struct
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+i
+ng
+false
+Type: 42 TOKEN_STRING_TAG| Length: 6 | Lexeme: string
+   | false
+Type: 10 TOKEN_SEMICOLON| Length: 1 | Lexeme: ;
+false
+Type: 45 TOKEN_EOF| Length: 0 | Lexeme: 
