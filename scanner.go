@@ -7,7 +7,6 @@ import (
 var scanner *Scanner = new(Scanner)
 
 func initScanner(source *string) {
-	fmt.Println(*source)
 	scanner.Source = *source
 	scanner.Start = 0
 	scanner.Current = 0
@@ -168,7 +167,6 @@ func checkKeyword(start int, length int, rest string, tokenType TokenType) Token
 	source := scanner.Source
 	var sameLength bool = scanner.Current-scanner.Start == start+length
 	var remainder string = string(source[scanner.Start+start : scanner.Start+start+length]) // compare "nd" with the rest of the current lexeme
-	fmt.Println(remainder)
 	if sameLength && remainder == rest {
 		return tokenType
 	}
@@ -217,7 +215,6 @@ func identifierType() TokenType {
 				return checkKeyword(2, 2, "ow", TOKEN_PRINT)
 			case "t":
 				if scanner.Current-scanner.Start > 2 {
-					fmt.Println(string(scanner.Source[scanner.Start+3]))
 					switch string(scanner.Source[scanner.Start+3]) {
 					case "u":
 						return checkKeyword(4, 2, "ct", TOKEN_STRUCT)

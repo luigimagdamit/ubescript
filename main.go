@@ -38,8 +38,8 @@ func repl() {
 	for {
 		fmt.Printf(">")
 		line, _ = reader.ReadString('\n')
-
-		fmt.Println(line)
+		line += "\x01"
+		interpret(&line)
 
 	}
 }

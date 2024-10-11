@@ -30,7 +30,6 @@ func preprocessFile(filename string) (string, error) {
 
 		}
 		lastChar := string(res[len(res)-1])
-		fmt.Println(lastChar)
 		if lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," {
 			res += ";"
 		}
