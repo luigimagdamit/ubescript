@@ -42,9 +42,9 @@ func errorAtCurrent(token Token) {
 	errorAt(parser.Current)
 }
 
-func printToken(token Token) {
+func printToken(token Token, name string) {
 	word := string(scanner.Source[token.Start : token.Start+token.Length])
-	fmt.Printf("Type: %2d %20s| Length: %2d | Lexeme: %15s | Line: %d\n", token.Type, tokenName(token.Type), token.Length, word, token.Line)
+	fmt.Printf("[%40s] Type: %2d %20s| Length: %2d | Lexeme: %15s | Line: %d\n", name, token.Type, tokenName(token.Type), token.Length, word, token.Line)
 }
 func getLexeme(token Token) string {
 	return string(scanner.Source[token.Start : token.Start+token.Length])
@@ -54,8 +54,10 @@ func parser_advance() {
 
 	for {
 		var curToken Token = scanToken()
-		printToken(curToken)
+
 		parser.Current = curToken // generate token from recent lexeme in source
+		printToken(parser.Previous, "parser_advance(): parser.Previous")
+		printToken(curToken, "parser_advance(): parser.Current")
 		if parser.Current.Type != TOKEN_ERROR {
 			break // if its valid, exit the loop
 		}
@@ -67,8 +69,9 @@ func parser_advance() {
 
 // Conditional advance that validates the the current token type
 func consume(tokenType TokenType) {
+	fmt.Println("[consume()]")
 	if parser.Current.Type == tokenType {
-		advance()
+		parser_advance()
 		return
 	}
 	errorAtCurrent(parser.Current)
@@ -155,7 +158,7 @@ func compile(source *string, c *Chunk) bool {
 	parseNumber()
 	parser_advance() // consume ";"
 	disassembleChunk(compilingChunk, "test")
-	consume(TOKEN_EOF)
+	consume(TOKEN_EOF) // equality check for current
 	endCompiler()
 	return !parser.HadError
 }
