@@ -78,8 +78,26 @@ func READ_LONG_CONSTANT() Value {
 
 // interpret() takes a chunk pointer as an input, runs it in the VM and returns the output
 func interpret(source *string) InterpretResult {
-	compile(source)
-	return INTERPRET_OK
+	// compile(source)
+	// return INTERPRET_OK
+
+	var c *Chunk = new(Chunk)
+	initChunk(c)
+
+	// Fill the new chunk with the bytecode from compile()
+	// retuurns false if there is a compile error
+	if !compile(source, c) {
+		freeChunk(c)
+		return INTERPRET_COMPILE_ERROR
+	}
+
+	vm.chunk = c
+	vm.ip = 0
+
+	var result InterpretResult = run() // MAKE SURE TO UNDO THIS!!!!
+	//result := INTERPRET_OK
+	freeChunk(c)
+	return result
 }
 
 func run() InterpretResult {

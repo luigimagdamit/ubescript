@@ -8,10 +8,11 @@ type Scanner struct {
 }
 
 type Token struct {
-	Type   TokenType
-	Start  int
-	Length int
-	Line   int
+	Type    TokenType
+	Start   int
+	Length  int
+	Line    int
+	Message string
 }
 
 type TokenType int
