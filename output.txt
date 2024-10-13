@@ -1,19 +1,120 @@
 [       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  0 | Lexeme:                 | Line: 0
-[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              20 | Line: 1
-[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              20 | Line: 1
+[        parser_advance(): parser.Current] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
+[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
+[[parsePrecedence()] Consumed this token.] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
+(69 * 420) / 69 / 420 * 50053135;
+
+false
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
+[        parser_advance(): parser.Current] Type: 12           TOKEN_STAR| Length:  1 | Lexeme:               * | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
+(69 * 420) / 69 / 420 * 50053135;
+
+false
+lex:  69 {23 1 2 1 }
+true
+[       parser_advance(): parser.Previous] Type: 12           TOKEN_STAR| Length:  1 | Lexeme:               * | Line: 1
+[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
+true
+true
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
+[        parser_advance(): parser.Current] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
+(69 * 420) / 69 / 420 * 50053135;
+
+false
+lex:  420 {23 6 3 1 }
+true
+true
+[consume()]
+[       parser_advance(): parser.Previous] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
+[        parser_advance(): parser.Current] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
+true
+[       parser_advance(): parser.Previous] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
+[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
+true
+true
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
+[        parser_advance(): parser.Current] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
+(69 * 420) / 69 / 420 * 50053135;
+
+false
+lex:  69 {23 13 2 1 }
+true
+true
+[       parser_advance(): parser.Previous] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
+[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
+true
+true
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
+[        parser_advance(): parser.Current] Type: 12           TOKEN_STAR| Length:  1 | Lexeme:               * | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
+(69 * 420) / 69 / 420 * 50053135;
+
+false
+lex:  420 {23 18 3 1 }
+true
+true
+[       parser_advance(): parser.Previous] Type: 12           TOKEN_STAR| Length:  1 | Lexeme:               * | Line: 1
+[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  8 | Lexeme:        50053135 | Line: 1
+true
+true
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  8 | Lexeme:        50053135 | Line: 1
 [        parser_advance(): parser.Current] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
-lex:  20 {23 0 2 1 }
+[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  8 | Lexeme:        50053135 | Line: 1
+(69 * 420) / 69 / 420 * 50053135;
+
+false
+lex:  50053135 {23 24 8 1 }
+true
+true
+[consume()]
 [       parser_advance(): parser.Previous] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
 [        parser_advance(): parser.Current] Type: 45            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 2
-== test ==
-OFFS  LINE	OPCCODE
-0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: 20
-[consume()]
-[       parser_advance(): parser.Previous] Type: 45            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 2
-[        parser_advance(): parser.Current] Type: 45            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 2
           offset 0-><-offset 0
-0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: 20
+0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: 69
 
-          offset 0->[20]<-offset 1
-0005    2	OP_RETURN
-Printed 20
+          offset 0->[69]<-offset 1
+0005    | 
+OP_CONSTANT_LONG C.Index:    1 ' Value: 420
+
+          offset 0->[69][420]<-offset 2
+0010    | 
+OP_MULTIPLY
+69 420
+          offset 0->[28980]<-offset 1
+0011    | 
+OP_CONSTANT_LONG C.Index:    2 ' Value: 69
+
+          offset 0->[28980][69]<-offset 2
+0016    | 
+OP_DIVIDE
+28980 69
+          offset 0->[420]<-offset 1
+0017    | 
+OP_CONSTANT_LONG C.Index:    3 ' Value: 420
+
+          offset 0->[420][420]<-offset 2
+0022    | 
+OP_DIVIDE
+420 420
+          offset 0->[1]<-offset 1
+0023    | 
+OP_CONSTANT_LONG C.Index:    4 ' Value: 5.0053135e+07
+
+          offset 0->[1][5.0053135e+07]<-offset 2
+0028    | 
+OP_MULTIPLY
+1 5.0053135e+07
+          offset 0->[5.0053135e+07]<-offset 1
+0029    | 
+OP_RETURN
+Printed 5.0053135e+07
