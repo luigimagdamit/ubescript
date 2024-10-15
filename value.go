@@ -2,7 +2,58 @@ package main
 
 import "fmt"
 
-type Value = float64
+type ValueType int
+
+const (
+	VAL_BOOL ValueType = iota
+	VAL_NIL
+	VAL_NUMBER
+)
+
+type as struct {
+	boolean bool
+	number  float64
+}
+type Value struct {
+	valueType ValueType
+	as        as
+}
+
+func IS_BOOL(val Value) bool {
+	return val.valueType == VAL_BOOL
+}
+func IS_NIL(val Value) bool {
+	return val.valueType == VAL_NIL
+}
+func IS_NUMBER(val Value) bool {
+	return val.valueType == VAL_NUMBER
+}
+func AS_BOOL(val Value) bool {
+	return val.as.boolean
+}
+func AS_NUMBER(val Value) float64 {
+	return val.as.number
+}
+
+// Raw GO Primitive to Ube Value Primitive
+func BOOL_VAL(value bool) Value {
+	var newVal *Value = new(Value)
+	newVal.valueType = VAL_BOOL
+	newVal.as.boolean = value
+	return *newVal
+}
+func NIL_VAL(nilval float64) Value {
+	var newVal *Value = new(Value)
+	newVal.valueType = VAL_NIL
+	newVal.as.number = 0
+	return *newVal
+}
+func NUMBER_VAL(number float64) Value {
+	var newVal *Value = new(Value)
+	newVal.valueType = VAL_NUMBER
+	newVal.as.number = number
+	return *newVal
+}
 
 type ValueArray struct {
 	Capacity int
@@ -26,5 +77,35 @@ func freeValueArray(arr *ValueArray) {
 	initValueArray(arr)
 }
 func printValue(val Value) {
-	fmt.Printf("%g", val)
+	switch val.valueType {
+	case VAL_BOOL:
+		if AS_BOOL(val) {
+			fmt.Println("true")
+		} else {
+			fmt.Println("false")
+		}
+		break
+	case VAL_NIL:
+		fmt.Println("nil")
+		break
+	case VAL_NUMBER:
+		fmt.Printf("%g", AS_NUMBER(val))
+	}
+
+}
+
+func valuesEqual(b Value, a Value) bool {
+	if b.valueType != a.valueType {
+		return false
+	}
+	switch a.valueType {
+	case VAL_BOOL:
+		return AS_BOOL(a) == AS_BOOL(b)
+	case VAL_NIL:
+		return true
+	case VAL_NUMBER:
+		return AS_NUMBER(a) == AS_NUMBER(b)
+	default:
+		return false
+	}
 }

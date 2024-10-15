@@ -28,6 +28,9 @@ func resetStack() {
 	vm.stack = [4096]Value{}
 	vm.stackTop = 0
 }
+func runtimeError() {
+	fmt.Println("std error.. implement soon")
+}
 func initVM() {
 	resetStack()
 }
@@ -44,6 +47,15 @@ func pop() Value {
 	return vm.stack[vm.stackTop]
 
 }
+func stackPeek(distance int) Value {
+	return vm.stack[vm.stackTop-1-distance]
+}
+
+// nil and false are falsey
+// true and all other values are truthy
+func isFalsey(val Value) bool {
+	return IS_NIL(val) || (IS_BOOL(val) && !AS_BOOL(val))
+}
 
 // replaces ip++
 // we want to return the byte at offset n, then increment the byte to n + 1
@@ -54,11 +66,25 @@ func READ_BYTE() uint8 {
 	return tmp
 }
 
-func BINARY_OP(op func(b float64, a float64) float64) {
-	var b float64 = pop()
-	var a float64 = pop()
+func BINARY_OP(valueType ValueType, op func(b float64, a float64) float64) {
+	if !IS_NUMBER(stackPeek(0)) || !IS_NUMBER(stackPeek(1)) {
+		runtimeError()
+		fmt.Println("need a way to return interpreter error here")
+	}
+
+	var b float64 = AS_NUMBER(pop())
+	var a float64 = AS_NUMBER(pop())
 	fmt.Println(a, b)
-	push(op(b, a))
+	switch valueType {
+	case VAL_NUMBER:
+		push(NUMBER_VAL(op(b, a)))
+		break
+	case VAL_BOOL:
+		break
+	default:
+		break
+	}
+
 }
 
 func READ_CONSTANT() Value {
@@ -123,21 +149,29 @@ func run() InterpretResult {
 			printValue(pop())
 			fmt.Println()
 			return INTERPRET_OK
-		case OP_ADD:
-			BINARY_OP(add)
-		case OP_SUBTRACT:
-			BINARY_OP(sub)
-		case OP_MULTIPLY:
-			BINARY_OP(mul)
-		case OP_DIVIDE:
-			BINARY_OP(div)
+		case OP_GREATER:
 
+		case OP_ADD:
+			BINARY_OP(VAL_NUMBER, add)
+		case OP_SUBTRACT:
+			BINARY_OP(VAL_NUMBER, sub)
+		case OP_MULTIPLY:
+			BINARY_OP(VAL_NUMBER, mul)
+		case OP_DIVIDE:
+			BINARY_OP(VAL_NUMBER, div)
+		case OP_NOT:
+			push(BOOL_VAL(isFalsey(pop())))
 		case OP_NEGATE:
-			fmt.Println(vm.stack, vm.stackTop)
+			if !IS_NUMBER(stackPeek(0)) {
+				runtimeError()
+				return INTERPRET_RUNTIME_ERROR
+			}
+
 			res := pop()
 
 			fmt.Println(vm.stack, vm.stackTop, res)
-			push(-res)
+			// unwrap the operand then negate it
+			push(NUMBER_VAL(-AS_NUMBER(res)))
 			fmt.Println(vm.stack, vm.stackTop, res)
 			break
 		case OP_CONSTANT:
@@ -150,6 +184,20 @@ func run() InterpretResult {
 			push(longConstant)
 			fmt.Println()
 			break
+		case OP_NIL:
+			push(NIL_VAL(0))
+			break
+		case OP_TRUE:
+			push(BOOL_VAL(true))
+			break
+		case OP_FALSE:
+			push(BOOL_VAL(false))
+			break
+		case OP_EQUAL:
+			b := pop()
+			a := pop()
+
+			push(BOOL_VAL(valuesEqual(a, b)))
 		}
 
 	}
