@@ -66,7 +66,7 @@ func READ_BYTE() uint8 {
 	return tmp
 }
 
-func BINARY_OP(valueType ValueType, op func(b float64, a float64) float64) {
+func BINARY_OP(valueType ValueType, op func(b Value, a Value) Value) {
 	if !IS_NUMBER(stackPeek(0)) || !IS_NUMBER(stackPeek(1)) {
 		runtimeError()
 		fmt.Println("need a way to return interpreter error here")
@@ -77,8 +77,11 @@ func BINARY_OP(valueType ValueType, op func(b float64, a float64) float64) {
 	fmt.Println(a, b)
 	switch valueType {
 	case VAL_NUMBER:
-		push(NUMBER_VAL(op(b, a)))
-		break
+		var bVal Value = NUMBER_VAL(b)
+		var aVal Value = NUMBER_VAL(a)
+		var resVal Value = (op(aVal, bVal))
+		push(resVal)
+
 	case VAL_BOOL:
 		break
 	default:
@@ -150,7 +153,9 @@ func run() InterpretResult {
 			fmt.Println()
 			return INTERPRET_OK
 		case OP_GREATER:
-
+			BINARY_OP(VAL_NUMBER, greater)
+		case OP_LESS:
+			BINARY_OP(VAL_NUMBER, less)
 		case OP_ADD:
 			BINARY_OP(VAL_NUMBER, add)
 		case OP_SUBTRACT:
@@ -159,6 +164,13 @@ func run() InterpretResult {
 			BINARY_OP(VAL_NUMBER, mul)
 		case OP_DIVIDE:
 			BINARY_OP(VAL_NUMBER, div)
+		case OP_DOTDOT:
+			b := AS_NUMBER(pop())
+			a := AS_NUMBER(pop())
+
+			for i := a; i <= b; i++ {
+				push(NUMBER_VAL(float64(i)))
+			}
 		case OP_NOT:
 			push(BOOL_VAL(isFalsey(pop())))
 		case OP_NEGATE:

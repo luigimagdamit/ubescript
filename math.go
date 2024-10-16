@@ -1,14 +1,20 @@
 package main
 
-func add(b float64, a float64) float64 {
-	return a + b
+func add(a Value, b Value) Value {
+	return NUMBER_VAL(AS_NUMBER(a) + AS_NUMBER(b))
 }
-func sub(b float64, a float64) float64 {
-	return a - b
+func sub(a Value, b Value) Value {
+	return NUMBER_VAL(AS_NUMBER(a) - AS_NUMBER(b))
 }
-func div(b float64, a float64) float64 {
-	return a / b
+func div(a Value, b Value) Value {
+	return NUMBER_VAL(AS_NUMBER(a) / AS_NUMBER(b))
 }
-func mul(b float64, a float64) float64 {
-	return a * b
+func mul(a Value, b Value) Value {
+	return NUMBER_VAL(AS_NUMBER(a) * AS_NUMBER(b))
+}
+func greater(a Value, b Value) Value {
+	return BOOL_VAL(AS_NUMBER(a) > AS_NUMBER(b))
+}
+func less(a Value, b Value) Value {
+	return BOOL_VAL(AS_NUMBER(a) < AS_NUMBER(b))
 }

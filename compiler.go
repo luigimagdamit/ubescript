@@ -145,6 +145,8 @@ func parseBinary() {
 	case TOKEN_SLASH:
 		emitByte(OP_DIVIDE)
 		break
+	case TOKEN_DOTDOT:
+		emitByte(OP_DOTDOT)
 	default:
 		return
 	}
@@ -253,7 +255,9 @@ func init() {
 	rules[TOKEN_VAR] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_WHILE] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_ERROR] = ParseRule{nil, nil, PREC_NONE}
+	rules[TOKEN_DOTDOT] = ParseRule{nil, parseBinary, PREC_TERM}
 	rules[TOKEN_EOF] = ParseRule{nil, nil, PREC_NONE}
+
 }
 
 func parsePrecedence(precedence Precedence) {

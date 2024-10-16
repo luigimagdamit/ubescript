@@ -54,7 +54,7 @@ func scanToken() Token {
 	case ",":
 		return makeToken(TOKEN_COMMA)
 	case ".":
-		return makeToken(TOKEN_DOT)
+		return makeToken(compare(".", TOKEN_DOTDOT, TOKEN_DOT))
 	case "-":
 		return makeToken(TOKEN_MINUS)
 	case "+":
