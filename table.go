@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type Table struct {
 	Count    int
 	Capacity int
@@ -11,7 +9,7 @@ type Table struct {
 func initTable(table *Table) {
 	table.Count = 0
 	table.Capacity = 0
-	fmt.Println("made  table")
+
 	table.Entries = make(map[string]Value)
 }
 
@@ -24,12 +22,11 @@ func tableSet(table *Table, key *ObjString, value Value) bool {
 	var keyStr string = key.chars
 
 	if table == nil {
-		fmt.Println("table init")
+
 		initTable(table)
 
 	} else {
-		fmt.Println("table exists")
-		println(table.Entries)
+
 		table.Entries[keyStr] = value
 		table.Count++
 	}

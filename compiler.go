@@ -73,17 +73,30 @@ func parser_advance() {
 
 // Conditional advance that validates the the current token type
 func consume(tokenType TokenType) {
-	fmt.Println("[consume()]")
+
 	if parser.Current.Type == tokenType {
 		parser_advance()
 		return
 	}
-	fmt.Println(parser.Current)
-	printToken(parser.Current, "consume")
+	if DEBUG_COMPILER_OUTPUT {
+		fmt.Println("[consume()]")
+		fmt.Println(parser.Current)
+		printToken(parser.Current, "consume")
+	}
+
 	parser.Current.Message = "Not correct token type: " + string(parser.Current.Type)
 	errorAtCurrent(parser.Current)
 }
-
+func check(tokenType TokenType) bool {
+	return parser.Current.Type == tokenType
+}
+func parseMatch(tokenType TokenType) bool {
+	if !check(tokenType) {
+		return false
+	}
+	parser_advance()
+	return true
+}
 func emitByte(b uint8) {
 	writeChunk(currentChunk(), b, parser.Previous.Line)
 }
@@ -307,18 +320,36 @@ func getRule(tokenType TokenType) *ParseRule {
 func expression() {
 	parsePrecedence(PREC_ASSIGNMENT) // the whole expression since it is the lowest precedence level
 }
-
+func printStatement() {
+	expression()
+	consume(TOKEN_SEMICOLON)
+	emitByte(OP_SHOW)
+}
+func declaration() {
+	statement()
+}
+func statement() {
+	if parseMatch(TOKEN_PRINT) {
+		printStatement()
+	}
+}
 func compile(source *string, c *Chunk) bool {
 	initScanner(source)
-	fmt.Println(*source)
+	if DEBUG_COMPILER_OUTPUT {
+		fmt.Println(*source)
+	}
+
 	compilingChunk = c
 	parser.HadError = false
 	parser.PanicMode = false
 
 	parser_advance()
-	expression()
-	// NEED TO CHANGE BACK TO EOF PROBABLY
-	consume(TOKEN_SEMICOLON) // equality check for current
+	// expression()
+	// // NEED TO CHANGE BACK TO EOF PROBABLY
+	// consume(TOKEN_SEMICOLON) // equality check for current
+	for !parseMatch(TOKEN_EOF) {
+		declaration()
+	}
 	endCompiler()
 	return !parser.HadError
 }

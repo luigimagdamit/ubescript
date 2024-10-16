@@ -26,13 +26,17 @@ func ALLOCATE_OBJ(objType ObjType) *Obj {
 	return res
 }
 func copyString(chars string, length int) *Obj {
-	fmt.Println(vm.strings.Entries)
+
 	interned := tableFindString(&vm.strings, chars)
 	if interned != nil {
-		fmt.Println("COPY FOUND")
+		if DEBUG_PRINT_CODE {
+			fmt.Println(vm.strings.Entries)
+			fmt.Println("COPY FOUND")
+		}
+
 		return interned
 	}
-	fmt.Println("allocating new string")
+	//fmt.Println("allocating new string")
 	return allocateString(chars, length)
 }
 func printObject(value Value) {
@@ -49,9 +53,11 @@ func allocateString(chars string, length int) *Obj {
 	objString.length = length
 
 	str.Value = objString
-	fmt.Println("table set")
+	//fmt.Println("table set")
 	tableSet(&vm.strings, objString, OBJ_VAL(*str))
-	fmt.Println(vm.strings.Entries)
+	if DEBUG_TABLE_CODE {
+		fmt.Println(vm.strings.Entries)
+	}
 
 	return str
 }

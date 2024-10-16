@@ -44,8 +44,13 @@ func freeVM() {
 }
 
 func push(val Value) {
-	vm.stack[vm.stackTop] = val
-	vm.stackTop++
+	if vm.stackTop < 4096 {
+		vm.stack[vm.stackTop] = val
+		vm.stackTop++
+	} else {
+		panic("StackOverflow Error")
+	}
+
 }
 func pop() Value {
 	vm.stackTop--
@@ -169,9 +174,6 @@ func run() InterpretResult {
 
 		// RET OpCode
 		case OP_RETURN:
-
-			printValue(pop())
-			fmt.Println()
 			return INTERPRET_OK
 		case OP_GREATER:
 			BINARY_OP(VAL_NUMBER, greater)
@@ -249,7 +251,6 @@ func run() InterpretResult {
 		case OP_CONSTANT_LONG:
 			var longConstant Value = READ_LONG_CONSTANT()
 			push(longConstant)
-			fmt.Println()
 			break
 		case OP_NIL:
 			push(NIL_VAL(0))
@@ -266,10 +267,10 @@ func run() InterpretResult {
 
 			push(BOOL_VAL(valuesEqual(a, b)))
 		case OP_SHOW:
-			fmt.Printf("Printed ")
+			//fmt.Printf("Printed ")
 			printValue(pop())
+			fmt.Println()
 
-			push(NUMBER_VAL(0))
 		}
 
 	}

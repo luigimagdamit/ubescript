@@ -168,7 +168,7 @@ func checkKeyword(start int, length int, rest string, tokenType TokenType) Token
 	source := scanner.Source
 	var sameLength bool = scanner.Current-scanner.Start == start+length
 	var remainder string = string(source[scanner.Start+start : scanner.Start+start+length]) // compare "nd" with the rest of the current lexeme
-	fmt.Println(rest)
+	//fmt.Println(rest)
 	if sameLength && remainder == rest {
 		return tokenType
 	}
@@ -206,6 +206,8 @@ func identifierType() TokenType {
 
 	case "n":
 		return checkKeyword(1, 3, "one", TOKEN_NIL)
+	case "p":
+		return checkKeyword(1, 4, "rint", TOKEN_PRINT)
 	case "r":
 		return checkKeyword(1, 5, "eturn", TOKEN_RETURN)
 	case "s":

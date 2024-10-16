@@ -13,8 +13,10 @@ func main() {
 	} else if len(args) == 2 {
 		readFile(args[1])
 	} else if len(args) == 3 {
-		fmt.Println("Usage: ube [path]")
-		os.Exit(64)
+		DEBUG_FLAG_GLOBAL = true
+		readFile(args[1])
+		// fmt.Println("Usage: ube [path]")
+		// os.Exit(64)
 	}
 }
 func readFile(path string) {
