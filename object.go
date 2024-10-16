@@ -27,7 +27,7 @@ func copyString(chars string, length int) *Obj {
 func printObject(value Value) {
 	switch OBJ_TYPE(value) {
 	case OBJ_STRING:
-		fmt.Println(AS_CSTRING(value))
+		fmt.Printf("%s", AS_CSTRING(value))
 
 	}
 }

@@ -95,13 +95,13 @@ func printValue(val Value) {
 	switch val.valueType {
 	case VAL_BOOL:
 		if AS_BOOL(val) {
-			fmt.Println("true")
+			fmt.Printf("true")
 		} else {
-			fmt.Println("false")
+			fmt.Printf("false")
 		}
 		break
 	case VAL_NIL:
-		fmt.Println("nil")
+		fmt.Printf("nil")
 		break
 	case VAL_NUMBER:
 		fmt.Printf("%g", AS_NUMBER(val))
