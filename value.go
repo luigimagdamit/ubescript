@@ -8,11 +8,13 @@ const (
 	VAL_BOOL ValueType = iota
 	VAL_NIL
 	VAL_NUMBER
+	VAL_OBJ
 )
 
 type as struct {
 	boolean bool
 	number  float64
+	obj     Obj
 }
 type Value struct {
 	valueType ValueType
@@ -28,11 +30,17 @@ func IS_NIL(val Value) bool {
 func IS_NUMBER(val Value) bool {
 	return val.valueType == VAL_NUMBER
 }
+func IS_OBJ(val Value) bool {
+	return val.valueType == VAL_OBJ
+}
 func AS_BOOL(val Value) bool {
 	return val.as.boolean
 }
 func AS_NUMBER(val Value) float64 {
 	return val.as.number
+}
+func AS_OBJ(val Value) Obj {
+	return val.as.obj
 }
 
 // Raw GO Primitive to Ube Value Primitive
@@ -52,6 +60,13 @@ func NUMBER_VAL(number float64) Value {
 	var newVal *Value = new(Value)
 	newVal.valueType = VAL_NUMBER
 	newVal.as.number = number
+	return *newVal
+}
+
+func OBJ_VAL(object Obj) Value {
+	var newVal *Value = new(Value)
+	newVal.valueType = VAL_OBJ
+	newVal.as.obj = object
 	return *newVal
 }
 
@@ -90,6 +105,8 @@ func printValue(val Value) {
 		break
 	case VAL_NUMBER:
 		fmt.Printf("%g", AS_NUMBER(val))
+	case VAL_OBJ:
+		printObject(val)
 	}
 
 }
@@ -105,6 +122,8 @@ func valuesEqual(b Value, a Value) bool {
 		return true
 	case VAL_NUMBER:
 		return AS_NUMBER(a) == AS_NUMBER(b)
+	case VAL_OBJ:
+		return AS_STRING(a).chars == AS_STRING(b).chars
 	default:
 		return false
 	}

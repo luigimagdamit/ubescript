@@ -195,6 +195,13 @@ func parseNumber() {
 	emitConstant(NUMBER_VAL(float64(value)))
 
 }
+func parseString() {
+	// emitConstant()
+	c := (getLexeme(parser.Previous))
+	c = c[1 : len(c)-1]
+	var objString Obj = *copyString(c, len(c))
+	emitConstant(OBJ_VAL(objString))
+}
 func unary() {
 	var operatorType TokenType = parser.Previous.Type
 	// parse at higher level so it ignores binary operators
@@ -236,7 +243,7 @@ func init() {
 	rules[TOKEN_LESS] = ParseRule{nil, parseBinary, PREC_COMPARISON}
 	rules[TOKEN_LESS_EQUAL] = ParseRule{nil, parseBinary, PREC_COMPARISON}
 	rules[TOKEN_IDENTIFIER] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_STRING] = ParseRule{nil, nil, PREC_NONE}
+	rules[TOKEN_STRING] = ParseRule{parseString, nil, PREC_NONE}
 	rules[TOKEN_NUMBER] = ParseRule{parseNumber, nil, PREC_NONE}
 	rules[TOKEN_AND] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_CLASS] = ParseRule{nil, nil, PREC_NONE}
