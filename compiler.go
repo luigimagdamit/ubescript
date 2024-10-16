@@ -213,6 +213,11 @@ func unary() {
 	case TOKEN_BANG:
 		emitByte(OP_NOT)
 		break
+	case TOKEN_LEN:
+		emitByte(OP_LEN)
+	case TOKEN_PRINT:
+
+		emitByte(OP_SHOW)
 	default:
 		return
 	}
@@ -253,8 +258,8 @@ func init() {
 	rules[TOKEN_FUN] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_IF] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_NIL] = ParseRule{literal, nil, PREC_NONE}
-	rules[TOKEN_OR] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_PRINT] = ParseRule{nil, nil, PREC_NONE}
+	rules[TOKEN_OR] = ParseRule{unary, nil, PREC_NONE}
+	rules[TOKEN_PRINT] = ParseRule{unary, nil, PREC_NONE}
 	rules[TOKEN_RETURN] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_SUPER] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_THIS] = ParseRule{nil, nil, PREC_NONE}
@@ -263,6 +268,7 @@ func init() {
 	rules[TOKEN_WHILE] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_ERROR] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_DOTDOT] = ParseRule{nil, parseBinary, PREC_TERM}
+	rules[TOKEN_LEN] = ParseRule{unary, nil, PREC_NONE}
 	rules[TOKEN_EOF] = ParseRule{nil, nil, PREC_NONE}
 
 }
@@ -304,6 +310,7 @@ func expression() {
 
 func compile(source *string, c *Chunk) bool {
 	initScanner(source)
+	fmt.Println(*source)
 	compilingChunk = c
 	parser.HadError = false
 	parser.PanicMode = false

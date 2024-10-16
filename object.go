@@ -39,6 +39,9 @@ func allocateString(chars string, length int) *Obj {
 	str.Value = objString
 	return str
 }
+func takeString(chars string, length int) *Obj {
+	return allocateString(chars, length)
+}
 
 //	func (o Obj) AS_STRING() ObjString {
 //		return o.value

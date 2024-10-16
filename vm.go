@@ -56,6 +56,16 @@ func stackPeek(distance int) Value {
 func isFalsey(val Value) bool {
 	return IS_NIL(val) || (IS_BOOL(val) && !AS_BOOL(val))
 }
+func concatenate() {
+	var b *ObjString = AS_STRING(pop())
+	var a *ObjString = AS_STRING(pop())
+
+	chars := a.chars + b.chars
+	length := a.length + b.length
+
+	res := takeString(chars, length)
+	push(OBJ_VAL(*res))
+}
 
 // replaces ip++
 // we want to return the byte at offset n, then increment the byte to n + 1
@@ -74,7 +84,7 @@ func BINARY_OP(valueType ValueType, op func(b Value, a Value) Value) {
 
 	var b float64 = AS_NUMBER(pop())
 	var a float64 = AS_NUMBER(pop())
-	fmt.Println(a, b)
+
 	switch valueType {
 	case VAL_NUMBER:
 		var bVal Value = NUMBER_VAL(b)
@@ -148,7 +158,7 @@ func run() InterpretResult {
 
 		// RET OpCode
 		case OP_RETURN:
-			fmt.Printf("Printed ")
+
 			printValue(pop())
 			fmt.Println()
 			return INTERPRET_OK
@@ -157,10 +167,41 @@ func run() InterpretResult {
 		case OP_LESS:
 			BINARY_OP(VAL_NUMBER, less)
 		case OP_ADD:
-			BINARY_OP(VAL_NUMBER, add)
+			if IS_STRING(stackPeek(0)) && IS_STRING(stackPeek(1)) {
+				concatenate()
+			} else if IS_NUMBER(stackPeek(0)) && IS_NUMBER(stackPeek(1)) {
+				BINARY_OP(VAL_NUMBER, add)
+			} else {
+				fmt.Println("Operands must be two numbers or strings")
+				return INTERPRET_RUNTIME_ERROR
+			}
+
 		case OP_SUBTRACT:
 			BINARY_OP(VAL_NUMBER, sub)
 		case OP_MULTIPLY:
+			// if IS_STRING(stackPeek(0)) && IS_NUMBER(stackPeek(1)) || IS_STRING(stackPeek(1)) && IS_NUMBER(stackPeek(0)) {
+			// 	var iter int
+			// 	b := stackPeek(0)
+
+			// 	var str *ObjString
+			// 	if IS_NUMBER(b) {
+			// 		iter = int(AS_NUMBER(pop()))
+			// 		str = AS_STRING(pop())
+			// 	} else {
+			// 		str = AS_STRING(pop())
+			// 		iter = int(AS_NUMBER(pop()))
+
+			// 	}
+
+			// 	for i := 0; i < iter; i++ {
+			// 		clone := takeString(str.chars, str.length)
+			// 		push(OBJ_VAL(*clone))
+			// 	}
+			// 	for i := 0; i < iter; i++ {
+			// 		concatenate()
+			// 	}
+			// }
+
 			BINARY_OP(VAL_NUMBER, mul)
 		case OP_DIVIDE:
 			BINARY_OP(VAL_NUMBER, div)
@@ -171,6 +212,9 @@ func run() InterpretResult {
 			for i := a; i <= b; i++ {
 				push(NUMBER_VAL(float64(i)))
 			}
+		case OP_LEN:
+			b := AS_STRING(pop())
+			push(NUMBER_VAL(float64(b.length)))
 		case OP_NOT:
 			push(BOOL_VAL(isFalsey(pop())))
 		case OP_NEGATE:
@@ -181,10 +225,10 @@ func run() InterpretResult {
 
 			res := pop()
 
-			fmt.Println(vm.stack, vm.stackTop, res)
+			//fmt.Println(vm.stack, vm.stackTop, res)
 			// unwrap the operand then negate it
 			push(NUMBER_VAL(-AS_NUMBER(res)))
-			fmt.Println(vm.stack, vm.stackTop, res)
+			//fmt.Println(vm.stack, vm.stackTop, res)
 			break
 		case OP_CONSTANT:
 			var constant Value = READ_CONSTANT()
@@ -210,6 +254,11 @@ func run() InterpretResult {
 			a := pop()
 
 			push(BOOL_VAL(valuesEqual(a, b)))
+		case OP_SHOW:
+			fmt.Printf("Printed ")
+			printValue(pop())
+
+			push(NUMBER_VAL(0))
 		}
 
 	}

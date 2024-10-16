@@ -71,6 +71,7 @@ const (
 
 	TOKEN_ERROR
 	TOKEN_DOTDOT
+	TOKEN_LEN
 	TOKEN_EOF
 )
 
@@ -121,7 +122,12 @@ func tokenName(token TokenType) string {
 		"TOKEN_FLOAT_TAG",
 		"TOKEN_STRING_TAG",
 		"TOKEN_STRUCT",
+
 		"TOKEN_ERROR",
+
+		"TOKEN_DOTDOT",
+		"TOKEN_LEN",
+
 		"TOKEN_EOF",
 	}
 

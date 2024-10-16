@@ -53,6 +53,10 @@ func disassembleInstruction(c *Chunk, offset int) int {
 		return simpleInstruction("OP_DIVIDE", offset)
 	case OP_DOTDOT:
 		return simpleInstruction("OP_DOTDOT", offset)
+	case OP_LEN:
+		return simpleInstruction("OP_LEN", offset)
+	case OP_SHOW:
+		return simpleInstruction("OP_SHOW", offset)
 	case OP_NOT:
 		return simpleInstruction("OP_NOT", offset)
 	case OP_NEGATE:
