@@ -1,4 +1,16 @@
 [       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  0 | Lexeme:                 | Line: 0
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "poop" | Line: 1
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "poop" | Line: 1
+[        parser_advance(): parser.Current] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "poop" | Line: 1
+[       parser_advance(): parser.Previous] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 1
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "poop" | Line: 1
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "poop" | Line: 1
+[        parser_advance(): parser.Current] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "poop" | Line: 1
+[       parser_advance(): parser.Previous] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 1
 [        parser_advance(): parser.Current] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
 [parsePrecedence()]======
 [       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
@@ -6,130 +18,77 @@
 [[parsePrecedence()] Consumed this token.] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
 [parsePrecedence()]======
 [       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
-[        parser_advance(): parser.Current] Type: 12           TOKEN_STAR| Length:  1 | Lexeme:               * | Line: 1
+[        parser_advance(): parser.Current] Type: 17        TOKEN_GREATER| Length:  1 | Lexeme:               > | Line: 1
 [[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
-lex:  69 {23 1 2 1 }
-[       parser_advance(): parser.Previous] Type: 12           TOKEN_STAR| Length:  1 | Lexeme:               * | Line: 1
+lex:  69 {23 21 2 1 }
+[       parser_advance(): parser.Previous] Type: 17        TOKEN_GREATER| Length:  1 | Lexeme:               > | Line: 1
 [        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
 [parsePrecedence()]======
 [       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
 [        parser_advance(): parser.Current] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
 [[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
-lex:  420 {23 6 3 1 }
+lex:  420 {23 26 3 1 }
 [consume()]
 [       parser_advance(): parser.Previous] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
-[        parser_advance(): parser.Current] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
-[       parser_advance(): parser.Previous] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
-[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
-[        parser_advance(): parser.Current] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              69 | Line: 1
-lex:  69 {23 13 2 1 }
-[       parser_advance(): parser.Previous] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
-[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
-[        parser_advance(): parser.Current] Type: 12           TOKEN_STAR| Length:  1 | Lexeme:               * | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  3 | Lexeme:             420 | Line: 1
-lex:  420 {23 18 3 1 }
-[       parser_advance(): parser.Previous] Type: 12           TOKEN_STAR| Length:  1 | Lexeme:               * | Line: 1
-[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  8 | Lexeme:        50053135 | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  8 | Lexeme:        50053135 | Line: 1
 [        parser_advance(): parser.Current] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  8 | Lexeme:        50053135 | Line: 1
-lex:  50053135 {23 24 8 1 }
 [consume()]
 [       parser_advance(): parser.Previous] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
-[        parser_advance(): parser.Current] Type: 45            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 2
+[        parser_advance(): parser.Current] Type: 46        UNKNOWN_TOKEN| Length:  0 | Lexeme:                 | Line: 2
 == code ==
 OFFS  LINE	OPCCODE
-0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: false
+0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: poop
 
 0005    | 
-OP_CONSTANT_LONG C.Index:    1 ' Value: false
+OP_CONSTANT_LONG C.Index:    1 ' Value: poop
 
 0010    | 
-OP_MULTIPLY
+OP_EQUAL
 0011    | 
-OP_CONSTANT_LONG C.Index:    2 ' Value: false
-
+OP_CONSTANT_LONG C.Index:    2 ' Value: 69
 0016    | 
-OP_DIVIDE
-0017    | 
-OP_CONSTANT_LONG C.Index:    3 ' Value: false
-
+OP_CONSTANT_LONG C.Index:    3 ' Value: 420
+0021    | 
+OP_GREATER
 0022    | 
-OP_DIVIDE
-0023    | 
-OP_CONSTANT_LONG C.Index:    4 ' Value: false
-
-0028    | 
-OP_MULTIPLY
+OP_EQUAL
           offset 0-><-offset 0
-0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: false
+0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: poop
 
 
-          offset 0->[false
+          offset 0->[poop
 ]<-offset 1
 0005    | 
-OP_CONSTANT_LONG C.Index:    1 ' Value: false
+OP_CONSTANT_LONG C.Index:    1 ' Value: poop
 
 
-          offset 0->[false
-][false
+          offset 0->[poop
+][poop
 ]<-offset 2
 0010    | 
-OP_MULTIPLY
-std error.. implement soon
-need a way to return interpreter error here
-69 420
-          offset 0->[false
+OP_EQUAL
+          offset 0->[true
 ]<-offset 1
 0011    | 
-OP_CONSTANT_LONG C.Index:    2 ' Value: false
+OP_CONSTANT_LONG C.Index:    2 ' Value: 69
 
-
-          offset 0->[false
-][false
-]<-offset 2
+          offset 0->[true
+][69]<-offset 2
 0016    | 
-OP_DIVIDE
-std error.. implement soon
-need a way to return interpreter error here
-28980 69
-          offset 0->[false
-]<-offset 1
-0017    | 
-OP_CONSTANT_LONG C.Index:    3 ' Value: false
+OP_CONSTANT_LONG C.Index:    3 ' Value: 420
 
-
-          offset 0->[false
+          offset 0->[true
+][69][420]<-offset 3
+0021    | 
+OP_GREATER
+69 420
+          offset 0->[true
 ][false
 ]<-offset 2
 0022    | 
-OP_DIVIDE
-std error.. implement soon
-need a way to return interpreter error here
-420 420
+OP_EQUAL
           offset 0->[false
 ]<-offset 1
 0023    | 
-OP_CONSTANT_LONG C.Index:    4 ' Value: false
-
-
-          offset 0->[false
-][false
-]<-offset 2
-0028    | 
-OP_MULTIPLY
-std error.. implement soon
-need a way to return interpreter error here
-1 5.0053135e+07
-          offset 0->[false
-]<-offset 1
-0029    | 
 OP_RETURN
 Printed false
 
