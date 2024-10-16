@@ -1,49 +1,103 @@
-made  table
-"PEEP" == "PEEP";
+print("hello" + " " + "world");
 
 [       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  0 | Lexeme:                 | Line: 0
-[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
+[        parser_advance(): parser.Current] Type: 33          TOKEN_PRINT| Length:  5 | Lexeme:           print | Line: 1
+[       parser_advance(): parser.Previous] Type: 33          TOKEN_PRINT| Length:  5 | Lexeme:           print | Line: 1
+[        parser_advance(): parser.Current] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
 [parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
-[        parser_advance(): parser.Current] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
-allocating new string
-table set
-table exists
-[       parser_advance(): parser.Previous] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 1
-[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
+[       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  7 | Lexeme:         "hello" | Line: 1
+[[parsePrecedence()] Consumed this token.] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
 [parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  7 | Lexeme:         "hello" | Line: 1
+[        parser_advance(): parser.Current] Type:  9           TOKEN_PLUS| Length:  1 | Lexeme:               + | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  7 | Lexeme:         "hello" | Line: 1
+map[hello:{3 {false 0 {0 0xc000078080 <nil>}}}]
+[       parser_advance(): parser.Previous] Type:  9           TOKEN_PLUS| Length:  1 | Lexeme:               + | Line: 1
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  3 | Lexeme:             " " | Line: 1
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  3 | Lexeme:             " " | Line: 1
+[        parser_advance(): parser.Current] Type:  9           TOKEN_PLUS| Length:  1 | Lexeme:               + | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  3 | Lexeme:             " " | Line: 1
+map[ :{3 {false 0 {0 0xc000078180 0xc000036040}}} hello:{3 {false 0 {0 0xc000078080 <nil>}}}]
+[       parser_advance(): parser.Previous] Type:  9           TOKEN_PLUS| Length:  1 | Lexeme:               + | Line: 1
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  7 | Lexeme:         "world" | Line: 1
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  7 | Lexeme:         "world" | Line: 1
+[        parser_advance(): parser.Current] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  7 | Lexeme:         "world" | Line: 1
+map[ :{3 {false 0 {0 0xc000078180 0xc000036040}}} hello:{3 {false 0 {0 0xc000078080 <nil>}}} world:{3 {false 0 {0 0xc000078280 0xc000036060}}}]
+[       parser_advance(): parser.Previous] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
 [        parser_advance(): parser.Current] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
-allocating new string
-table set
-table exists
-[consume()]
 [       parser_advance(): parser.Previous] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
+[        parser_advance(): parser.Current] Type: 47            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 2
+[       parser_advance(): parser.Previous] Type: 47            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 2
 [        parser_advance(): parser.Current] Type: 47            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 2
 == code ==
 OFFS  LINE	OPCCODE
-0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: PEEP
+0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: hello
 0005    | 
-OP_CONSTANT_LONG C.Index:    1 ' Value: PEEP
+OP_CONSTANT_LONG C.Index:    1 ' Value:  
 0010    | 
-OP_EQUAL
+OP_ADD
+0011    | 
+OP_CONSTANT_LONG C.Index:    2 ' Value: world
+0016    | 
+OP_ADD
+0017    | 
+OP_SHOW
           offset 0-><-offset 0
-0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: PEEP
-
-          offset 0->[PEEP]0
+0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: hello
+          offset 0->[hello]3
+map:  hello {3 {false 0 {0 0xc000078080 <nil>}}}
+map:    {3 {false 0 {0 0xc000078180 0xc000036040}}}
+map:  world {3 {false 0 {0 0xc000078280 0xc000036060}}}
 <-offset 1
 0005    | 
-OP_CONSTANT_LONG C.Index:    1 ' Value: PEEP
-
-          offset 0->[PEEP]0
-[PEEP]0
+OP_CONSTANT_LONG C.Index:    1 ' Value:  
+          offset 0->[hello]3
+map:  world {3 {false 0 {0 0xc000078280 0xc000036060}}}
+map:  hello {3 {false 0 {0 0xc000078080 <nil>}}}
+map:    {3 {false 0 {0 0xc000078180 0xc000036040}}}
+[ ]3
+map:  hello {3 {false 0 {0 0xc000078080 <nil>}}}
+map:    {3 {false 0 {0 0xc000078180 0xc000036040}}}
+map:  world {3 {false 0 {0 0xc000078280 0xc000036060}}}
 <-offset 2
 0010    | 
-OP_EQUAL
-          offset 0->[false]0
+OP_ADD
+map[ :{3 {false 0 {0 0xc000078180 0xc000036040}}} hello:{3 {false 0 {0 0xc000078080 <nil>}}} hello :{3 {false 0 {0 0xc000078600 0xc000036080}}} world:{3 {false 0 {0 0xc000078280 0xc000036060}}}]
+          offset 0->[hello ]4
+map:    {3 {false 0 {0 0xc000078180 0xc000036040}}}
+map:  world {3 {false 0 {0 0xc000078280 0xc000036060}}}
+map:  hello  {3 {false 0 {0 0xc000078600 0xc000036080}}}
+map:  hello {3 {false 0 {0 0xc000078080 <nil>}}}
 <-offset 1
 0011    | 
-OP_RETURN
-false
+OP_CONSTANT_LONG C.Index:    2 ' Value: world
+          offset 0->[hello ]4
+map:  hello {3 {false 0 {0 0xc000078080 <nil>}}}
+map:    {3 {false 0 {0 0xc000078180 0xc000036040}}}
+map:  world {3 {false 0 {0 0xc000078280 0xc000036060}}}
+map:  hello  {3 {false 0 {0 0xc000078600 0xc000036080}}}
+[world]4
+map:  hello {3 {false 0 {0 0xc000078080 <nil>}}}
+map:    {3 {false 0 {0 0xc000078180 0xc000036040}}}
+map:  world {3 {false 0 {0 0xc000078280 0xc000036060}}}
+map:  hello  {3 {false 0 {0 0xc000078600 0xc000036080}}}
+<-offset 2
+0016    | 
+OP_ADD
+map[ :{3 {false 0 {0 0xc000078180 0xc000036040}}} hello:{3 {false 0 {0 0xc000078080 <nil>}}} hello :{3 {false 0 {0 0xc000078600 0xc000036080}}} hello world:{3 {false 0 {0 0xc000078a80 0xc0000360a0}}} world:{3 {false 0 {0 0xc000078280 0xc000036060}}}]
+          offset 0->[hello world]5
+map:  hello {3 {false 0 {0 0xc000078080 <nil>}}}
+map:    {3 {false 0 {0 0xc000078180 0xc000036040}}}
+map:  world {3 {false 0 {0 0xc000078280 0xc000036060}}}
+map:  hello  {3 {false 0 {0 0xc000078600 0xc000036080}}}
+map:  hello world {3 {false 0 {0 0xc000078a80 0xc0000360a0}}}
+<-offset 1
+0017    | 
+OP_SHOW
+hello world
+          offset 0-><-offset 0
+0018    2	OP_RETURN
