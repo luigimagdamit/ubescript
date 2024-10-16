@@ -19,6 +19,8 @@ type VM struct {
 
 	stack    [4096]Value
 	stackTop int
+	strings  Table
+	objects  *Obj
 }
 
 // Use a single global VM variable since we only need one
@@ -33,9 +35,12 @@ func runtimeError() {
 }
 func initVM() {
 	resetStack()
+	vm.objects = nil
+	initTable(&vm.strings)
 }
 func freeVM() {
-
+	freeObjects()
+	freeTable(&vm.strings)
 }
 
 func push(val Value) {
@@ -122,6 +127,7 @@ func interpret(source *string) InterpretResult {
 
 	var c *Chunk = new(Chunk)
 	initChunk(c)
+	initVM()
 
 	// Fill the new chunk with the bytecode from compile()
 	// retuurns false if there is a compile error
@@ -135,6 +141,7 @@ func interpret(source *string) InterpretResult {
 
 	var result InterpretResult = run() // MAKE SURE TO UNDO THIS!!!!
 	//result := INTERPRET_OK
+	//freeVM()
 	freeChunk(c)
 	return result
 }
@@ -147,6 +154,10 @@ func run() InterpretResult {
 				fmt.Printf("[")
 				printValue(vm.stack[i])
 				fmt.Printf("]")
+				fmt.Println(len(vm.strings.Entries))
+				for k, v := range vm.strings.Entries {
+					fmt.Println("map: ", k, v)
+				}
 			}
 			fmt.Println("<-offset", vm.stackTop)
 			disassembleInstruction(vm.chunk, int(vm.ip))

@@ -1,109 +1,49 @@
-show(len("str") + 20 / 15 < 20);
+made  table
+"PEEP" == "PEEP";
 
-ow
 [       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  0 | Lexeme:                 | Line: 0
-[        parser_advance(): parser.Current] Type: 33          TOKEN_PRINT| Length:  4 | Lexeme:            show | Line: 1
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
 [parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 33          TOKEN_PRINT| Length:  4 | Lexeme:            show | Line: 1
-[        parser_advance(): parser.Current] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 33          TOKEN_PRINT| Length:  4 | Lexeme:            show | Line: 1
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
+[        parser_advance(): parser.Current] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
+allocating new string
+table set
+table exists
+[       parser_advance(): parser.Previous] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 1
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
 [parsePrecedence()]======
-
-[       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
-[        parser_advance(): parser.Current] Type: 46            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 1
-[[parsePrecedence()] Consumed this token.] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 46            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 1
-[        parser_advance(): parser.Current] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 46            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
-[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  5 | Lexeme:           "str" | Line: 1
-[[parsePrecedence()] Consumed this token.] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  5 | Lexeme:           "str" | Line: 1
-[        parser_advance(): parser.Current] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  5 | Lexeme:           "str" | Line: 1
-[consume()]
-[       parser_advance(): parser.Previous] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
-[        parser_advance(): parser.Current] Type:  9           TOKEN_PLUS| Length:  1 | Lexeme:               + | Line: 1
-[       parser_advance(): parser.Previous] Type:  9           TOKEN_PLUS| Length:  1 | Lexeme:               + | Line: 1
-[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              20 | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              20 | Line: 1
-[        parser_advance(): parser.Current] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              20 | Line: 1
-lex:  20 {23 18 2 1 }
-[       parser_advance(): parser.Previous] Type: 11          TOKEN_SLASH| Length:  1 | Lexeme:               / | Line: 1
-[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              15 | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              15 | Line: 1
-[        parser_advance(): parser.Current] Type: 19           TOKEN_LESS| Length:  1 | Lexeme:               < | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              15 | Line: 1
-lex:  15 {23 23 2 1 }
-[       parser_advance(): parser.Previous] Type: 19           TOKEN_LESS| Length:  1 | Lexeme:               < | Line: 1
-[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              20 | Line: 1
-[parsePrecedence()]======
-[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              20 | Line: 1
-[        parser_advance(): parser.Current] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
-[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              20 | Line: 1
-lex:  20 {23 28 2 1 }
-[consume()]
-[       parser_advance(): parser.Previous] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 1
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
 [        parser_advance(): parser.Current] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  6 | Lexeme:          "PEEP" | Line: 1
+allocating new string
+table set
+table exists
 [consume()]
 [       parser_advance(): parser.Previous] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
 [        parser_advance(): parser.Current] Type: 47            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 2
 == code ==
 OFFS  LINE	OPCCODE
-0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: str
+0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: PEEP
 0005    | 
-OP_LEN
-0006    | 
-OP_CONSTANT_LONG C.Index:    1 ' Value: 20
-0011    | 
-OP_CONSTANT_LONG C.Index:    2 ' Value: 15
-0016    | 
-OP_DIVIDE
-0017    | 
-OP_ADD
-0018    | 
-OP_CONSTANT_LONG C.Index:    3 ' Value: 20
-0023    | 
-OP_LESS
-0024    | 
-OP_SHOW
+OP_CONSTANT_LONG C.Index:    1 ' Value: PEEP
+0010    | 
+OP_EQUAL
           offset 0-><-offset 0
-0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: str
+0000    1	OP_CONSTANT_LONG C.Index:    0 ' Value: PEEP
 
-          offset 0->[str]<-offset 1
+          offset 0->[PEEP]0
+<-offset 1
 0005    | 
-OP_LEN
-          offset 0->[3]<-offset 1
-0006    | 
-OP_CONSTANT_LONG C.Index:    1 ' Value: 20
+OP_CONSTANT_LONG C.Index:    1 ' Value: PEEP
 
-          offset 0->[3][20]<-offset 2
+          offset 0->[PEEP]0
+[PEEP]0
+<-offset 2
+0010    | 
+OP_EQUAL
+          offset 0->[false]0
+<-offset 1
 0011    | 
-OP_CONSTANT_LONG C.Index:    2 ' Value: 15
-
-          offset 0->[3][20][15]<-offset 3
-0016    | 
-OP_DIVIDE
-          offset 0->[3][1.3333333333333333]<-offset 2
-0017    | 
-OP_ADD
-          offset 0->[4.333333333333333]<-offset 1
-0018    | 
-OP_CONSTANT_LONG C.Index:    3 ' Value: 20
-
-          offset 0->[4.333333333333333][20]<-offset 2
-0023    | 
-OP_LESS
-          offset 0->[true]<-offset 1
-0024    | 
-OP_SHOW
-Printed true          offset 0->[0]<-offset 1
-0025    | 
 OP_RETURN
-0
+false

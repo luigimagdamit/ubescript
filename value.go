@@ -123,7 +123,7 @@ func valuesEqual(b Value, a Value) bool {
 	case VAL_NUMBER:
 		return AS_NUMBER(a) == AS_NUMBER(b)
 	case VAL_OBJ:
-		return AS_STRING(a).chars == AS_STRING(b).chars
+		return AS_OBJ(a) == AS_OBJ(b)
 	default:
 		return false
 	}

@@ -19,9 +19,20 @@ func AS_CSTRING(value Value) string {
 }
 func ALLOCATE_OBJ(objType ObjType) *Obj {
 	var newString *ObjString = new(ObjString)
-	return NEW_OBJ(OBJ_STRING, newString)
+
+	res := NEW_OBJ(OBJ_STRING, newString)
+	res.next = vm.objects
+	vm.objects = res
+	return res
 }
 func copyString(chars string, length int) *Obj {
+	fmt.Println(vm.strings.Entries)
+	interned := tableFindString(&vm.strings, chars)
+	if interned != nil {
+		fmt.Println("COPY FOUND")
+		return interned
+	}
+	fmt.Println("allocating new string")
 	return allocateString(chars, length)
 }
 func printObject(value Value) {
@@ -36,10 +47,20 @@ func allocateString(chars string, length int) *Obj {
 	objString := str.Value.(*ObjString)
 	objString.chars = chars
 	objString.length = length
+
 	str.Value = objString
+	fmt.Println("table set")
+	tableSet(&vm.strings, objString, OBJ_VAL(*str))
+	fmt.Println(vm.strings.Entries)
+
 	return str
 }
 func takeString(chars string, length int) *Obj {
+	interned := tableFindString(&vm.strings, chars)
+	if interned != nil {
+		chars = ""
+		return interned
+	}
 	return allocateString(chars, length)
 }
 
@@ -62,6 +83,7 @@ const (
 type Obj struct {
 	ObjType ObjType
 	Value   interface{}
+	next    *Obj
 }
 
 type ObjString struct {
