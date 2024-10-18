@@ -182,7 +182,16 @@ func identifierType() TokenType {
 	case "c":
 		return checkKeyword(1, 4, "lass", TOKEN_CLASS)
 	case "e":
-		return checkKeyword(1, 3, "lse", TOKEN_ELSE)
+
+		if scanner.Current-scanner.Start > 1 {
+			switch string(scanner.Source[scanner.Start+1]) {
+			case "l":
+				return checkKeyword(2, 2, "se", TOKEN_ELSE)
+			case "c":
+				return checkKeyword(2, 2, "ho", TOKEN_PRINT)
+			}
+
+		}
 	case "f":
 		if scanner.Current-scanner.Start > 1 {
 			switch string(scanner.Source[scanner.Start+1]) {

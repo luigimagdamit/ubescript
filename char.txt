@@ -2,6 +2,7 @@ let breakfast str = "beignets"
 let beverage str = "cafe au lait"
 
 print(breakfast)
-breakfast = breakfast + " with " + beverage
+breakfast = breakfast + " with \n\n\n" + beverage
 
 print(breakfast)
+echo breakfast
