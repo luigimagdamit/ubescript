@@ -309,6 +309,16 @@ func run() InterpretResult {
 			tableSet(&vm.globals, name, stackPeek(0)) // Peek at the value, set the name equal to it
 			pop()                                     //DANGER!!!
 			pop()
+		case OP_SET_GLOBAL:
+
+			name := READ_STRING()
+			if tableSet(&vm.globals, name, stackPeek(0)) {
+
+				tableDelete(&vm.globals, name, NIL_VAL(0))
+				runtimeError()
+				return INTERPRET_RUNTIME_ERROR
+			}
+			break
 		case OP_EQUAL:
 			b := pop()
 			a := pop()

@@ -120,7 +120,7 @@ func endCompiler() {
 	emitReturn()
 }
 
-func parseBinary() {
+func parseBinary(canAssign bool) {
 	// left hand operand consumed
 	// we have consumed the operator
 	var operatorType TokenType = parser.Previous.Type
@@ -165,7 +165,7 @@ func parseBinary() {
 	}
 
 }
-func literal() {
+func literal(canAssign bool) {
 	fmt.Println("literally")
 	switch parser.Previous.Type {
 	case TOKEN_FALSE:
@@ -185,7 +185,7 @@ func literal() {
 
 // Parsing functions for () grouping. We assume ( as already been consumed
 // parser.Previous == "(" Token
-func grouping() {
+func grouping(canAssign bool) {
 	expression() // Parse expression, parser.Current should land at )
 	parser.Current.Message = "Expect ')' after expression."
 	consume(TOKEN_RIGHT_PAREN)
@@ -194,7 +194,7 @@ func grouping() {
 // parseNumber() will get the lexeme pointed at by parser.Previous
 // meaning that the desired parssed number will need to have been consumed / advanced()
 // wrapper for writeConstant() and turns lexeme into appropriate bytecode
-func parseNumber() {
+func parseNumber(canAssign bool) {
 	var token Token = parser.Previous
 	var lexeme string = getLexeme(token)
 	if DEBUG_COMPILER_OUTPUT {
@@ -209,25 +209,35 @@ func parseNumber() {
 	emitConstant(NUMBER_VAL(float64(value)))
 
 }
-func parseString() {
+func parseString(canAssign bool) {
 	// emitConstant()
 	c := (getLexeme(parser.Previous))
 	c = c[1 : len(c)-1]
 	var objString Obj = *copyString(c, len(c))
 	emitConstant(OBJ_VAL(objString))
 }
-func namedVariable(name Token) {
+func namedVariable(name Token, canAssign bool) {
 	arg := identifierConstant(&name)
-	emitByte(OP_GET_GLOBAL)
-	for i := 0; i < 4; i++ {
-		emitByte(arg[i])
+
+	if canAssign && parseMatch(TOKEN_EQUAL) {
+		expression()
+		emitByte(OP_SET_GLOBAL)
+		for i := 0; i < 4; i++ {
+			emitByte(arg[i])
+		}
+	} else {
+		emitByte(OP_GET_GLOBAL)
+		for i := 0; i < 4; i++ {
+			emitByte(arg[i])
+		}
 	}
 
 }
-func variable() {
-	namedVariable(parser.Previous)
+func variable(canAssign bool) {
+	namedVariable(parser.Previous, canAssign)
 }
-func unary() {
+
+func unary(canAssign bool) {
 	var operatorType TokenType = parser.Previous.Type
 	// parse at higher level so it ignores binary operators
 	parsePrecedence(PREC_UNARY)
@@ -315,13 +325,18 @@ func parsePrecedence(precedence Precedence) {
 		errorAtPrevious(prevTok)
 		return
 	}
-	prefixRule()
+	canAssign := precedence <= PREC_ASSIGNMENT
+	prefixRule(canAssign)
 
 	// get precendence rule for current token
 	for precedence <= getRule(parser.Current.Type).Precedence {
 		parser_advance() // consume it if the prec is higher / continue parsing the whole expr
 		var infixRule ParseFn = getRule(parser.Previous.Type).Infix
-		infixRule()
+		infixRule(canAssign)
+	}
+	if canAssign && parseMatch(TOKEN_EQUAL) {
+		parser.Current.Message = "Invalid Assignment target"
+		errorAtCurrent(parser.Current)
 	}
 }
 

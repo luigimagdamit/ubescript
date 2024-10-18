@@ -26,9 +26,16 @@ func tableSet(table *Table, key *ObjString, value Value) bool {
 		initTable(table)
 
 	} else {
-
+		_, exists := table.Entries[keyStr]
+		if !exists {
+			table.Entries[keyStr] = value
+			table.Count++
+			return true
+		}
 		table.Entries[keyStr] = value
 		table.Count++
+		return false
+
 	}
 
 	return true

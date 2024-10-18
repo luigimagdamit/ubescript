@@ -30,4 +30,4 @@ type ParseRule struct {
 }
 
 // just a function type
-type ParseFn func()
+type ParseFn func(canAssign bool)

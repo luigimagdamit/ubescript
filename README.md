@@ -23,6 +23,16 @@ ubescript pulls inspiration from the simplicity of Go, while developing a strong
 ### Hello World.ube
 ```rust
 print("hello world")
+
+let breakfast str = "beignets"
+let beverage str = "cafe au lait"
+
+print(breakfast)
+// "beignets"
+breakfast = breakfast + " with " + beverage
+
+print(breakfast)
+// "beignets with au lait"
 ```
 
 ```
