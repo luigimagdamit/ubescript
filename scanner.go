@@ -200,7 +200,7 @@ func identifierType() TokenType {
 			case "f":
 				return checkKeyword(2, 0, "", TOKEN_IF)
 			case "n":
-				return checkKeyword(2, 1, "t", TOKEN_INT_TAG)
+				return checkKeyword(2, 1, "t", TOKEN_TYPE)
 			}
 		}
 
@@ -219,11 +219,20 @@ func identifierType() TokenType {
 				return checkKeyword(2, 2, "ow", TOKEN_PRINT)
 			case "t":
 				if scanner.Current-scanner.Start > 2 {
-					switch string(scanner.Source[scanner.Start+3]) {
-					case "u":
-						return checkKeyword(4, 2, "ct", TOKEN_STRUCT)
-					case "i":
-						return checkKeyword(4, 2, "ng", TOKEN_STRING_TAG)
+					switch string(scanner.Source[scanner.Start+2]) {
+					case "r":
+						if scanner.Current-scanner.Start > 3 {
+							switch string(scanner.Source[scanner.Start+3]) {
+							case "u":
+								return checkKeyword(4, 2, "ct", TOKEN_STRUCT)
+
+							}
+						} else {
+							return TOKEN_TYPE
+						}
+						// 	return checkKeyword(4, 2, "ct", TOKEN_STRUCT)
+						// case "":
+						// 	return checkKeyword(4, 2, "ng", TOKEN_TYPE)
 					}
 				}
 

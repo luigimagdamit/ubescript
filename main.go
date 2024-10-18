@@ -8,11 +8,13 @@ import (
 
 func main() {
 	args := os.Args
+
 	if len(args) == 1 {
 		repl()
 	} else if len(args) == 2 {
 		readFile(args[1])
 	} else if len(args) == 3 {
+
 		DEBUG_FLAG_GLOBAL = true
 		readFile(args[1])
 		// fmt.Println("Usage: ube [path]")

@@ -30,7 +30,7 @@ func errorAt(token Token) {
 	} else if token.Type == TOKEN_ERROR {
 
 	} else {
-		fmt.Printf(" at '%d'", token.Start)
+		fmt.Printf(" at %d:%d", token.Line, token.Start)
 	}
 	fmt.Printf(": %s\n", token.Message)
 	parser.HadError = true
@@ -84,7 +84,6 @@ func consume(tokenType TokenType) {
 		printToken(parser.Current, "consume")
 	}
 
-	parser.Current.Message = "Not correct token type: " + string(parser.Current.Type)
 	errorAtCurrent(parser.Current)
 }
 func check(tokenType TokenType) bool {
@@ -292,6 +291,7 @@ func init() {
 	rules[TOKEN_VAR] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_WHILE] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_ERROR] = ParseRule{nil, nil, PREC_NONE}
+	rules[TOKEN_TYPE] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_DOTDOT] = ParseRule{nil, parseBinary, PREC_TERM}
 	rules[TOKEN_LEN] = ParseRule{unary, nil, PREC_NONE}
 	rules[TOKEN_EOF] = ParseRule{nil, nil, PREC_NONE}
@@ -348,6 +348,13 @@ func expression() {
 }
 func varDeclaration() {
 	global := parseVariable("Expect variable name")
+
+	parser.Current.Message = "Expected proper type annotation or =, but instead found '" + getLexeme(parser.Current) + "'"
+	if parseMatch(TOKEN_TYPE) {
+		// idk do something i guess
+	} else {
+
+	}
 	if parseMatch(TOKEN_EQUAL) {
 		expression()
 	} else {

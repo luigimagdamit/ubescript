@@ -64,6 +64,7 @@ const (
 	TOKEN_VAR
 	TOKEN_WHILE
 
+	TOKEN_TYPE
 	TOKEN_INT_TAG
 	TOKEN_FLOAT_TAG
 	TOKEN_STRING_TAG
@@ -118,6 +119,7 @@ func tokenName(token TokenType) string {
 		"TOKEN_TRUE",
 		"TOKEN_VAR",
 		"TOKEN_WHILE",
+		"TOKEN_TYPE",
 		"TOKEN_INT_TAG",
 		"TOKEN_FLOAT_TAG",
 		"TOKEN_STRING_TAG",
