@@ -1,8 +1,3 @@
-let greeting str = "hello world"
-let length int = len(greeting)
-
-print("The length of ")
-print(greeting + " is")
-print(length)
-
-print(length == 14)
+let a str = "hello world"
+print ("the length of " + a + " is " )
+print len(a)
