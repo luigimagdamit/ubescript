@@ -64,10 +64,14 @@ print(1 * 2 * 3)
 
 ### Variables
 ```rust
-let greeting str= "hello world"
-let length int= len(greeting)
+let greeting str = "hello world"
+let n int = len(greeting)
 
-print("The length of ")
-print(greeting + " is")
-print(length)
+let equals12 = n == 12
+
+echo greeting + " has the length: " 
+echo n 
+
+echo "and its equal to 12: "
+echo equals12
 ```

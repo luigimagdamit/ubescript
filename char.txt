@@ -1,8 +1,10 @@
-let breakfast str = "beignets"
-let beverage str = "cafe au lait"
+let greeting str = "hello world"
+let n int = len(greeting)
 
-print(breakfast)
-breakfast = breakfast + " with \n\n\n" + beverage
+let equals12 = n == 12
 
-print(breakfast)
-echo breakfast
+echo greeting + " has the length: " 
+echo n 
+
+echo "and its equal to 12: "
+echo equals12
