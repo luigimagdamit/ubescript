@@ -54,8 +54,8 @@ print(1 * 2 * 3)
 
 ### Variables
 ```rust
-let greeting = "hello world"
-let length = len(greeting)
+let greeting str= "hello world"
+let length int= len(greeting)
 
 print("The length of ")
 print(greeting + " is")
