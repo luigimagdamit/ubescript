@@ -10,6 +10,9 @@ const (
 	OP_NIL
 	OP_TRUE
 	OP_FALSE
+	OP_POP
+	OP_GET_GLOBAL
+	OP_DEFINE_GLOBAL
 	OP_EQUAL
 	OP_GREATER
 	OP_LESS
@@ -71,7 +74,7 @@ func writeChunk(c *Chunk, inst uint8, line int) {
 // writeConstants is an alternate function that is used for writing constants to the constant pool and the index to the chunk
 // The index is written from a uint32 version of an index, relative to the size of the ValueArray(constant pool) - necessary to encode more than 255 constants - Refer to Ch 1 of CI
 // The 32-bit int is split into an array of four 8 bit instructions, and fed into the chunk as the OpCodes are
-func writeConstant(c *Chunk, val Value, line int) {
+func writeConstant(c *Chunk, val Value, line int) [4]uint8 {
 	var index uint32 = uint32(addContant(c, val))
 	var arr [4]uint8 = splitUInt32(index)
 
@@ -84,6 +87,7 @@ func writeConstant(c *Chunk, val Value, line int) {
 	for i := 0; i < 4; i++ {
 		writeChunk(c, arr[i], line)
 	}
+	return arr
 
 }
 

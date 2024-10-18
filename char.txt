@@ -1,1 +1,6 @@
-print("hello" + " " + "world")
+let greeting = "hello world"
+let length = len(greeting)
+
+print("The length of ")
+print(greeting + " is")
+print(length)

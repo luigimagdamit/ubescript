@@ -110,8 +110,8 @@ func emitReturn() {
 func emitConstant(val Value) {
 	makeConstant(val)
 }
-func makeConstant(val Value) {
-	writeConstant(compilingChunk, val, parser.Previous.Line)
+func makeConstant(val Value) [4]uint8 {
+	return writeConstant(compilingChunk, val, parser.Previous.Line)
 }
 func endCompiler() {
 	if DEBUG_PRINT_CODE && !parser.HadError {
@@ -166,6 +166,7 @@ func parseBinary() {
 
 }
 func literal() {
+	fmt.Println("literally")
 	switch parser.Previous.Type {
 	case TOKEN_FALSE:
 		emitByte(OP_FALSE)
@@ -215,6 +216,17 @@ func parseString() {
 	var objString Obj = *copyString(c, len(c))
 	emitConstant(OBJ_VAL(objString))
 }
+func namedVariable(name Token) {
+	arg := identifierConstant(&name)
+	emitByte(OP_GET_GLOBAL)
+	for i := 0; i < 4; i++ {
+		emitByte(arg[i])
+	}
+
+}
+func variable() {
+	namedVariable(parser.Previous)
+}
 func unary() {
 	var operatorType TokenType = parser.Previous.Type
 	// parse at higher level so it ignores binary operators
@@ -260,7 +272,7 @@ func init() {
 	rules[TOKEN_GREATER_EQUAL] = ParseRule{nil, parseBinary, PREC_COMPARISON}
 	rules[TOKEN_LESS] = ParseRule{nil, parseBinary, PREC_COMPARISON}
 	rules[TOKEN_LESS_EQUAL] = ParseRule{nil, parseBinary, PREC_COMPARISON}
-	rules[TOKEN_IDENTIFIER] = ParseRule{nil, nil, PREC_NONE}
+	rules[TOKEN_IDENTIFIER] = ParseRule{variable, nil, PREC_NONE}
 	rules[TOKEN_STRING] = ParseRule{parseString, nil, PREC_NONE}
 	rules[TOKEN_NUMBER] = ParseRule{parseNumber, nil, PREC_NONE}
 	rules[TOKEN_AND] = ParseRule{nil, nil, PREC_NONE}
@@ -312,6 +324,20 @@ func parsePrecedence(precedence Precedence) {
 	}
 }
 
+func identifierConstant(name *Token) [4]uint8 {
+	return makeConstant(OBJ_VAL(*copyString(getLexeme(*name), name.Length)))
+}
+func parseVariable(errorMessage string) [4]uint8 {
+	consume(TOKEN_IDENTIFIER)
+	return identifierConstant(&parser.Previous)
+}
+func defineVariable(global [4]uint8) {
+	emitByte(OP_DEFINE_GLOBAL)
+	for i := 0; i < 4; i++ {
+		emitByte(global[i])
+	}
+}
+
 // returns rule at TokenType index
 // called by parseBinary() to look up precedence of operator
 func getRule(tokenType TokenType) *ParseRule {
@@ -320,17 +346,64 @@ func getRule(tokenType TokenType) *ParseRule {
 func expression() {
 	parsePrecedence(PREC_ASSIGNMENT) // the whole expression since it is the lowest precedence level
 }
+func varDeclaration() {
+	global := parseVariable("Expect variable name")
+	if parseMatch(TOKEN_EQUAL) {
+		expression()
+	} else {
+		emitByte(OP_NIL)
+	}
+	consume(TOKEN_SEMICOLON)
+	defineVariable(global)
+}
+func expressionStatement() {
+	expression()
+
+	consume(TOKEN_SEMICOLON)
+	emitByte(OP_POP)
+}
 func printStatement() {
 	expression()
 	consume(TOKEN_SEMICOLON)
 	emitByte(OP_SHOW)
 }
+func synchronize() {
+	parser.PanicMode = false
+	for parser.Current.Type != TOKEN_EOF {
+		if parser.Previous.Type == TOKEN_SEMICOLON {
+			return
+		}
+		switch parser.Current.Type {
+		case TOKEN_CLASS:
+		case TOKEN_FUN:
+		case TOKEN_VAR:
+		case TOKEN_IF:
+		case TOKEN_WHILE:
+		case TOKEN_PRINT:
+		case TOKEN_RETURN:
+			return
+		default:
+
+		}
+		parser_advance()
+	}
+}
 func declaration() {
-	statement()
+
+	if parseMatch(TOKEN_VAR) {
+		varDeclaration()
+	} else {
+		statement()
+	}
+	if parser.PanicMode {
+		synchronize()
+	}
 }
 func statement() {
 	if parseMatch(TOKEN_PRINT) {
 		printStatement()
+	} else {
+		expressionStatement()
 	}
 }
 func compile(source *string, c *Chunk) bool {

@@ -38,9 +38,11 @@ func tableGet(table *Table, key *ObjString, value Value) bool {
 	retrieved, exists := table.Entries[keyStr]
 
 	if exists {
+		//fmt.Println("retrieved ", retrieved)
 		value = retrieved
 		return true
 	}
+
 	return false
 }
 func tableDelete(table *Table, key *ObjString, value Value) bool {

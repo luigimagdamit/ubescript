@@ -19,6 +19,7 @@ type VM struct {
 
 	stack    [4096]Value
 	stackTop int
+	globals  Table
 	strings  Table
 	objects  *Obj
 }
@@ -36,10 +37,12 @@ func runtimeError() {
 func initVM() {
 	resetStack()
 	vm.objects = nil
+	initTable(&vm.globals)
 	initTable(&vm.strings)
 }
 func freeVM() {
 	freeObjects()
+	freeTable(&vm.globals)
 	freeTable(&vm.strings)
 }
 
@@ -124,6 +127,9 @@ func READ_LONG_CONSTANT() Value {
 	var longConstantIndex uint32 = combineUInt8Array(indexBytes)
 	return vm.chunk.Constants.Values[longConstantIndex]
 }
+func READ_STRING() *ObjString {
+	return AS_STRING(READ_LONG_CONSTANT())
+}
 
 // interpret() takes a chunk pointer as an input, runs it in the VM and returns the output
 func interpret(source *string) InterpretResult {
@@ -159,10 +165,8 @@ func run() InterpretResult {
 				fmt.Printf("[")
 				printValue(vm.stack[i])
 				fmt.Printf("]")
-				fmt.Println(len(vm.strings.Entries))
-				for k, v := range vm.strings.Entries {
-					fmt.Println("map: ", k, v)
-				}
+				fmt.Println(vm.globals)
+				//fmt.Println(vm.strings)
 			}
 			fmt.Println("<-offset", vm.stackTop)
 			disassembleInstruction(vm.chunk, int(vm.ip))
@@ -174,6 +178,12 @@ func run() InterpretResult {
 
 		// RET OpCode
 		case OP_RETURN:
+			res := ""
+			for i := 0; i < compilingChunk.Count; i++ {
+				// fmt.Printf("0x%04x\n", compilingChunk.Code[i])
+				res += "\n0x" + fmt.Sprintf("%04x", compilingChunk.Code[i])
+				write("dump.txt", res)
+			}
 			return INTERPRET_OK
 		case OP_GREATER:
 			BINARY_OP(VAL_NUMBER, greater)
@@ -250,6 +260,7 @@ func run() InterpretResult {
 			break
 		case OP_CONSTANT_LONG:
 			var longConstant Value = READ_LONG_CONSTANT()
+			//fmt.Println("aaaaaa", longConstant.valueType == VAL_NUMBER)
 			push(longConstant)
 			break
 		case OP_NIL:
@@ -261,6 +272,24 @@ func run() InterpretResult {
 		case OP_FALSE:
 			push(BOOL_VAL(false))
 			break
+		case OP_POP:
+			pop()
+		case OP_GET_GLOBAL:
+			var name *ObjString = READ_STRING()
+			var value Value = vm.globals.Entries[name.chars]
+
+			if !tableGet(&vm.globals, name, value) {
+				runtimeError()
+				return INTERPRET_RUNTIME_ERROR
+			}
+			push(value)
+
+			//fmt.Println("type + ", value, value.valueType)
+			break
+		case OP_DEFINE_GLOBAL:
+			var name *ObjString = READ_STRING()
+			tableSet(&vm.globals, name, stackPeek(0)) // Peek at the value, set the name equal to it
+			pop()
 		case OP_EQUAL:
 			b := pop()
 			a := pop()
