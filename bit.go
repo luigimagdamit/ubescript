@@ -7,7 +7,7 @@ import (
 func splitUInt32(num uint32) [4]uint8 {
 	var arr [4]uint8
 	binary.BigEndian.PutUint32(arr[0:4], uint32(num))
-
+	//fmt.Println(arr)
 	return arr
 }
 

@@ -87,6 +87,7 @@ func writeConstant(c *Chunk, val Value, line int) [4]uint8 {
 	for i := 0; i < 4; i++ {
 		writeChunk(c, arr[i], line)
 	}
+	//fmt.Println("OFFSET ", combineUInt8Array(arr), arr)
 	return arr
 
 }

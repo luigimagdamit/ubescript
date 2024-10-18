@@ -1,3 +1,10 @@
-let a str = "hello world"
-print ("the length of " + a + " is " )
-print len(a)
+let n1 int = 0
+let n2 int = 1
+
+print(n1)
+print(n2)
+print(n1+n2)
+print(n1+n2+n1+n2)
+print(n1+n2+n1+n2+n1+n2)
+print(n1+n2+n1+n2+n1+n2+n1+n2+n1+n2)
+print(n1+n2+n1+n2+n1+n2+n1+n2+n1+n2+n1+n2+n1+n2+n1+n2)

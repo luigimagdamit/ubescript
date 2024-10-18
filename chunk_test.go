@@ -64,12 +64,12 @@ func TestWriteConstant(t *testing.T) {
 	c := new(Chunk)
 	initChunk(c)
 	for i := 0; i < test; i++ {
-		writeConstant(c, float64(i), 123)
+		writeConstant(c, NUMBER_VAL(float64(i)), 123)
 	}
 
 	for i := 0; i < test; i++ {
 		// i need this to test the actual index values as well
-		if c.Constants.Values[i] != float64(i) {
+		if c.Constants.Values[i] != NUMBER_VAL(float64(i)) {
 			t.Errorf("Constant Value Mismatch")
 		}
 

@@ -15,7 +15,7 @@ const (
 
 type VM struct {
 	chunk *Chunk
-	ip    uint8 // will point to memory location of an OpCode, which is usually just a byte
+	ip    int // will point to memory location of an OpCode, which is usually just a byte
 
 	stack    [4096]Value
 	stackTop int
@@ -85,6 +85,9 @@ func concatenate() {
 func READ_BYTE() uint8 {
 	vm.ip++
 	tmp := vm.chunk.Code[vm.ip-1]
+	if DEBUG_BYTE_READ {
+		fmt.Println("READ_BYTE: ", tmp)
+	}
 
 	return tmp
 }
@@ -122,9 +125,14 @@ func READ_LONG_CONSTANT() Value {
 	var indexBytes [4]uint8
 	for i := 0; i < 4; i++ {
 		indexBytes[i] = READ_BYTE()
+
 	}
 
 	var longConstantIndex uint32 = combineUInt8Array(indexBytes)
+	if DEBUG_BYTE_READ {
+		fmt.Println("index: ", fmt.Sprintf("0x%04x", longConstantIndex), indexBytes)
+	}
+
 	return vm.chunk.Constants.Values[longConstantIndex]
 }
 func READ_STRING() *ObjString {
@@ -158,6 +166,12 @@ func interpret(source *string) InterpretResult {
 }
 
 func run() InterpretResult {
+	res := ""
+	for i := 0; i < compilingChunk.Count; i++ {
+		// fmt.Printf("0x%04x\n", compilingChunk.Code[i])
+		res += "\n0x" + fmt.Sprintf("%04x", compilingChunk.Code[i])
+		write("dump.txt", res)
+	}
 	for {
 		if DEBUG_TRACE_EXECUTION {
 			fmt.Printf("          offset 0->")
@@ -181,12 +195,7 @@ func run() InterpretResult {
 
 		// RET OpCode
 		case OP_RETURN:
-			res := ""
-			for i := 0; i < compilingChunk.Count; i++ {
-				// fmt.Printf("0x%04x\n", compilingChunk.Code[i])
-				res += "\n0x" + fmt.Sprintf("%04x", compilingChunk.Code[i])
-				write("dump.txt", res)
-			}
+
 			return INTERPRET_OK
 		case OP_GREATER:
 			BINARY_OP(VAL_NUMBER, greater)
@@ -262,6 +271,11 @@ func run() InterpretResult {
 			fmt.Printf("\n")
 			break
 		case OP_CONSTANT_LONG:
+			if DEBUG_BYTE_READ {
+				fmt.Println("yip", vm.ip, " ", vm.chunk.Code[vm.ip-1])
+				fmt.Println(vm.chunk.Code[vm.ip-1:])
+			}
+
 			var longConstant Value = READ_LONG_CONSTANT()
 			//fmt.Println("aaaaaa", longConstant.valueType == VAL_NUMBER)
 			push(longConstant)

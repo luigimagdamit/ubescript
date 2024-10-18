@@ -110,6 +110,7 @@ func emitConstant(val Value) {
 	makeConstant(val)
 }
 func makeConstant(val Value) [4]uint8 {
+	//fmt.Println("yij")
 	return writeConstant(compilingChunk, val, parser.Previous.Line)
 }
 func endCompiler() {
