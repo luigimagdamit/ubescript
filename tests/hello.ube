@@ -1,0 +1,3 @@
+let greeting str = "hello world"
+let name str = "luigi"
+print(greeting + " " + name)
