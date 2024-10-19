@@ -386,6 +386,10 @@ func resolveLocal(compiler *Compiler, name *Token) [4]uint8 {
 		local := &compiler.Locals[i]
 
 		if identifiersEqual(name, &local.Name) {
+			if local.Depth == -1 {
+				parser.Current.Message = "Cant read local variable in its own initializer"
+				errorAtCurrent(parser.Current)
+			}
 			return splitUInt32(uint32(i))
 		}
 	}
@@ -399,7 +403,8 @@ func addLocal(name Token) {
 	//local := &current.Locals[current.LocalCount]
 
 	newLocal.Name = name
-	newLocal.Depth = current.ScopeDepth
+	// newLocal.Depth = current.ScopeDepth
+	newLocal.Depth = -1
 
 	current.Locals[current.LocalCount] = *newLocal
 	current.LocalCount++
@@ -433,6 +438,7 @@ func parseVariable(errorMessage string) [4]uint8 {
 }
 func defineVariable(global [4]uint8) {
 	if current.ScopeDepth > 0 {
+		markInitialized()
 		return
 	}
 	emitByte(OP_DEFINE_GLOBAL)
@@ -473,6 +479,9 @@ func varDeclaration() {
 	parser.Current.Message = "Expected ; but found " + getLexeme(parser.Current)
 	consume(TOKEN_SEMICOLON)
 	defineVariable(global)
+}
+func markInitialized() {
+	current.Locals[current.LocalCount-1].Depth = current.ScopeDepth
 }
 func expressionStatement() {
 	expression()

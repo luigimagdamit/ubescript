@@ -1,11 +1,17 @@
-let x int = 24 / 2
-let y int = 4
-
-echo x / y
-
+let a = 24
 {
-    let y int = 2
-    echo x / y
+    let a = 12
+    print a
+    a = 143
+    {
+        let a = 3000
+        print a
+        {
+           
+        }
+    }
+    print a
+    
 }
 
-echo x / y
+print a

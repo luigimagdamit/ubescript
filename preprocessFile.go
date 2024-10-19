@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func preprocessFile(filename string) (string, error) {
@@ -36,8 +37,18 @@ func preprocessFile(filename string) (string, error) {
 		// } else if lastChar == ")" {
 		// 	closed = true
 		// }
+		if lastChar == " " {
+			// fmt.Println("AHHH")
+			// if lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," && lastChar != "}" && lastChar != " " {
+			// 	res += ";"
+			// }
+			if len(line) < 0 {
+				res = strings.TrimRight(res, " ") + ";"
+			}
 
-		if lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," && lastChar != "}" && lastChar != "\r\n" && lastChar != " " {
+			// fmt.Println(res)
+		}
+		if lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," && lastChar != "}" && lastChar != " " {
 			res += ";"
 		}
 		res += "\n"
