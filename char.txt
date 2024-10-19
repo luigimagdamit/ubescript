@@ -1,10 +1,11 @@
-let greeting str = "hello world"
-let n int = len(greeting)
+let x int = 24 / 2
+let y int = 4
 
-let equals12 = n == 12
+echo x / y
 
-echo greeting + " has the length: " 
-echo n 
+{
+    let y int = 2
+    echo x / y
+}
 
-echo "and its equal to 12: "
-echo equals12
+echo x / y

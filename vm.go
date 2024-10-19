@@ -180,7 +180,7 @@ func run() InterpretResult {
 				printValue(vm.stack[i])
 				fmt.Printf("]")
 				if DEBUG_TABLE_CODE {
-					fmt.Println(vm.globals)
+					//fmt.Println(vm.globals)
 				}
 
 				//fmt.Println(vm.strings)
@@ -291,7 +291,26 @@ func run() InterpretResult {
 			break
 		case OP_POP:
 			pop()
+		case OP_GET_LOCAL:
+
+			var slot [4]uint8
+			for i := 0; i < 4; i++ {
+				slot[i] = READ_BYTE()
+			}
+			slotIndex := combineUInt8Array(slot)
+			push(vm.stack[slotIndex])
+		case OP_SET_LOCAL:
+
+			var slot [4]uint8
+			for i := 0; i < 4; i++ {
+				slot[i] = READ_BYTE()
+			}
+			slotIndex := combineUInt8Array(slot)
+
+			vm.stack[slotIndex] = stackPeek(0)
+
 		case OP_GET_GLOBAL:
+
 			var name *ObjString = READ_STRING()
 			var value Value = vm.globals.Entries[name.chars]
 

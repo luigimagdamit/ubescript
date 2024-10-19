@@ -36,7 +36,8 @@ func preprocessFile(filename string) (string, error) {
 		// } else if lastChar == ")" {
 		// 	closed = true
 		// }
-		if lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," {
+
+		if lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," && lastChar != "}" && lastChar != "\r\n" && lastChar != " " {
 			res += ";"
 		}
 		res += "\n"

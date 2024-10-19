@@ -28,6 +28,15 @@ type ParseRule struct {
 	Infix      ParseFn
 	Precedence Precedence
 }
+type Local struct {
+	Name  Token
+	Depth int
+}
+type Compiler struct {
+	Locals     [4096]Local
+	LocalCount int
+	ScopeDepth int
+}
 
 // just a function type
 type ParseFn func(canAssign bool)

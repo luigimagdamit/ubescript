@@ -75,3 +75,18 @@ echo n
 echo "and its equal to 12: "
 echo equals12
 ```
+### Scoping
+
+```rust
+let x int = 24 / 2
+let y int = 4
+
+echo x / y
+
+{
+    let y int = 2
+    echo x / y
+}
+
+echo x / y
+```

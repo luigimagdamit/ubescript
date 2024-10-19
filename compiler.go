@@ -13,6 +13,7 @@ type Parser struct {
 }
 
 var parser Parser
+var current *Compiler
 var compilingChunk *Chunk
 
 func currentChunk() *Chunk {
@@ -113,13 +114,29 @@ func makeConstant(val Value) [4]uint8 {
 	//fmt.Println("yij")
 	return writeConstant(compilingChunk, val, parser.Previous.Line)
 }
+func initCompiler(compiler *Compiler) {
+	compiler.Locals = [4096]Local{}
+	compiler.LocalCount = 0
+	compiler.ScopeDepth = 0
+	current = compiler
+}
 func endCompiler() {
 	if DEBUG_PRINT_CODE && !parser.HadError {
 		disassembleChunk(currentChunk(), "code")
 	}
 	emitReturn()
 }
-
+func beginScope() {
+	current.ScopeDepth++
+}
+func endScope() {
+	current.ScopeDepth--
+	for current.LocalCount > 0 && current.Locals[current.LocalCount-1].Depth >
+		current.ScopeDepth {
+		emitByte(OP_POP)
+		current.LocalCount--
+	}
+}
 func parseBinary(canAssign bool) {
 	// left hand operand consumed
 	// we have consumed the operator
@@ -166,7 +183,7 @@ func parseBinary(canAssign bool) {
 
 }
 func literal(canAssign bool) {
-	fmt.Println("literally")
+
 	switch parser.Previous.Type {
 	case TOKEN_FALSE:
 		emitByte(OP_FALSE)
@@ -217,16 +234,29 @@ func parseString(canAssign bool) {
 	emitConstant(OBJ_VAL(objString))
 }
 func namedVariable(name Token, canAssign bool) {
-	arg := identifierConstant(&name)
+	var getOp uint8
+	var setOp uint8
+	var arg [4]uint8 = resolveLocal(current, &name)
+
+	if combineUInt8Array(arg) != 4294967295 {
+
+		getOp = OP_GET_LOCAL
+		setOp = OP_SET_LOCAL
+	} else {
+		arg = identifierConstant(&name)
+		getOp = OP_GET_GLOBAL
+		setOp = OP_SET_GLOBAL
+	}
 
 	if canAssign && parseMatch(TOKEN_EQUAL) {
 		expression()
-		emitByte(OP_SET_GLOBAL)
+		emitByte(setOp)
+
 		for i := 0; i < 4; i++ {
 			emitByte(arg[i])
 		}
 	} else {
-		emitByte(OP_GET_GLOBAL)
+		emitByte(getOp)
 		for i := 0; i < 4; i++ {
 			emitByte(arg[i])
 		}
@@ -343,11 +373,68 @@ func parsePrecedence(precedence Precedence) {
 func identifierConstant(name *Token) [4]uint8 {
 	return makeConstant(OBJ_VAL(*copyString(getLexeme(*name), name.Length)))
 }
+func identifiersEqual(a *Token, b *Token) bool {
+	if a.Length != b.Length {
+		return false
+	} else {
+		return getLexeme(*a) == getLexeme(*b)
+	}
+}
+func resolveLocal(compiler *Compiler, name *Token) [4]uint8 {
+	for i := compiler.LocalCount - 1; i >= 0; i-- {
+
+		local := &compiler.Locals[i]
+
+		if identifiersEqual(name, &local.Name) {
+			return splitUInt32(uint32(i))
+		}
+	}
+
+	return splitUInt32(4294967295)
+}
+func addLocal(name Token) {
+
+	var newLocal *Local = new(Local)
+
+	//local := &current.Locals[current.LocalCount]
+
+	newLocal.Name = name
+	newLocal.Depth = current.ScopeDepth
+
+	current.Locals[current.LocalCount] = *newLocal
+	current.LocalCount++
+
+}
+func declareVariable() {
+	if current.ScopeDepth == 0 {
+		return
+	}
+
+	var name *Token = &parser.Previous
+	for i := current.LocalCount - 1; i >= 0; i-- {
+		local := &current.Locals[i]
+		if local.Depth != -1 && local.Depth < current.ScopeDepth {
+			break
+		}
+		if identifiersEqual(name, &local.Name) {
+			parser.Current.Message = "Error declaring locals"
+			errorAtCurrent(parser.Current)
+		}
+	}
+	addLocal(*name)
+}
 func parseVariable(errorMessage string) [4]uint8 {
 	consume(TOKEN_IDENTIFIER)
+	declareVariable()
+	if current.ScopeDepth > 0 {
+		return [4]uint8{0, 0, 0, 0}
+	}
 	return identifierConstant(&parser.Previous)
 }
 func defineVariable(global [4]uint8) {
+	if current.ScopeDepth > 0 {
+		return
+	}
 	emitByte(OP_DEFINE_GLOBAL)
 	for i := 0; i < 4; i++ {
 		emitByte(global[i])
@@ -361,6 +448,13 @@ func getRule(tokenType TokenType) *ParseRule {
 }
 func expression() {
 	parsePrecedence(PREC_ASSIGNMENT) // the whole expression since it is the lowest precedence level
+}
+func block() {
+	for !check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF) {
+		declaration()
+	}
+	parser.Current.Message = "Expect } after block but found " + getLexeme(parser.Current)
+	consume(TOKEN_RIGHT_BRACE)
 }
 func varDeclaration() {
 	global := parseVariable("Expect variable name")
@@ -376,6 +470,7 @@ func varDeclaration() {
 	} else {
 		emitByte(OP_NIL)
 	}
+	parser.Current.Message = "Expected ; but found " + getLexeme(parser.Current)
 	consume(TOKEN_SEMICOLON)
 	defineVariable(global)
 }
@@ -414,6 +509,7 @@ func synchronize() {
 func declaration() {
 
 	if parseMatch(TOKEN_VAR) {
+
 		varDeclaration()
 	} else {
 		statement()
@@ -425,6 +521,12 @@ func declaration() {
 func statement() {
 	if parseMatch(TOKEN_PRINT) {
 		printStatement()
+	} else if parseMatch(TOKEN_LEFT_BRACE) {
+
+		beginScope()
+
+		block()
+		endScope()
 	} else {
 		expressionStatement()
 	}
@@ -434,6 +536,8 @@ func compile(source *string, c *Chunk) bool {
 	if DEBUG_COMPILER_OUTPUT {
 		fmt.Println(*source)
 	}
+	var compiler Compiler
+	initCompiler(&compiler)
 
 	compilingChunk = c
 	parser.HadError = false
