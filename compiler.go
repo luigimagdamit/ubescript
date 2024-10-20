@@ -122,7 +122,11 @@ func emitReturn() {
 	emitByte(OP_RETURN)
 }
 func emitConstant(val Value) {
-	makeConstant(val)
+	writeChunk(currentChunk(), OP_CONSTANT_LONG, parser.Current.Line)
+	res := makeConstant(val)
+	emitBytes(res[0], res[1])
+	emitBytes(res[2], res[3])
+
 }
 func patchJump(offset int) {
 	jump := currentChunk().Count - offset - 1
@@ -284,6 +288,7 @@ func namedVariable(name Token, canAssign bool) {
 	}
 
 	if canAssign && parseMatch(TOKEN_EQUAL) {
+
 		expression()
 		emitByte(setOp)
 
@@ -477,6 +482,7 @@ func defineVariable(global [4]uint8) {
 		return
 	}
 	emitByte(OP_DEFINE_GLOBAL)
+
 	for i := 0; i < 4; i++ {
 		emitByte(global[i])
 	}

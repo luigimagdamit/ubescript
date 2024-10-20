@@ -186,7 +186,7 @@ func run() InterpretResult {
 				printValue(vm.stack[i])
 				fmt.Printf("]")
 				if DEBUG_TABLE_CODE {
-					fmt.Println(vm.globals)
+					//fmt.Println(vm.globals)
 				}
 
 				//fmt.Println(vm.strings)
@@ -330,13 +330,14 @@ func run() InterpretResult {
 		case OP_GET_GLOBAL:
 
 			var name *ObjString = READ_STRING()
+
 			var value Value = vm.globals.Entries[name.chars]
 
 			if !tableGet(&vm.globals, name, value) {
 				runtimeError()
 				return INTERPRET_RUNTIME_ERROR
 			}
-			pop() //DANGER!!!
+			//pop() //DANGER!!!
 			push(value)
 
 			//fmt.Println("type + ", value, value.valueType)
@@ -345,16 +346,18 @@ func run() InterpretResult {
 			var name *ObjString = READ_STRING()
 			tableSet(&vm.globals, name, stackPeek(0)) // Peek at the value, set the name equal to it
 			pop()                                     //DANGER!!!
-			pop()
+
 		case OP_SET_GLOBAL:
 
 			name := READ_STRING()
+
 			if tableSet(&vm.globals, name, stackPeek(0)) {
 
 				tableDelete(&vm.globals, name, NIL_VAL(0))
 				runtimeError()
 				return INTERPRET_RUNTIME_ERROR
 			}
+
 			break
 		case OP_EQUAL:
 			b := pop()

@@ -88,10 +88,10 @@ func writeConstant(c *Chunk, val Value, line int) [4]uint8 {
 		panic("conversion failed")
 	}
 	// may have to remove the writeChunk so that the OP_CONSTANT_LONG emit can be handled separately
-	writeChunk(c, OP_CONSTANT_LONG, line)
+	//writeChunk(c, OP_CONSTANT_LONG, line)
 	// This just the index but split up
 	for i := 0; i < 4; i++ {
-		writeChunk(c, arr[i], line)
+		//writeChunk(c, arr[i], line)
 	}
 	//fmt.Println("OFFSET ", combineUInt8Array(arr), arr)
 	return arr

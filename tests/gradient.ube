@@ -1,0 +1,30 @@
+let w = 8
+let h = 8
+
+let j = 0
+let i = 0
+
+let iter = 0
+while j < h {
+    
+    while i < w {
+        let r = i / (w -1)
+        let g = j / (h - 1)
+        let b = 0
+
+        let ir = 256 * r
+        let ig = 256 * g
+        let ib = 256 * b
+
+        echo ir
+        echo ig
+        echo ib
+
+        i = i + 1
+        iter = iter + 1
+    }
+    j = j + 1
+    i = i * 0
+    
+}
+echo iter

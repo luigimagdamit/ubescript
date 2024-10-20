@@ -18,10 +18,9 @@ func disassembleInstruction(c *Chunk, offset int) int {
 	// 	fmt.Println(curLine == prevLine, []int{curLine, prevLine}, []int{offset, offset - 1})
 
 	// }
-	fmt.Println(len(c.Lines), offset)
 
 	if offset > 0 && c.Lines[offset] == c.Lines[offset-1] {
-		fmt.Println("   | ") // this is done for any other instructions that come from the same source line
+		//fmt.Println("   | ") // this is done for any other instructions that come from the same source line
 	} else {
 		fmt.Printf("%4d\t", c.Lines[offset])
 	}
@@ -48,6 +47,8 @@ func disassembleInstruction(c *Chunk, offset int) int {
 		return simpleInstruction("OP_DEFINE_GLOBAL", offset)
 	case OP_SET_GLOBAL:
 		return simpleInstruction("OP_SET_GLOBAL", offset)
+	case OP_GET_GLOBAL:
+		return simpleInstruction("OP_GET_GLOBAL", offset)
 	case OP_EQUAL:
 		return simpleInstruction("OP_EQUAL", offset)
 	case OP_GREATER:
@@ -93,10 +94,10 @@ func simpleInstruction(name string, offset int) int {
 
 func constantInstruction(name string, c *Chunk, offset int) int {
 	var constant uint8 = c.Code[offset+1] // obtain the operand
-	fmt.Printf("%-16s C.Index %4d ' Value: ", name, constant)
+	fmt.Printf("%-16s (C.Index %4d ' Value: ", name, constant)
 
 	printValue(c.Constants.Values[constant]) // print the actual value from within the constant pool
-	fmt.Printf("\n")
+	fmt.Printf(")\n")
 	return offset + 2 // since the original constant implementation is [01] [02] = [OP_CONSTANT][CONST_INDEX]
 }
 
@@ -108,10 +109,10 @@ func constantInstructionLong(name string, c *Chunk, offset int) int {
 		arr[i] = c.Code[1+offset+i]
 	}
 	long_con := combineUInt8Array(arr)
-	fmt.Printf("%s C.Index: %4d ' Value: ", name, long_con)
+	fmt.Printf("%s (C.Index: %4d ' Value: ", name, long_con)
 
 	printValue(c.Constants.Values[long_con]) // print the actual value from within the constant pool
-	fmt.Printf("\n")
+	fmt.Printf(")\n")
 	return offset + 5
 }
 func jumpInstruction(name string, sign int, chunk *Chunk, offset int) int {
