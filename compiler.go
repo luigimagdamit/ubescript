@@ -104,12 +104,29 @@ func emitBytes(b1 uint8, b2 uint8) {
 	emitByte(b1)
 	emitByte(b2)
 }
+func emitJump(instruction uint8) int {
+	emitByte(instruction)
+	emitByte(0xff)
+	emitByte(0xff)
+	return currentChunk().Count - 2
+}
 func emitReturn() {
 	emitByte(OP_RETURN)
 }
 func emitConstant(val Value) {
 	makeConstant(val)
 }
+func patchJump(offset int) {
+	jump := currentChunk().Count - offset - 1
+	if jump > 65535 {
+		panic("too much code to jump over")
+	}
+
+	currentChunk().Code[offset] = uint8((jump >> 8)) & 0xff
+	currentChunk().Code[offset+1] = uint8((jump & 0xff))
+
+}
+
 func makeConstant(val Value) [4]uint8 {
 	//fmt.Println("yij")
 	return writeConstant(compilingChunk, val, parser.Previous.Line)
@@ -489,6 +506,13 @@ func expressionStatement() {
 	consume(TOKEN_SEMICOLON)
 	emitByte(OP_POP)
 }
+func ifStatement() {
+	expression()
+	var thenJump int = emitJump(OP_JUMP_IF_FALSE)
+	statement()
+
+	patchJump(thenJump)
+}
 func printStatement() {
 	expression()
 	consume(TOKEN_SEMICOLON)
@@ -530,6 +554,8 @@ func declaration() {
 func statement() {
 	if parseMatch(TOKEN_PRINT) {
 		printStatement()
+	} else if parseMatch(TOKEN_IF) {
+		ifStatement()
 	} else if parseMatch(TOKEN_LEFT_BRACE) {
 
 		beginScope()

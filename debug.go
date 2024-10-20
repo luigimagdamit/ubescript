@@ -18,6 +18,7 @@ func disassembleInstruction(c *Chunk, offset int) int {
 	// 	fmt.Println(curLine == prevLine, []int{curLine, prevLine}, []int{offset, offset - 1})
 
 	// }
+	fmt.Println(len(c.Lines), offset)
 
 	if offset > 0 && c.Lines[offset] == c.Lines[offset-1] {
 		fmt.Println("   | ") // this is done for any other instructions that come from the same source line
@@ -73,6 +74,8 @@ func disassembleInstruction(c *Chunk, offset int) int {
 		return simpleInstruction("OP_NEGATE", offset)
 	case OP_RETURN:
 		return simpleInstruction("OP_RETURN", offset)
+	case OP_JUMP_IF_FALSE:
+		return jumpInstruction("OP_JUMP_IF_FALSE", 1, c, offset)
 	default:
 		fmt.Printf("Unknown OpCode %d at offset %04d\n", inst, offset)
 		return offset + 1
@@ -106,4 +109,10 @@ func constantInstructionLong(name string, c *Chunk, offset int) int {
 	printValue(c.Constants.Values[long_con]) // print the actual value from within the constant pool
 	fmt.Printf("\n")
 	return offset + 5
+}
+func jumpInstruction(name string, sign int, chunk *Chunk, offset int) int {
+	jump := uint16(uint16(chunk.Code[offset+1]) << 8)
+	jump |= uint16(uint16(chunk.Code[offset+2]))
+
+	return offset + 3
 }

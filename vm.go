@@ -135,6 +135,12 @@ func READ_LONG_CONSTANT() Value {
 
 	return vm.chunk.Constants.Values[longConstantIndex]
 }
+func READ_SHORT() uint16 {
+	b1 := READ_BYTE()
+	b2 := READ_BYTE()
+
+	return (uint16)((uint16(b1) << 8) | uint16(b2))
+}
 func READ_STRING() *ObjString {
 	return AS_STRING(READ_LONG_CONSTANT())
 }
@@ -197,6 +203,12 @@ func run() InterpretResult {
 		case OP_RETURN:
 
 			return INTERPRET_OK
+		case OP_JUMP_IF_FALSE:
+			offset := READ_SHORT()
+			//fmt.Println("omg", offset, vm.chunk.Code)
+			if isFalsey(stackPeek(0)) {
+				vm.ip += int(offset) - 1
+			}
 		case OP_GREATER:
 			BINARY_OP(VAL_NUMBER, greater)
 		case OP_LESS:
