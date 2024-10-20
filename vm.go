@@ -186,7 +186,7 @@ func run() InterpretResult {
 				printValue(vm.stack[i])
 				fmt.Printf("]")
 				if DEBUG_TABLE_CODE {
-					//fmt.Println(vm.globals)
+					fmt.Println(vm.globals)
 				}
 
 				//fmt.Println(vm.strings)
@@ -203,6 +203,12 @@ func run() InterpretResult {
 		case OP_RETURN:
 
 			return INTERPRET_OK
+		case OP_LOOP:
+			offset := READ_SHORT()
+			vm.ip -= int(offset)
+		case OP_JUMP:
+			offset := READ_SHORT()
+			vm.ip += int(offset) - 1
 		case OP_JUMP_IF_FALSE:
 			offset := READ_SHORT()
 			//fmt.Println("omg", offset, vm.chunk.Code)

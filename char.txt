@@ -1,12 +1,14 @@
-let greeting = "hello world!"
-let evil_greeting = "goodbye world!"
+let n1 int = 0
+let n2 int = 1
+let tmp int
 
-let good = false
+let n int = 20
+let i int = 0
 
-if !good {
-    echo evil_greeting
+while i < n  {
+    echo n1
+    tmp = n2
+    n2 = n1 + n2
+    n1 = tmp
+    i = i + 1
 }
-good = !good
-if good {
-    echo greeting
-} 

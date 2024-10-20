@@ -1,0 +1,8 @@
+let greeting str = "hello world"
+echo len(greeting)
+
+if (greeting == "hello world" and len(greeting) == 11) {
+    echo "success!"
+} else {
+    echo "failure"
+}

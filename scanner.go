@@ -215,6 +215,8 @@ func identifierType() TokenType {
 
 	case "n":
 		return checkKeyword(1, 3, "one", TOKEN_NIL)
+	case "o":
+		return checkKeyword(1, 1, "r", TOKEN_OR)
 	case "p":
 		return checkKeyword(1, 4, "rint", TOKEN_PRINT)
 	case "r":

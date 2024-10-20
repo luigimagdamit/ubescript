@@ -104,6 +104,14 @@ func emitBytes(b1 uint8, b2 uint8) {
 	emitByte(b1)
 	emitByte(b2)
 }
+func emitLoop(loopStart int) {
+	emitByte(OP_LOOP)
+
+	offset := currentChunk().Count - loopStart + 2
+
+	emitByte((uint8(offset) >> 8) & 0xff)
+	emitByte(uint8(offset) & 0xff)
+}
 func emitJump(instruction uint8) int {
 	emitByte(instruction)
 	emitByte(0xff)
@@ -243,6 +251,16 @@ func parseNumber(canAssign bool) {
 	emitConstant(NUMBER_VAL(float64(value)))
 
 }
+func or_(canAssign bool) {
+	elseJump := emitJump(OP_JUMP_IF_FALSE)
+	endJump := emitJump(OP_JUMP)
+
+	patchJump(elseJump)
+	emitByte(OP_POP)
+
+	parsePrecedence(PREC_OR)
+	patchJump(endJump)
+}
 func parseString(canAssign bool) {
 	// emitConstant()
 	c := (getLexeme(parser.Previous))
@@ -332,7 +350,7 @@ func init() {
 	rules[TOKEN_IDENTIFIER] = ParseRule{variable, nil, PREC_NONE}
 	rules[TOKEN_STRING] = ParseRule{parseString, nil, PREC_NONE}
 	rules[TOKEN_NUMBER] = ParseRule{parseNumber, nil, PREC_NONE}
-	rules[TOKEN_AND] = ParseRule{nil, nil, PREC_NONE}
+	rules[TOKEN_AND] = ParseRule{nil, and_, PREC_AND}
 	rules[TOKEN_CLASS] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_ELSE] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_FALSE] = ParseRule{literal, nil, PREC_NONE}
@@ -340,7 +358,7 @@ func init() {
 	rules[TOKEN_FUN] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_IF] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_NIL] = ParseRule{literal, nil, PREC_NONE}
-	rules[TOKEN_OR] = ParseRule{unary, nil, PREC_NONE}
+	rules[TOKEN_OR] = ParseRule{nil, or_, PREC_OR}
 	rules[TOKEN_PRINT] = ParseRule{unary, nil, PREC_NONE}
 	rules[TOKEN_RETURN] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_SUPER] = ParseRule{nil, nil, PREC_NONE}
@@ -463,6 +481,12 @@ func defineVariable(global [4]uint8) {
 		emitByte(global[i])
 	}
 }
+func and_(canAssign bool) {
+	endJump := emitJump(OP_JUMP_IF_FALSE)
+	emitByte(OP_POP)
+	parsePrecedence(PREC_AND)
+	patchJump(endJump)
+}
 
 // returns rule at TokenType index
 // called by parseBinary() to look up precedence of operator
@@ -509,14 +533,31 @@ func expressionStatement() {
 func ifStatement() {
 	expression()
 	var thenJump int = emitJump(OP_JUMP_IF_FALSE)
+	emitByte(OP_POP)
 	statement()
-
+	var elseJump = emitJump(OP_JUMP)
 	patchJump(thenJump)
+	emitByte(OP_POP)
+	if parseMatch(TOKEN_ELSE) {
+		statement()
+	}
+	patchJump(elseJump)
 }
 func printStatement() {
 	expression()
 	consume(TOKEN_SEMICOLON)
 	emitByte(OP_SHOW)
+}
+func whileStatement() {
+	loopStart := currentChunk().Count
+	expression()
+	exitJump := emitJump(OP_JUMP_IF_FALSE)
+	emitByte(OP_POP)
+	statement()
+	emitLoop(loopStart)
+
+	patchJump(exitJump)
+	emitByte(OP_POP)
 }
 func synchronize() {
 	parser.PanicMode = false
@@ -556,6 +597,8 @@ func statement() {
 		printStatement()
 	} else if parseMatch(TOKEN_IF) {
 		ifStatement()
+	} else if parseMatch(TOKEN_WHILE) {
+		whileStatement()
 	} else if parseMatch(TOKEN_LEFT_BRACE) {
 
 		beginScope()

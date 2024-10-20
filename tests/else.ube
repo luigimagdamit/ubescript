@@ -1,0 +1,14 @@
+let a = 12
+let b = 13
+
+if false {
+    echo a
+} else {
+    echo b
+}
+
+if true {
+    echo a
+} else {
+    echo b
+}
