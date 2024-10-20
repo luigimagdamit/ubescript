@@ -19,43 +19,46 @@ ubescript pulls inspiration from the simplicity of Go, while developing a strong
 - Further OpCode optimizations
 
 ## Examples
----
+
 ### Hello World.ube
 ```rust
-print("hello world")
+println("hello world")
 
 let breakfast str = "beignets"
 let beverage str = "cafe au lait"
 
-print(breakfast)
+println(breakfast)
+
 // "beignets"
 breakfast = breakfast + " with " + beverage
 
-print(breakfast)
+println(breakfast)
 // "beignets with au lait"
 ```
 
 ```
 hello world
+beignets
+beignets with cafe au lait
 ```
 
 ### Strings
 ```rust
-print(len("hello"))
+println(len("hello"))
 // prints 5
 
-print("ube" + "script")
+println("ube" + "script")
 //print 'ubescript'
 
-print("abc" == "abc")
+println("abc" == "abc")
 // print 'true'
 ```
 
 ### Numerical Operations
 ```rust
-print(1 + 2)
+println(1 + 2)
 // prints 3
-print(1 * 2 * 3)
+println(1 * 2 * 3)
 // prints 6
 1..400
 // places 1-400 on the VM stack

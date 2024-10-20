@@ -1,30 +1,42 @@
-let w = 8
-let h = 8
+let width int = 256
+let height int = 256
 
-let j = 0
-let i = 0
+let j int = 0
+let i int = 0
 
-let iter = 0
-while j < h {
-    
-    while i < w {
-        let r = i / (w -1)
-        let g = j / (h - 1)
-        let b = 0
+let r int
+let g int
+let b int
+
+println("P3")
+echo width
+echo " "
+echo height
+println(" ")
+echo 255
+println(" ")
+
+while j < height {
+    while i < width {
+        r = i / (width -1)
+        g = j / (height - 1)
+        b = 1
 
         let ir = 256 * r
         let ig = 256 * g
         let ib = 256 * b
 
         echo ir
+        echo " "
         echo ig
+        echo " "
         echo ib
+        println(" ")
 
         i = i + 1
-        iter = iter + 1
+        
     }
     j = j + 1
     i = i * 0
     
 }
-echo iter
