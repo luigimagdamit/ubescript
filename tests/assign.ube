@@ -8,4 +8,4 @@ n2 = n2 * n2
 n2 = n2 * n2
 n2 = n2 * n2
 
-print n2
+println n2

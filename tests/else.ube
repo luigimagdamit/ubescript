@@ -2,13 +2,13 @@ let a = 12
 let b = 13
 
 if false {
-    echo a
+    println a
 } else {
-    echo b
+    println b
 }
 
 if true {
-    echo a
+    println a
 } else {
-    echo b
+    println b
 }

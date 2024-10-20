@@ -1,2 +1,188 @@
+let greeting str = "hello world";
+println len(greeting);
+
+if (greeting == "hello world" and len(greeting) == 11) {
+    println"success!";
+} else {
+    println "failure";
+}
+
+[       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  0 | Lexeme:                 | Line: 0
+[        parser_advance(): parser.Current] Type: 38            TOKEN_VAR| Length:  3 | Lexeme:             let | Line: 1
+[       parser_advance(): parser.Previous] Type: 38            TOKEN_VAR| Length:  3 | Lexeme:             let | Line: 1
+[        parser_advance(): parser.Current] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 1
+[       parser_advance(): parser.Previous] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 1
+[        parser_advance(): parser.Current] Type: 40           TOKEN_TYPE| Length:  3 | Lexeme:             str | Line: 1
+[       parser_advance(): parser.Previous] Type: 40           TOKEN_TYPE| Length:  3 | Lexeme:             str | Line: 1
+[        parser_advance(): parser.Current] Type: 15          TOKEN_EQUAL| Length:  1 | Lexeme:               = | Line: 1
+[       parser_advance(): parser.Previous] Type: 15          TOKEN_EQUAL| Length:  1 | Lexeme:               = | Line: 1
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length: 13 | Lexeme:   "hello world" | Line: 1
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length: 13 | Lexeme:   "hello world" | Line: 1
+[        parser_advance(): parser.Current] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length: 13 | Lexeme:   "hello world" | Line: 1
+[       parser_advance(): parser.Previous] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 1
+[        parser_advance(): parser.Current] Type: 33          TOKEN_PRINT| Length:  7 | Lexeme:         println | Line: 2
+[       parser_advance(): parser.Previous] Type: 33          TOKEN_PRINT| Length:  7 | Lexeme:         println | Line: 2
+[        parser_advance(): parser.Current] Type: 47            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 2
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 47            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 2
+[        parser_advance(): parser.Current] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 2
+[[parsePrecedence()] Consumed this token.] Type: 47            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 2
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 2
+[        parser_advance(): parser.Current] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 2
+[[parsePrecedence()] Consumed this token.] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 2
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 2
+[        parser_advance(): parser.Current] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 2
+[[parsePrecedence()] Consumed this token.] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 2
+map[greeting:{3 {false 0 {0 0xc000078080 <nil>}}} hello world:{3 {false 0 {0 0xc000078140 0xc000014080}}}]
+COPY FOUND
+[       parser_advance(): parser.Previous] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 2
+[        parser_advance(): parser.Current] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 2
+[       parser_advance(): parser.Previous] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 2
+[        parser_advance(): parser.Current] Type: 30             TOKEN_IF| Length:  2 | Lexeme:              if | Line: 4
+[       parser_advance(): parser.Previous] Type: 30             TOKEN_IF| Length:  2 | Lexeme:              if | Line: 4
+[        parser_advance(): parser.Current] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 4
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 4
+[        parser_advance(): parser.Current] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 4
+[[parsePrecedence()] Consumed this token.] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 4
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 4
+[        parser_advance(): parser.Current] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 4
+[[parsePrecedence()] Consumed this token.] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 4
+map[greeting:{3 {false 0 {0 0xc000078080 <nil>}}} hello world:{3 {false 0 {0 0xc000078140 0xc000014080}}}]
+COPY FOUND
+[       parser_advance(): parser.Previous] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 4
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length: 13 | Lexeme:   "hello world" | Line: 4
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length: 13 | Lexeme:   "hello world" | Line: 4
+[        parser_advance(): parser.Current] Type: 24            TOKEN_AND| Length:  3 | Lexeme:             and | Line: 4
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length: 13 | Lexeme:   "hello world" | Line: 4
+map[greeting:{3 {false 0 {0 0xc000078080 <nil>}}} hello world:{3 {false 0 {0 0xc000078140 0xc000014080}}}]
+COPY FOUND
+[       parser_advance(): parser.Previous] Type: 24            TOKEN_AND| Length:  3 | Lexeme:             and | Line: 4
+[        parser_advance(): parser.Current] Type: 47            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 4
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 47            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 4
+[        parser_advance(): parser.Current] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 4
+[[parsePrecedence()] Consumed this token.] Type: 47            TOKEN_LEN| Length:  3 | Lexeme:             len | Line: 4
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 4
+[        parser_advance(): parser.Current] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 4
+[[parsePrecedence()] Consumed this token.] Type:  0     TOKEN_LEFT_PAREN| Length:  1 | Lexeme:               ( | Line: 4
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 4
+[        parser_advance(): parser.Current] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 4
+[[parsePrecedence()] Consumed this token.] Type: 21     TOKEN_IDENTIFIER| Length:  8 | Lexeme:        greeting | Line: 4
+map[greeting:{3 {false 0 {0 0xc000078080 <nil>}}} hello world:{3 {false 0 {0 0xc000078140 0xc000014080}}}]
+COPY FOUND
+[       parser_advance(): parser.Previous] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 4
+[        parser_advance(): parser.Current] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 4
+[       parser_advance(): parser.Previous] Type: 16    TOKEN_EQUAL_EQUAL| Length:  2 | Lexeme:              == | Line: 4
+[        parser_advance(): parser.Current] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              11 | Line: 4
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              11 | Line: 4
+[        parser_advance(): parser.Current] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 4
+[[parsePrecedence()] Consumed this token.] Type: 23         TOKEN_NUMBER| Length:  2 | Lexeme:              11 | Line: 4
+lex:  11 {23 109 2 4 }
+[       parser_advance(): parser.Previous] Type:  1    TOKEN_RIGHT_PAREN| Length:  1 | Lexeme:               ) | Line: 4
+[        parser_advance(): parser.Current] Type:  2     TOKEN_LEFT_BRACE| Length:  1 | Lexeme:               { | Line: 4
+[       parser_advance(): parser.Previous] Type:  2     TOKEN_LEFT_BRACE| Length:  1 | Lexeme:               { | Line: 4
+[        parser_advance(): parser.Current] Type: 33          TOKEN_PRINT| Length:  7 | Lexeme:         println | Line: 5
+[       parser_advance(): parser.Previous] Type: 33          TOKEN_PRINT| Length:  7 | Lexeme:         println | Line: 5
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length: 10 | Lexeme:      "success!" | Line: 5
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length: 10 | Lexeme:      "success!" | Line: 5
+[        parser_advance(): parser.Current] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 5
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length: 10 | Lexeme:      "success!" | Line: 5
+[       parser_advance(): parser.Previous] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 5
+[        parser_advance(): parser.Current] Type:  3    TOKEN_RIGHT_BRACE| Length:  1 | Lexeme:               } | Line: 6
+[       parser_advance(): parser.Previous] Type:  3    TOKEN_RIGHT_BRACE| Length:  1 | Lexeme:               } | Line: 6
+[        parser_advance(): parser.Current] Type: 26           TOKEN_ELSE| Length:  4 | Lexeme:            else | Line: 6
+[       parser_advance(): parser.Previous] Type: 26           TOKEN_ELSE| Length:  4 | Lexeme:            else | Line: 6
+[        parser_advance(): parser.Current] Type:  2     TOKEN_LEFT_BRACE| Length:  1 | Lexeme:               { | Line: 6
+[       parser_advance(): parser.Previous] Type:  2     TOKEN_LEFT_BRACE| Length:  1 | Lexeme:               { | Line: 6
+[        parser_advance(): parser.Current] Type: 33          TOKEN_PRINT| Length:  7 | Lexeme:         println | Line: 7
+[       parser_advance(): parser.Previous] Type: 33          TOKEN_PRINT| Length:  7 | Lexeme:         println | Line: 7
+[        parser_advance(): parser.Current] Type: 22         TOKEN_STRING| Length:  9 | Lexeme:       "failure" | Line: 7
+[parsePrecedence()]======
+[       parser_advance(): parser.Previous] Type: 22         TOKEN_STRING| Length:  9 | Lexeme:       "failure" | Line: 7
+[        parser_advance(): parser.Current] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 7
+[[parsePrecedence()] Consumed this token.] Type: 22         TOKEN_STRING| Length:  9 | Lexeme:       "failure" | Line: 7
+[       parser_advance(): parser.Previous] Type: 10      TOKEN_SEMICOLON| Length:  1 | Lexeme:               ; | Line: 7
+[        parser_advance(): parser.Current] Type:  3    TOKEN_RIGHT_BRACE| Length:  1 | Lexeme:               } | Line: 8
+[       parser_advance(): parser.Previous] Type:  3    TOKEN_RIGHT_BRACE| Length:  1 | Lexeme:               } | Line: 8
+[        parser_advance(): parser.Current] Type: 48            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 9
+[       parser_advance(): parser.Previous] Type: 48            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 9
+[        parser_advance(): parser.Current] Type: 48            TOKEN_EOF| Length:  0 | Lexeme:                 | Line: 9
+== code ==
+OFFS  LINE	OPCCODE
+0000    1	OP_CONSTANT_LONG (C.Index:    1 ' Value: hello world)
+0005 OP_DEFINE_GLOBAL
+0006 OP_CONSTANT      (C.Index    0 ' Value: greeting)
+0008 OP_CONSTANT      (C.Index    0 ' Value: greeting)
+0010    2	OP_GET_GLOBAL
+0011 OP_CONSTANT      (C.Index    0 ' Value: greeting)
+0013 OP_CONSTANT      (C.Index    2 ' Value: greeting)
+0015 OP_LEN
+0016 Unknown OpCode 22 at offset 0016
+0017    4	OP_GET_GLOBAL
+0018 OP_CONSTANT      (C.Index    0 ' Value: greeting)
+0020 OP_CONSTANT      (C.Index    3 ' Value: greeting)
+0022 OP_CONSTANT_LONG (C.Index:    4 ' Value: hello world)
+0027 OP_EQUAL
+0028 0031 OP_POP
+0032 OP_GET_GLOBAL
+0033 OP_CONSTANT      (C.Index    0 ' Value: greeting)
+0035 OP_CONSTANT      (C.Index    5 ' Value: greeting)
+0037 OP_LEN
+0038 OP_CONSTANT_LONG (C.Index:    6 ' Value: 11)
+0043 OP_EQUAL
+0044 0047 OP_POP
+0048    5	OP_CONSTANT_LONG (C.Index:    7 ' Value: success!)
+0053 Unknown OpCode 22 at offset 0053
+0054    6	0057 OP_POP
+0058    7	OP_CONSTANT_LONG (C.Index:    8 ' Value: failure)
+0063 Unknown OpCode 22 at offset 0063
+          offset 0-><-offset 0
+0000    1	OP_CONSTANT_LONG (C.Index:    1 ' Value: hello world)
+          offset 0->[hello world]<-offset 1
+0005 OP_DEFINE_GLOBAL
+          offset 0-><-offset 0
+0010    2	OP_GET_GLOBAL
+          offset 0->[hello world]<-offset 1
+0015 OP_LEN
+          offset 0->[11]<-offset 1
+0016 Unknown OpCode 22 at offset 0016
 11
+          offset 0-><-offset 0
+0017    4	OP_GET_GLOBAL
+          offset 0->[hello world]<-offset 1
+0022 OP_CONSTANT_LONG (C.Index:    4 ' Value: hello world)
+          offset 0->[hello world][hello world]<-offset 2
+0027 OP_EQUAL
+          offset 0->[true]<-offset 1
+0028           offset 0->[true]<-offset 1
+0031 OP_POP
+          offset 0-><-offset 0
+0032 OP_GET_GLOBAL
+          offset 0->[hello world]<-offset 1
+0037 OP_LEN
+          offset 0->[11]<-offset 1
+0038 OP_CONSTANT_LONG (C.Index:    6 ' Value: 11)
+          offset 0->[11][11]<-offset 2
+0043 OP_EQUAL
+          offset 0->[true]<-offset 1
+0044           offset 0->[true]<-offset 1
+0047 OP_POP
+          offset 0-><-offset 0
+0048    5	OP_CONSTANT_LONG (C.Index:    7 ' Value: success!)
+          offset 0->[success!]<-offset 1
+0053 Unknown OpCode 22 at offset 0053
 success!
+          offset 0-><-offset 0
+0054    6	          offset 0-><-offset 0
+0064    9	OP_RETURN

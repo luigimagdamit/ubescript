@@ -550,9 +550,16 @@ func ifStatement() {
 	patchJump(elseJump)
 }
 func printStatement() {
+	keyword := (getLexeme(parser.Previous))
+
 	expression()
 	consume(TOKEN_SEMICOLON)
-	emitByte(OP_SHOW)
+	if keyword == "println" {
+		emitByte(OP_NEWLINE)
+	} else {
+		emitByte(OP_SHOW)
+	}
+
 }
 func whileStatement() {
 	loopStart := currentChunk().Count
@@ -600,6 +607,7 @@ func declaration() {
 }
 func statement() {
 	if parseMatch(TOKEN_PRINT) {
+
 		printStatement()
 	} else if parseMatch(TOKEN_IF) {
 		ifStatement()

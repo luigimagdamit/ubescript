@@ -366,9 +366,17 @@ func run() InterpretResult {
 			push(BOOL_VAL(valuesEqual(a, b)))
 		case OP_SHOW:
 			//fmt.Printf("Printed ")
-			printValue(pop())
-			fmt.Println()
 
+			res := pop()
+			// chars := res.as.obj.Value.(*ObjString).chars
+			// last := (string(chars[len(chars)-2:]))
+
+			printValue(res)
+
+		case OP_NEWLINE:
+			res := pop()
+			printValue(res)
+			fmt.Println()
 		}
 
 	}

@@ -104,7 +104,7 @@ func printValue(val Value) {
 		fmt.Printf("nil")
 		break
 	case VAL_NUMBER:
-		fmt.Printf("%g", AS_NUMBER(val))
+		fmt.Printf("%d", int(AS_NUMBER(val)))
 	case VAL_OBJ:
 		printObject(val)
 	}

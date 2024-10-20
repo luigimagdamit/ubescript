@@ -4,9 +4,9 @@ let evil_greeting = "goodbye world!"
 let good = false
 
 if !good {
-    echo evil_greeting
+    println evil_greeting
 }
 good = !good
 if good {
-    echo greeting
+    println greeting
 } 

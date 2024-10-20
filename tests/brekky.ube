@@ -1,7 +1,7 @@
 let breakfast str = "beignets"
 let beverage str = "cafe au lait"
 
-print(breakfast)
+println(breakfast)
 breakfast = breakfast + " with " + beverage
 
-print(breakfast)
+println(breakfast)
