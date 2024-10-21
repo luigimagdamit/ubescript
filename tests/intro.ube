@@ -1,3 +1,4 @@
+// basics
 let name str = "ube"
 let age int = 400
 
@@ -14,7 +15,7 @@ if name == "ube" and favorite == "saffron and rose" {
 if age == 400 println("i belong in a museum")
 else println("the museum belongs to me")
 
-
+// variables
 let cat str = "meow"
 let dog str = "woof"
 let mouse1, mouse2, mouse3 = "squeek", "squeek", "squeek"
@@ -26,9 +27,9 @@ println("Dog says " + dog)
 mouse1 = "deadmau5"
 println("Mouse says " + mouse1)
 
+// logic
 let name = "beach"
 let sleepy = false
 
 if !sleepy println("Let's drive!")
 else println("Let's go home...")
-
