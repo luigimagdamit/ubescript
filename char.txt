@@ -1,12 +1,36 @@
-println("hello world")
+let width, height = 256, 256
+let j, i = 0, 0
+let r, g, b
 
-let breakfast str = "beignets"
-let beverage str = "cafe au lait"
+println("P3")
+echo width
+echo " "
+echo height
+println(" ")
+echo 255
+println(" ")
 
-println(breakfast)
+while j < height {
+    while i < width {
+        r = i / (width -1)
+        g = j / (height - 1)
+        b = 1
 
-// "beignets"
-breakfast = breakfast + " with " + beverage
+        let ir = 256 * r
+        let ig = 256 * g
+        let ib = 256 * b
 
-println(breakfast)
-// "beignets with au lait"
+        echo ir
+        echo " "
+        echo ig
+        echo " "
+        echo ib
+        println(" ")
+
+        i = i + 1
+        
+    }
+    j = j + 1
+    i = i * 0
+    
+}

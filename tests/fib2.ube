@@ -2,11 +2,11 @@ let n1 int = 0
 let n2 int = 1
 let tmp int
 
-let n int = 20
+let n int = 10
 let i int = 0
 
 while i < n  {
-    echo n1
+    println(n1)
     tmp = n2
     n2 = n1 + n2
     n1 = tmp

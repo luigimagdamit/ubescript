@@ -63,6 +63,34 @@ func TestFib(t *testing.T) {
 	// Print the file content
 	fmt.Println(string(data))
 }
+func TestFib2(t *testing.T) {
+	// Run the command
+	cmd := exec.Command("./ubescript", "./tests/fib2.ube")
+	output, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("Error executing command: %v", err)
+	}
+
+	// Write the command output to a file
+	err = ioutil.WriteFile("output.txt", output, 0644)
+	if err != nil {
+		t.Fatalf("Error writing to file: %v", err)
+	}
+
+	// Read the output file
+	data, err := ioutil.ReadFile("output.txt")
+	if err != nil {
+		t.Errorf("Error reading file: %v", err)
+	}
+
+	expected := "0\n1\n1\n2\n3\n5\n8\n13\n21\n34\n"
+	if string(data) != expected {
+		t.Errorf("Expected %q, got %q", expected, string(data))
+	}
+
+	// Print the file content
+	fmt.Println(string(data))
+}
 func TestAssign(t *testing.T) {
 	// Run the command
 	cmd := exec.Command("./ubescript", "./tests/assign.ube")

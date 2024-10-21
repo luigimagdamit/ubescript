@@ -80,7 +80,7 @@ func consume(tokenType TokenType) {
 		return
 	}
 	if DEBUG_COMPILER_OUTPUT {
-		fmt.Println("[consume()]")
+		fmt.Println("[consume()]", "Expected Type: ", tokenType)
 		fmt.Println(parser.Current)
 		printToken(parser.Current, "consume")
 	}
@@ -513,6 +513,35 @@ func varDeclaration() {
 	global := parseVariable("Expect variable name")
 
 	parser.Current.Message = "Expected proper type annotation or =, but instead found '" + getLexeme(parser.Current) + "'"
+	if parseMatch(TOKEN_COMMA) {
+		fmt.Println("TOKEN_COMMA")
+		var globals ([][4]uint8)
+		globals = append(globals, global)
+
+		for !check(TOKEN_EQUAL) && !check(TOKEN_SEMICOLON) {
+			fmt.Println(getLexeme(parser.Current), check(TOKEN_SEMICOLON))
+			varName := parseVariable("expect variable name")
+			globals = append(globals, varName)
+			parseMatch(TOKEN_COMMA)
+		}
+		if parseMatch(TOKEN_EQUAL) {
+			for i := 0; i < len(globals); i++ {
+				expression() // expr
+				// ,
+				parseMatch(TOKEN_COMMA)
+				defineVariable(globals[i])
+			}
+		} else {
+			for i := 0; i < len(globals); i++ {
+				emitByte(OP_NIL) // expr
+				// ,
+				defineVariable(globals[i])
+			}
+		}
+
+		consume(TOKEN_SEMICOLON)
+		return
+	}
 	if parseMatch(TOKEN_TYPE) {
 		// idk do something i guess
 	} else {
