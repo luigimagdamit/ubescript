@@ -514,12 +514,12 @@ func varDeclaration() {
 
 	parser.Current.Message = "Expected proper type annotation or =, but instead found '" + getLexeme(parser.Current) + "'"
 	if parseMatch(TOKEN_COMMA) {
-		fmt.Println("TOKEN_COMMA")
+
 		var globals ([][4]uint8)
 		globals = append(globals, global)
 
 		for !check(TOKEN_EQUAL) && !check(TOKEN_SEMICOLON) {
-			fmt.Println(getLexeme(parser.Current), check(TOKEN_SEMICOLON))
+
 			varName := parseVariable("expect variable name")
 			globals = append(globals, varName)
 			parseMatch(TOKEN_COMMA)

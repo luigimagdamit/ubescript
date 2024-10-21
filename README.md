@@ -6,7 +6,7 @@
 ---
 ubescript is a gradually typed, high level, compiled programming language. It focuses on maintaining a balance between readability and expressiveness. It currently compiles to a bytecode format and is run from a custom made virtual machine architecture.
 
-ubescript pulls inspiration from the simplicity of Go, while developing a strong typing system found in Rust.
+ubescript pulls inspiration from the simplicity of Go, while developing a strong typing system found in Rust, and stealing from the convienience of Python semantics 
 
 ## Planned Features
 ---
@@ -72,24 +72,42 @@ let n int = len(greeting)
 
 let equals12 = n == 12
 
-echo greeting + " has the length: " 
-echo n 
+println(greeting + " has the length: ") 
+println(n) 
 
-echo "and its equal to 12: "
-echo equals12
+println("and its equal to 12: ")
+println(equals12)
 ```
-### Scoping
 
+
+### Fibonacci
+
+```rust
+let n1, n2 = 0, 1
+let tmp int
+
+let i, n = 0, 10
+
+while i < n  {
+    println(n1)
+    tmp = n2
+    n2 = n1 + n2
+    n1 = tmp
+    i = i + 1
+}
+```
+
+### Scoping
 ```rust
 let x int = 24 / 2
 let y int = 4
 
-echo x / y
+println(x / y)
 
 {
     let y int = 2
-    echo x / y
+    println(x / y)
 }
 
-echo x / y
+println(x / y)
 ```
