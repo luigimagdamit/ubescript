@@ -24,7 +24,7 @@ func errorAt(token Token) {
 		return
 	}
 	parser.PanicMode = true
-	fmt.Printf("[Line %d] Error", token.Line)
+	fmt.Printf("[CompileError] Error on line %d", token.Line)
 
 	if token.Type == TOKEN_EOF {
 		fmt.Printf(" at end")
@@ -33,7 +33,10 @@ func errorAt(token Token) {
 	} else {
 		fmt.Printf(" at %d:%d", token.Line, token.Start)
 	}
-	fmt.Printf(": %s\n", token.Message)
+	if token.Message != nil {
+		fmt.Printf(": %s\n", *token.Message)
+	}
+
 	parser.HadError = true
 }
 func errorAtPrevious(token Token) {
@@ -67,7 +70,8 @@ func parser_advance() {
 		}
 
 		// otherwise lets generate the lexical error here
-		curToken.Message = "TOKEN_ERROR Found"
+		msg := "TOKEN_ERROR Found"
+		curToken.Message = &msg
 		errorAtCurrent(curToken)
 	}
 }
@@ -109,7 +113,7 @@ func emitLoop(loopStart int) {
 
 	offset := currentChunk().Count - loopStart + 2
 
-	emitByte((uint8(offset) >> 8) & 0xff)
+	emitByte((uint8(offset >> 8)) & 0xff)
 	emitByte(uint8(offset) & 0xff)
 }
 func emitJump(instruction uint8) int {
@@ -233,7 +237,8 @@ func literal(canAssign bool) {
 // parser.Previous == "(" Token
 func grouping(canAssign bool) {
 	expression() // Parse expression, parser.Current should land at )
-	parser.Current.Message = "Expect ')' after expression."
+	msg := "Expect ')' after expression but found " + getLexeme(parser.Current)
+	parser.Current.Message = &msg
 	consume(TOKEN_RIGHT_PAREN)
 }
 
@@ -314,14 +319,11 @@ func unary(canAssign bool) {
 	switch operatorType {
 	case TOKEN_MINUS:
 		emitByte(OP_NEGATE)
-		break
 	case TOKEN_BANG:
 		emitByte(OP_NOT)
-		break
 	case TOKEN_LEN:
 		emitByte(OP_LEN)
 	case TOKEN_PRINT:
-
 		emitByte(OP_SHOW)
 	default:
 		return
@@ -391,7 +393,8 @@ func parsePrecedence(precedence Precedence) {
 	var prefixRule ParseFn = getRule(prevTok.Type).Prefix
 	if prefixRule == nil {
 		//fmt.Println("eee")
-		prevTok.Message = "Expect expression"
+		msg := "Expect expression, but instead found " + getLexeme(parser.Current)
+		prevTok.Message = &msg
 		errorAtPrevious(prevTok)
 		return
 	}
@@ -405,7 +408,8 @@ func parsePrecedence(precedence Precedence) {
 		infixRule(canAssign)
 	}
 	if canAssign && parseMatch(TOKEN_EQUAL) {
-		parser.Current.Message = "Invalid Assignment target"
+		msg := "Invalid Assignment target"
+		parser.Current.Message = &msg
 		errorAtCurrent(parser.Current)
 	}
 }
@@ -427,7 +431,8 @@ func resolveLocal(compiler *Compiler, name *Token) [4]uint8 {
 
 		if identifiersEqual(name, &local.Name) {
 			if local.Depth == -1 {
-				parser.Current.Message = "Cant read local variable in its own initializer"
+				msg := "Cant read local variable in its own initializer"
+				parser.Current.Message = &msg
 				errorAtCurrent(parser.Current)
 			}
 			return splitUInt32(uint32(i))
@@ -462,7 +467,8 @@ func declareVariable() {
 			break
 		}
 		if identifiersEqual(name, &local.Name) {
-			parser.Current.Message = "Error declaring locals"
+			msg := "Error declaring locals"
+			parser.Current.Message = &msg
 			errorAtCurrent(parser.Current)
 		}
 	}
@@ -506,13 +512,15 @@ func block() {
 	for !check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF) {
 		declaration()
 	}
-	parser.Current.Message = "Expect } after block but found " + getLexeme(parser.Current)
+	msg := "Expect } after block but found " + getLexeme(parser.Current)
+	parser.Current.Message = &msg
 	consume(TOKEN_RIGHT_BRACE)
 }
 func varDeclaration() {
 	global := parseVariable("Expect variable name")
 
-	parser.Current.Message = "Expected proper type annotation or =, but instead found '" + getLexeme(parser.Current) + "'"
+	msg := "Expected proper type annotation or =, but instead found '" + getLexeme(parser.Current) + "'"
+	parser.Current.Message = &msg
 	if parseMatch(TOKEN_COMMA) {
 
 		var globals ([][4]uint8)
@@ -552,7 +560,8 @@ func varDeclaration() {
 	} else {
 		emitByte(OP_NIL)
 	}
-	parser.Current.Message = "Expected ; but found " + getLexeme(parser.Current)
+	msg = "Expected ; but found " + getLexeme(parser.Current)
+	parser.Current.Message = &msg
 	consume(TOKEN_SEMICOLON)
 	defineVariable(global)
 }

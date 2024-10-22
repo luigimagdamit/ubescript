@@ -126,7 +126,7 @@ func errorToken(message string) Token {
 
 	token.Start = scanner.Start
 	token.Length = scanner.Current - scanner.Start
-	token.Message = message
+	token.Message = &message
 	fmt.Printf("===\n" + "===\n")
 	token.Line = scanner.Line
 	return *token

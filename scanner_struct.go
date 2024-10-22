@@ -12,7 +12,7 @@ type Token struct {
 	Start   int
 	Length  int
 	Line    int
-	Message string
+	Message *string
 }
 
 type TokenType int

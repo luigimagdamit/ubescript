@@ -1,34 +1,4 @@
-let name str = "ube"
-let age int = 400
-
-println("My name is " + name + "!")
-
-let favorite = "saffron and rose"
-
-if name == "ube" and favorite == "saffron and rose" {
-    println("persian icecream")
-} else {
-    println(":(")
-}
-
-if age == 400 println("i belong in a museum")
-else println("the museum belongs to me")
-
-
-let cat str = "meow"
-let dog str = "woof"
-let mouse1, mouse2, mouse3 = "squeek", "squeek", "squeek"
-
-let pets int = 3
-println("Cat says " + cat)
-println("Dog says " + dog)
-
-mouse1 = "deadmau5"
-println("Mouse says " + mouse1)
-
 let name = "beach"
 let sleepy = false
 
-if !sleepy println("Let's drive!")
-else println("Let's go home...")
-
+if !sleepy println("Let's drive!"); else println("Let's go home...";)

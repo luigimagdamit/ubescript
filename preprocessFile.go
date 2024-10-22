@@ -22,33 +22,38 @@ func preprocessFile(filename string) (string, error) {
 
 	// Read file line by line
 	var res string = ""
+	var closed bool = true
 	for scanner.Scan() {
 		line := scanner.Text()
+
 		for i := 0; i < len(line); i++ {
 			cur := string(line[i])
 			// fmt.Println(string(line[i]))
 			res += cur
 
 		}
+		res = strings.TrimRight(res, " ")
 		lastChar := string(res[len(res)-1])
-		// var closed bool = true
-		// if lastChar == "(" {
-		// 	closed = false
-		// } else if lastChar == ")" {
-		// 	closed = true
-		// }
+
+		if lastChar == "(" {
+
+			closed = false
+
+		} else if lastChar == ")" {
+			closed = true
+		}
 		if lastChar == " " {
 			// fmt.Println("AHHH")
 			// if lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," && lastChar != "}" && lastChar != " " {
 			// 	res += ";"
 			// }
 			if len(line) < 0 {
-				res = strings.TrimRight(res, " ") + ";"
+
 			}
 
 			// fmt.Println(res)
 		}
-		if lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," && lastChar != "}" && lastChar != " " {
+		if closed && lastChar != "{" && lastChar != "(" && lastChar != "[" && lastChar != ";" && lastChar != "\n" && lastChar != "," && lastChar != "}" && lastChar != " " {
 			res += ";"
 		}
 		res += "\n"
