@@ -582,19 +582,22 @@ func expressionStatement() {
 	emitByte(OP_POP)
 }
 func forStatement() {
-	expression()
+	if check(TOKEN_NUMBER) {
+		expression()
 
-	loopStart := currentChunk().Count
+		loopStart := currentChunk().Count
 
-	exitJump := emitJump(OP_JUMP_IF_FALSE)
-	emitByte(OP_EMIT_BREAK)
-	emitByte(OP_POP)
-	statement()
+		exitJump := emitJump(OP_JUMP_IF_FALSE)
+		emitByte(OP_EMIT_BREAK)
+		emitByte(OP_POP)
+		statement()
 
-	emitLoop(loopStart)
+		emitLoop(loopStart)
 
-	patchJump(exitJump)
-	emitByte(OP_POP)
+		patchJump(exitJump)
+		emitByte(OP_POP)
+	}
+
 }
 func ifStatement() {
 	expression()

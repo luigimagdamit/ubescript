@@ -18,7 +18,7 @@ else println("the museum belongs to me")
 // variables
 let cat str = "meow"
 let dog str = "woof"
-let mouse1, mouse2, mouse3 = "squeek", "squeek", "squeek"
+let mouse1, mouse2, mouse3 (str)= "squeek", "squeek", "squeek"
 
 let pets int = 3
 println("Cat says " + cat)
