@@ -1,59 +1,42 @@
-# `ubescript is a small, portable, dynamically typed scripting language.`
+# `ubescript`
+
+`ubescript` is a small, gradually typed programming language built around the semantics and ease of readability of Python and the simplicity of Go. It is yet another C-inspired language, with a focus on conciseness, convenience, and expressivity.
 
  **Note: This project is still currently under construction**
 
+Many thanks to Bob Nystrom and his `lox` language, serving as the foundational basis for this project.
 ## Intro
 ---
-ubescript is a gradually typed, high level, compiled programming language. It focuses on maintaining a balance between readability and expressiveness. It currently compiles to a bytecode format and is run from a custom made virtual machine architecture.
 
-ubescript pulls inspiration from the simplicity of Go, while developing a strong typing system found in Rust, and stealing from the convienience of Python semantics 
+```rust
+let cat str = "meow" // optional type annotations
+let dog str = "woof"
+let isDog = true
 
+if isDog println(dog); else println(cat) // python style one line if-else
+
+let mouse1, mouse2, mouse3 (str) = "squeek", "squeek", "squeek" // multiple assignment 
+
+let miceCount int = 3
+println("Cat says " + cat) // "meow"
+println("Dog says " + dog) // "woof"
+for 0..miceCount println("Mouse says " + mouse3) // "squeek", "squeek", "squeek"
+
+mouse1 = "deadmau5"
+println("Mouse also says " + mouse1) // "deadmau5"
+```
 ## Planned Features
 ---
 - Target Compile to C down to machine code
-- Gradual typing
-- Compile to register based IR > LLVM
 - Record Types
-- Loop interchange optimization
 - Some() Construct
-- Further OpCode optimizations
+- Many more...
 
 ## Examples
 
 ### Intro
 ```rust
 // basics
-let name str = "ube"
-let age int = 400
-
-println("My name is " + name + "!")
-
-let favorite = "saffron and rose"
-
-if name == "ube" and favorite == "saffron and rose" {
-    println("persian icecream")
-} else {
-    println(":(")
-}
-
-if age == 400 println("i belong in a museum")
-else println("the museum belongs to me")
-
-// variables
-let cat str = "meow"
-let dog str = "woof"
-let isDog = true
-
-if isDog println(dog); else println(cat)
-
-let mouse1, mouse2, mouse3 (str) = "squeek", "squeek", "squeek"
-
-let pets int = 3
-println("Cat says " + cat)
-println("Dog says " + dog)
-
-mouse1 = "deadmau5"
-println("Mouse says " + mouse1)
 
 // logic
 let name = "beach"
@@ -108,6 +91,8 @@ println("ube" + "script")
 
 println("abc" == "abc")
 // print 'true'
+
+echo "hello world!" // prints 'hello world' without \n
 ```
 
 ### Numerical Operations
@@ -116,26 +101,41 @@ println(1 + 2)
 // prints 3
 println(1 * 2 * 3)
 // prints 6
-1..400
-// places 1-400 on the VM stack
 ```
 
 
 ### Variables
 ```rust
-let greeting str = "hello world"
-let n int = len(greeting)
+let name str = "ube"
+let age int = 400
 
-let equals12 = n == 12
+println("My name is " + name + "!")
 
-println(greeting + " has the length: ") 
-println(n) 
+let favorite = "saffron and rose"
 
-println("and its equal to 12: ")
-println(equals12)
+if name == "ube" and favorite == "saffron and rose" {
+    println("persian icecream")
+} else {
+    println(":(")
+}
+
+if age == 400 println("i belong in a museum")
+else println("the museum belongs to me")
+
 ```
 
+### Fizzbuzz
+```rust
+let i int = 0
 
+for 0..30 {
+    if (i % 5 == 0 and i % 3 == 0) println("fizzbuzz")
+    else if (i % 3 == 0) println("fizz")
+    else if (i % 5 == 0) println("buzz")
+    else println(i)
+    i = i + 1
+}
+```
 ### Fibonacci
 
 ```rust
