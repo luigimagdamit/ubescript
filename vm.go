@@ -203,6 +203,17 @@ func run() InterpretResult {
 		case OP_RETURN:
 
 			return INTERPRET_OK
+		case OP_EMIT_BREAK:
+			b := AS_NUMBER(pop()) - 1
+			a := AS_NUMBER(pop())
+			if a == b {
+				push(BOOL_VAL(false))
+				push(BOOL_VAL(false))
+			} else {
+				push(NUMBER_VAL(a))
+				push(NUMBER_VAL(b))
+				push(BOOL_VAL(true))
+			}
 		case OP_LOOP:
 			offset := READ_SHORT()
 			vm.ip -= int(offset)
@@ -261,10 +272,14 @@ func run() InterpretResult {
 		case OP_DOTDOT:
 			b := AS_NUMBER(pop())
 			a := AS_NUMBER(pop())
+			push(NUMBER_VAL(a))
+			push(NUMBER_VAL(b))
 
-			for i := a; i <= b; i++ {
-				push(NUMBER_VAL(float64(i)))
-			}
+			// push(BOOL_VAL(false))
+			// for i := a; i <= b; i++ {
+			// 	push(NUMBER_VAL(float64(i)))
+			// }
+			//push(NUMBER_VAL(float64(b - a))) // returns the size arg
 		case OP_LEN:
 			b := AS_STRING(pop())
 			push(NUMBER_VAL(float64(b.length)))
@@ -283,6 +298,17 @@ func run() InterpretResult {
 			push(NUMBER_VAL(-AS_NUMBER(res)))
 			//fmt.Println(vm.stack, vm.stackTop, res)
 			break
+		case OP_PLUS_PLUS:
+			if !IS_NUMBER(stackPeek(0)) {
+				runtimeError()
+				return INTERPRET_RUNTIME_ERROR
+			}
+
+			res := pop()
+
+			//fmt.Println(vm.stack, vm.stackTop, res)
+			// unwrap the operand then negate it
+			push(NUMBER_VAL(AS_NUMBER(res) + 1))
 		case OP_CONSTANT:
 			var constant Value = READ_CONSTANT()
 			push(constant) // producing a vlue, we push it onto the stack to be used

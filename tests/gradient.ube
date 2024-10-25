@@ -1,12 +1,6 @@
-let width int = 256
-let height int = 256
-
-let j int = 0
-let i int = 0
-
-let r int
-let g int
-let b int
+let width, height = 256, 256
+let i, j = 0, 0
+let r, g, b
 
 println("P3")
 echo width

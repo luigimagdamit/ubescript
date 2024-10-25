@@ -325,6 +325,8 @@ func unary(canAssign bool) {
 		emitByte(OP_LEN)
 	case TOKEN_PRINT:
 		emitByte(OP_SHOW)
+	case TOKEN_PLUSPLUS:
+		emitByte(OP_PLUS_PLUS)
 	default:
 		return
 	}
@@ -377,6 +379,7 @@ func init() {
 	rules[TOKEN_TYPE] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_DOTDOT] = ParseRule{nil, parseBinary, PREC_TERM}
 	rules[TOKEN_LEN] = ParseRule{unary, nil, PREC_NONE}
+	rules[TOKEN_PLUSPLUS] = ParseRule{unary, nil, PREC_NONE}
 	rules[TOKEN_EOF] = ParseRule{nil, nil, PREC_NONE}
 
 }
@@ -526,11 +529,15 @@ func varDeclaration() {
 		var globals ([][4]uint8)
 		globals = append(globals, global)
 
-		for !check(TOKEN_EQUAL) && !check(TOKEN_SEMICOLON) {
+		for !check(TOKEN_EQUAL) && !check(TOKEN_SEMICOLON) && !check(TOKEN_LEFT_PAREN) {
 
 			varName := parseVariable("expect variable name")
 			globals = append(globals, varName)
 			parseMatch(TOKEN_COMMA)
+		}
+		if parseMatch(TOKEN_LEFT_PAREN) {
+			parser_advance()
+			consume(TOKEN_RIGHT_PAREN)
 		}
 		if parseMatch(TOKEN_EQUAL) {
 			for i := 0; i < len(globals); i++ {
@@ -572,6 +579,21 @@ func expressionStatement() {
 	expression()
 
 	consume(TOKEN_SEMICOLON)
+	emitByte(OP_POP)
+}
+func forStatement() {
+	expression()
+
+	loopStart := currentChunk().Count
+
+	exitJump := emitJump(OP_JUMP_IF_FALSE)
+	emitByte(OP_EMIT_BREAK)
+	emitByte(OP_POP)
+	statement()
+
+	emitLoop(loopStart)
+
+	patchJump(exitJump)
 	emitByte(OP_POP)
 }
 func ifStatement() {
@@ -647,6 +669,8 @@ func statement() {
 	if parseMatch(TOKEN_PRINT) {
 
 		printStatement()
+	} else if parseMatch(TOKEN_FOR) {
+		forStatement()
 	} else if parseMatch(TOKEN_IF) {
 		ifStatement()
 	} else if parseMatch(TOKEN_WHILE) {

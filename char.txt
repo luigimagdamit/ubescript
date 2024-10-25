@@ -1,4 +1,0 @@
-let name = "beach"
-let sleepy = false
-
-if !sleepy println("Let's drive!"); else println("Let's go home...";)

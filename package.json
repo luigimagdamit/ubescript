@@ -1,0 +1,25 @@
+{
+  "name": "ubescript",
+  "displayName": "ubescript",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.94.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "ube",
+      "aliases": ["ubescript", "ube"],
+      "extensions": [".ube"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "ube",
+      "scopeName": "source.ube",
+      "path": "./syntaxes/ube.tmLanguage.json"
+    }]
+  }
+}

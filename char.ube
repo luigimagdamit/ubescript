@@ -1,0 +1,11 @@
+let n1, n2, tmp (int) = 0, 1, 0
+let i, n (int) = 0, 10
+
+let runs int = 10
+for 0..runs {
+    println(n1)
+    tmp = n2
+    n2 = n1 + n2
+    n1 = tmp
+    ++i
+}
