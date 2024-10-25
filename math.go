@@ -18,3 +18,6 @@ func greater(a Value, b Value) Value {
 func less(a Value, b Value) Value {
 	return BOOL_VAL(AS_NUMBER(a) < AS_NUMBER(b))
 }
+func mod(a Value, b Value) Value {
+	return NUMBER_VAL(float64((int(AS_NUMBER(a)) % int(AS_NUMBER(b)))))
+}

@@ -62,6 +62,8 @@ func scanToken() Token {
 		return makeToken(TOKEN_SLASH)
 	case "*":
 		return makeToken(TOKEN_STAR)
+	case "%":
+		return makeToken(TOKEN_PERCENT)
 	case "=":
 		return makeToken(compare("=", TOKEN_EQUAL_EQUAL, TOKEN_EQUAL))
 	case "!":

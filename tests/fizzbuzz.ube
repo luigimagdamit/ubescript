@@ -1,0 +1,9 @@
+let i int = 0
+
+for 0..30 {
+    if (i % 5 == 0 and i % 3 == 0) println("fizzbuzz")
+    else if (i % 3 == 0) println("fizz")
+    else if (i % 5 == 0) println("buzz")
+    else println(i)
+    i = i + 1
+}

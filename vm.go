@@ -67,6 +67,7 @@ func stackPeek(distance int) Value {
 // nil and false are falsey
 // true and all other values are truthy
 func isFalsey(val Value) bool {
+
 	return IS_NIL(val) || (IS_BOOL(val) && !AS_BOOL(val))
 }
 func concatenate() {
@@ -280,6 +281,8 @@ func run() InterpretResult {
 			// 	push(NUMBER_VAL(float64(i)))
 			// }
 			//push(NUMBER_VAL(float64(b - a))) // returns the size arg
+		case OP_MOD:
+			BINARY_OP(VAL_NUMBER, mod)
 		case OP_LEN:
 			b := AS_STRING(pop())
 			push(NUMBER_VAL(float64(b.length)))

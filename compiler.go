@@ -210,6 +210,8 @@ func parseBinary(canAssign bool) {
 		break
 	case TOKEN_DOTDOT:
 		emitByte(OP_DOTDOT)
+	case TOKEN_PERCENT:
+		emitByte(OP_MOD)
 	default:
 		return
 	}
@@ -380,6 +382,7 @@ func init() {
 	rules[TOKEN_DOTDOT] = ParseRule{nil, parseBinary, PREC_TERM}
 	rules[TOKEN_LEN] = ParseRule{unary, nil, PREC_NONE}
 	rules[TOKEN_PLUSPLUS] = ParseRule{unary, nil, PREC_NONE}
+	rules[TOKEN_PERCENT] = ParseRule{nil, parseBinary, PREC_FACTOR}
 	rules[TOKEN_EOF] = ParseRule{nil, nil, PREC_NONE}
 
 }
