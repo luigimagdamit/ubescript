@@ -10,6 +10,10 @@ type Parser struct {
 	Previous  Token
 	HadError  bool
 	PanicMode bool
+	OpMode    bool
+	LH        string
+	RH        string
+	ValCount  int
 }
 
 var parser Parser
@@ -125,12 +129,12 @@ func emitJump(instruction uint8) int {
 func emitReturn() {
 	emitByte(OP_RETURN)
 }
-func emitConstant(val Value) {
+func emitConstant(val Value) int {
 	writeChunk(currentChunk(), OP_CONSTANT_LONG, parser.Current.Line)
 	res := makeConstant(val)
 	emitBytes(res[0], res[1])
 	emitBytes(res[2], res[3])
-
+	return int(combineUInt8Array(res))
 }
 func patchJump(offset int) {
 	jump := currentChunk().Count - offset - 1
@@ -171,10 +175,12 @@ func endScope() {
 	}
 }
 func parseBinary(canAssign bool) {
+	parser.OpMode = true
 	// left hand operand consumed
 	// we have consumed the operator
 	var operatorType TokenType = parser.Previous.Type
 	var rule *ParseRule = getRule(operatorType)
+
 	// why pass it in with 1?
 	parsePrecedence(rule.Precedence + 1)
 	switch operatorType {
@@ -198,6 +204,11 @@ func parseBinary(canAssign bool) {
 		break
 	case TOKEN_PLUS:
 		emitByte(OP_ADD)
+		fmt.Print("%")
+		fmt.Printf("%d", parser.ValCount)
+		fmt.Println(" = add i32 " + parser.LH + ", " + parser.RH)
+		parser.LH = fmt.Sprintf("%%%d", parser.ValCount)
+		parser.ValCount++
 		break
 	case TOKEN_MINUS:
 		emitByte(OP_SUBTRACT)
@@ -253,13 +264,25 @@ func parseNumber(canAssign bool) {
 	if DEBUG_COMPILER_OUTPUT {
 		fmt.Println("lex: ", lexeme, parser.Previous)
 	}
+	//fmt.Print(" i32\n")
+
+	//fmt.Printf("i32 " + getLexeme(token) + "\n")
 
 	value, err := strconv.Atoi(lexeme)
 	if err != nil {
 		fmt.Println("Error parsing number")
 		return
 	}
+	//fmt.Print(getLexeme(token))
 	emitConstant(NUMBER_VAL(float64(value)))
+
+	//
+	if !parser.OpMode {
+		parser.LH = getLexeme(token)
+	} else {
+		parser.RH = getLexeme(token)
+		parser.OpMode = false
+	}
 
 }
 func or_(canAssign bool) {
@@ -481,12 +504,21 @@ func declareVariable() {
 	addLocal(*name)
 }
 func parseVariable(errorMessage string) [4]uint8 {
+	fmt.Printf(getLexeme(parser.Current))
 	consume(TOKEN_IDENTIFIER)
 	declareVariable()
 	if current.ScopeDepth > 0 {
 		return [4]uint8{0, 0, 0, 0}
 	}
 	return identifierConstant(&parser.Previous)
+}
+func parseVariableString(errorMessage string) string {
+	fmt.Printf(getLexeme(parser.Current))
+	consume(TOKEN_IDENTIFIER)
+	declareVariable()
+
+	return getLexeme(parser.Current)
+
 }
 func defineVariable(global [4]uint8) {
 	if current.ScopeDepth > 0 {
@@ -523,6 +555,7 @@ func block() {
 	consume(TOKEN_RIGHT_BRACE)
 }
 func varDeclaration() {
+	fmt.Print("%")
 	global := parseVariable("Expect variable name")
 
 	msg := "Expected proper type annotation or =, but instead found '" + getLexeme(parser.Current) + "'"
@@ -562,17 +595,23 @@ func varDeclaration() {
 	}
 	if parseMatch(TOKEN_TYPE) {
 		// idk do something i guess
+
 	} else {
 
 	}
 	if parseMatch(TOKEN_EQUAL) {
+		fmt.Printf(" = alloca")
 		expression()
+		index := combineUInt8Array(global)
+		fmt.Print(" %", AS_STRING(currentChunk().Constants.Values[index]).chars)
+
 	} else {
 		emitByte(OP_NIL)
 	}
 	msg = "Expected ; but found " + getLexeme(parser.Current)
 	parser.Current.Message = &msg
 	consume(TOKEN_SEMICOLON)
+
 	defineVariable(global)
 }
 func markInitialized() {
@@ -619,9 +658,13 @@ func printStatement() {
 	keyword := (getLexeme(parser.Previous))
 
 	expression()
+	fmt.Print("%")
+	fmt.Printf("%d = getelementptr [4 x i8], [4 x i8]* @.str, i32 0, i32 0", parser.ValCount)
+
+	fmt.Printf("\ncall i32 (i8*, ...) @printf(i8* %%%d, i32 %%%d)", parser.ValCount, parser.ValCount-1)
 	consume(TOKEN_SEMICOLON)
 	if keyword == "println" {
-		emitByte(OP_NEWLINE)
+		// emitByte(OP_NEWLINE)
 	} else {
 		emitByte(OP_SHOW)
 	}
@@ -665,6 +708,7 @@ func declaration() {
 
 		varDeclaration()
 	} else {
+
 		statement()
 	}
 	if parser.PanicMode {
@@ -672,6 +716,7 @@ func declaration() {
 	}
 }
 func statement() {
+
 	if parseMatch(TOKEN_PRINT) {
 
 		printStatement()
@@ -707,9 +752,13 @@ func compile(source *string, c *Chunk) bool {
 	// expression()
 	// // NEED TO CHANGE BACK TO EOF PROBABLY
 	// consume(TOKEN_SEMICOLON) // equality check for current
+	fmt.Print("@.str = private unnamed_addr constant [4 x i8] c\"%d\\0A\\00\", align 1\ndeclare i32 @printf(i8*, ...)\ndefine i32 @main() {\nentry:\n")
 	for !parseMatch(TOKEN_EOF) {
 		declaration()
 	}
+
+	fmt.Print("\nret i32 0\n}\n")
+
 	endCompiler()
 	return !parser.HadError
 }
