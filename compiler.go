@@ -60,15 +60,15 @@ func printToken(token Token, name string) {
 func getLexeme(token Token) string {
 	return string(scanner.Source[token.Start : token.Start+token.Length])
 }
-func parser_advance() {
-	parser.Previous = parser.Current // consume the current token
+func Advance() {
+	parser.Previous = parser.Current // Consume the current token
 
 	for {
 		var curToken Token = scanToken()
 
 		parser.Current = curToken // generate token from recent lexeme in source
-		printToken(parser.Previous, "parser_advance(): parser.Previous")
-		printToken(curToken, "parser_advance(): parser.Current")
+		printToken(parser.Previous, "Advance(): parser.Previous")
+		printToken(curToken, "Advance(): parser.Current")
 		if parser.Current.Type != TOKEN_ERROR {
 			break // if its valid, exit the loop
 		}
@@ -81,16 +81,16 @@ func parser_advance() {
 }
 
 // Conditional advance that validates the the current token type
-func consume(tokenType TokenType) {
+func Consume(tokenType TokenType) {
 
 	if parser.Current.Type == tokenType {
-		parser_advance()
+		Advance()
 		return
 	}
 	if DEBUG_COMPILER_OUTPUT {
-		fmt.Println("[consume()]", "Expected Type: ", tokenType)
+		fmt.Println("[Consume()]", "Expected Type: ", tokenType)
 		fmt.Println(parser.Current)
-		printToken(parser.Current, "consume")
+		printToken(parser.Current, "Consume")
 	}
 
 	errorAtCurrent(parser.Current)
@@ -98,44 +98,14 @@ func consume(tokenType TokenType) {
 func check(tokenType TokenType) bool {
 	return parser.Current.Type == tokenType
 }
-func parseMatch(tokenType TokenType) bool {
+func Match(tokenType TokenType) bool {
 	if !check(tokenType) {
 		return false
 	}
-	parser_advance()
+	Advance()
 	return true
 }
-func emitByte(b uint8) {
-	writeChunk(currentChunk(), b, parser.Previous.Line)
-}
-func emitBytes(b1 uint8, b2 uint8) {
-	emitByte(b1)
-	emitByte(b2)
-}
-func emitLoop(loopStart int) {
-	emitByte(OP_LOOP)
 
-	offset := currentChunk().Count - loopStart + 2
-
-	emitByte((uint8(offset >> 8)) & 0xff)
-	emitByte(uint8(offset) & 0xff)
-}
-func emitJump(instruction uint8) int {
-	emitByte(instruction)
-	emitByte(0xff)
-	emitByte(0xff)
-	return currentChunk().Count - 2
-}
-func emitReturn() {
-	emitByte(OP_RETURN)
-}
-func emitConstant(val Value) int {
-	writeChunk(currentChunk(), OP_CONSTANT_LONG, parser.Current.Line)
-	res := makeConstant(val)
-	emitBytes(res[0], res[1])
-	emitBytes(res[2], res[3])
-	return int(combineUInt8Array(res))
-}
 func patchJump(offset int) {
 	jump := currentChunk().Count - offset - 1
 	if jump > 65535 {
@@ -174,7 +144,7 @@ func endScope() {
 		current.LocalCount--
 	}
 }
-func parseBinary(canAssign bool) {
+func Binary(canAssign bool) {
 	parser.OpMode = true
 	// left hand operand consumed
 	// we have consumed the operator
@@ -186,39 +156,40 @@ func parseBinary(canAssign bool) {
 	switch operatorType {
 	case TOKEN_BANG_EQUAL:
 		emitBytes(OP_EQUAL, OP_NOT)
-		break
 	case TOKEN_EQUAL_EQUAL:
 		emitByte(OP_EQUAL)
-		break
 	case TOKEN_GREATER:
 		emitByte(OP_GREATER)
-		break
 	case TOKEN_GREATER_EQUAL:
 		emitBytes(OP_LESS, OP_NOT)
-		break
 	case TOKEN_LESS:
 		emitByte(OP_LESS)
-		break
 	case TOKEN_LESS_EQUAL:
 		emitBytes(OP_GREATER, OP_NOT)
-		break
 	case TOKEN_PLUS:
 		emitByte(OP_ADD)
-		fmt.Print("%")
-		fmt.Printf("%d", parser.ValCount)
-		fmt.Println(" = add i32 " + parser.LH + ", " + parser.RH)
-		parser.LH = fmt.Sprintf("%%%d", parser.ValCount)
-		parser.ValCount++
-		break
+		if COMPILER_MODE {
+			fmt.Print("%")
+			fmt.Printf("%d", parser.ValCount)
+			fmt.Println(" = add i32 " + parser.LH + ", " + parser.RH)
+			parser.LH = fmt.Sprintf("%%%d", parser.ValCount)
+			parser.ValCount++
+		}
+
 	case TOKEN_MINUS:
 		emitByte(OP_SUBTRACT)
-		break
+
+		if COMPILER_MODE {
+			fmt.Print("%")
+			fmt.Printf("%d", parser.ValCount)
+			fmt.Println(" = sub i32 " + parser.LH + ", " + parser.RH)
+			parser.LH = fmt.Sprintf("%%%d", parser.ValCount)
+			parser.ValCount++
+		}
 	case TOKEN_STAR:
 		emitByte(OP_MULTIPLY)
-		break
 	case TOKEN_SLASH:
 		emitByte(OP_DIVIDE)
-		break
 	case TOKEN_DOTDOT:
 		emitByte(OP_DOTDOT)
 	case TOKEN_PERCENT:
@@ -228,37 +199,33 @@ func parseBinary(canAssign bool) {
 	}
 
 }
-func literal(canAssign bool) {
-
+func Literal(canAssign bool) {
 	switch parser.Previous.Type {
 	case TOKEN_FALSE:
 		emitByte(OP_FALSE)
-		break
 	case TOKEN_NIL:
 		emitByte(OP_NIL)
-		break
 	case TOKEN_TRUE:
 		emitByte(OP_TRUE)
-		break
 	default:
 		return
 	}
 
 }
 
-// Parsing functions for () grouping. We assume ( as already been consumed
+// Parsing functions for () Grouping. We assume ( as already been consumed
 // parser.Previous == "(" Token
-func grouping(canAssign bool) {
-	expression() // Parse expression, parser.Current should land at )
-	msg := "Expect ')' after expression but found " + getLexeme(parser.Current)
+func Grouping(canAssign bool) {
+	Expr() // Parse Expr, parser.Current should land at )
+	msg := "Expect ')' after Expr but found " + getLexeme(parser.Current)
 	parser.Current.Message = &msg
-	consume(TOKEN_RIGHT_PAREN)
+	Consume(TOKEN_RIGHT_PAREN)
 }
 
-// parseNumber() will get the lexeme pointed at by parser.Previous
+// Number() will get the lexeme pointed at by parser.Previous
 // meaning that the desired parssed number will need to have been consumed / advanced()
 // wrapper for writeConstant() and turns lexeme into appropriate bytecode
-func parseNumber(canAssign bool) {
+func Number(canAssign bool) {
 	var token Token = parser.Previous
 	var lexeme string = getLexeme(token)
 	if DEBUG_COMPILER_OUTPUT {
@@ -285,7 +252,7 @@ func parseNumber(canAssign bool) {
 	}
 
 }
-func or_(canAssign bool) {
+func Or(canAssign bool) {
 	elseJump := emitJump(OP_JUMP_IF_FALSE)
 	endJump := emitJump(OP_JUMP)
 
@@ -295,14 +262,19 @@ func or_(canAssign bool) {
 	parsePrecedence(PREC_OR)
 	patchJump(endJump)
 }
-func parseString(canAssign bool) {
-	// emitConstant()
-	c := (getLexeme(parser.Previous))
-	c = c[1 : len(c)-1]
-	var objString Obj = *copyString(c, len(c))
-	emitConstant(OBJ_VAL(objString))
+func createString(c string) Obj {
+	return *copyString(c, len(c))
 }
-func namedVariable(name Token, canAssign bool) {
+func trimQuotes(s string) string {
+	return s[1 : len(s)-1]
+}
+func String(canAssign bool) {
+	str := (getLexeme(parser.Previous))
+	str = trimQuotes(str)
+	newString := createString(str)
+	emitConstant(OBJ_VAL(newString))
+}
+func NameVar(name Token, canAssign bool) {
 	var getOp uint8
 	var setOp uint8
 	var arg [4]uint8 = resolveLocal(current, &name)
@@ -317,9 +289,9 @@ func namedVariable(name Token, canAssign bool) {
 		setOp = OP_SET_GLOBAL
 	}
 
-	if canAssign && parseMatch(TOKEN_EQUAL) {
+	if canAssign && Match(TOKEN_EQUAL) {
 
-		expression()
+		Expr()
 		emitByte(setOp)
 
 		for i := 0; i < 4; i++ {
@@ -333,11 +305,11 @@ func namedVariable(name Token, canAssign bool) {
 	}
 
 }
-func variable(canAssign bool) {
-	namedVariable(parser.Previous, canAssign)
+func Variable(canAssign bool) {
+	NameVar(parser.Previous, canAssign)
 }
 
-func unary(canAssign bool) {
+func Unary(canAssign bool) {
 	var operatorType TokenType = parser.Previous.Type
 	// parse at higher level so it ignores binary operators
 	parsePrecedence(PREC_UNARY)
@@ -360,7 +332,7 @@ func unary(canAssign bool) {
 var rules = make([]ParseRule, TOKEN_EOF+1)
 
 func init() {
-	rules[TOKEN_LEFT_PAREN] = ParseRule{grouping, nil, PREC_NONE}
+	rules[TOKEN_LEFT_PAREN] = ParseRule{Grouping, nil, PREC_NONE}
 	rules[TOKEN_RIGHT_PAREN] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_LEFT_BRACE] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_RIGHT_BRACE] = ParseRule{nil, nil, PREC_NONE}
@@ -368,44 +340,44 @@ func init() {
 	rules[TOKEN_RIGHT_BRACKET] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_COMMA] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_DOT] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_MINUS] = ParseRule{unary, parseBinary, PREC_TERM}
-	rules[TOKEN_PLUS] = ParseRule{nil, parseBinary, PREC_TERM}
+	rules[TOKEN_MINUS] = ParseRule{Unary, Binary, PREC_TERM}
+	rules[TOKEN_PLUS] = ParseRule{nil, Binary, PREC_TERM}
 	rules[TOKEN_SEMICOLON] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_SLASH] = ParseRule{nil, parseBinary, PREC_FACTOR}
-	rules[TOKEN_STAR] = ParseRule{nil, parseBinary, PREC_FACTOR}
-	rules[TOKEN_BANG] = ParseRule{unary, nil, PREC_NONE}
-	rules[TOKEN_BANG_EQUAL] = ParseRule{nil, parseBinary, PREC_EQUALITY}
+	rules[TOKEN_SLASH] = ParseRule{nil, Binary, PREC_FACTOR}
+	rules[TOKEN_STAR] = ParseRule{nil, Binary, PREC_FACTOR}
+	rules[TOKEN_BANG] = ParseRule{Unary, nil, PREC_NONE}
+	rules[TOKEN_BANG_EQUAL] = ParseRule{nil, Binary, PREC_EQUALITY}
 	rules[TOKEN_EQUAL] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_EQUAL_EQUAL] = ParseRule{nil, parseBinary, PREC_EQUALITY}
-	rules[TOKEN_GREATER] = ParseRule{nil, parseBinary, PREC_COMPARISON}
-	rules[TOKEN_GREATER_EQUAL] = ParseRule{nil, parseBinary, PREC_COMPARISON}
-	rules[TOKEN_LESS] = ParseRule{nil, parseBinary, PREC_COMPARISON}
-	rules[TOKEN_LESS_EQUAL] = ParseRule{nil, parseBinary, PREC_COMPARISON}
-	rules[TOKEN_IDENTIFIER] = ParseRule{variable, nil, PREC_NONE}
-	rules[TOKEN_STRING] = ParseRule{parseString, nil, PREC_NONE}
-	rules[TOKEN_NUMBER] = ParseRule{parseNumber, nil, PREC_NONE}
-	rules[TOKEN_AND] = ParseRule{nil, and_, PREC_AND}
+	rules[TOKEN_EQUAL_EQUAL] = ParseRule{nil, Binary, PREC_EQUALITY}
+	rules[TOKEN_GREATER] = ParseRule{nil, Binary, PREC_COMPARISON}
+	rules[TOKEN_GREATER_EQUAL] = ParseRule{nil, Binary, PREC_COMPARISON}
+	rules[TOKEN_LESS] = ParseRule{nil, Binary, PREC_COMPARISON}
+	rules[TOKEN_LESS_EQUAL] = ParseRule{nil, Binary, PREC_COMPARISON}
+	rules[TOKEN_IDENTIFIER] = ParseRule{Variable, nil, PREC_NONE}
+	rules[TOKEN_STRING] = ParseRule{String, nil, PREC_NONE}
+	rules[TOKEN_NUMBER] = ParseRule{Number, nil, PREC_NONE}
+	rules[TOKEN_AND] = ParseRule{nil, And, PREC_AND}
 	rules[TOKEN_CLASS] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_ELSE] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_FALSE] = ParseRule{literal, nil, PREC_NONE}
+	rules[TOKEN_FALSE] = ParseRule{Literal, nil, PREC_NONE}
 	rules[TOKEN_FOR] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_FUN] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_IF] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_NIL] = ParseRule{literal, nil, PREC_NONE}
-	rules[TOKEN_OR] = ParseRule{nil, or_, PREC_OR}
-	rules[TOKEN_PRINT] = ParseRule{unary, nil, PREC_NONE}
+	rules[TOKEN_NIL] = ParseRule{Literal, nil, PREC_NONE}
+	rules[TOKEN_OR] = ParseRule{nil, Or, PREC_OR}
+	rules[TOKEN_PRINT] = ParseRule{Unary, nil, PREC_NONE}
 	rules[TOKEN_RETURN] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_SUPER] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_THIS] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_TRUE] = ParseRule{literal, nil, PREC_NONE}
+	rules[TOKEN_TRUE] = ParseRule{Literal, nil, PREC_NONE}
 	rules[TOKEN_VAR] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_WHILE] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_ERROR] = ParseRule{nil, nil, PREC_NONE}
 	rules[TOKEN_TYPE] = ParseRule{nil, nil, PREC_NONE}
-	rules[TOKEN_DOTDOT] = ParseRule{nil, parseBinary, PREC_TERM}
-	rules[TOKEN_LEN] = ParseRule{unary, nil, PREC_NONE}
-	rules[TOKEN_PLUSPLUS] = ParseRule{unary, nil, PREC_NONE}
-	rules[TOKEN_PERCENT] = ParseRule{nil, parseBinary, PREC_FACTOR}
+	rules[TOKEN_DOTDOT] = ParseRule{nil, Binary, PREC_TERM}
+	rules[TOKEN_LEN] = ParseRule{Unary, nil, PREC_NONE}
+	rules[TOKEN_PLUSPLUS] = ParseRule{Unary, nil, PREC_NONE}
+	rules[TOKEN_PERCENT] = ParseRule{nil, Binary, PREC_FACTOR}
 	rules[TOKEN_EOF] = ParseRule{nil, nil, PREC_NONE}
 
 }
@@ -415,14 +387,14 @@ func parsePrecedence(precedence Precedence) {
 		fmt.Println("[parsePrecedence()]======")
 	}
 
-	parser_advance()
+	Advance()
 	var prevTok Token = parser.Previous
 	printToken(prevTok, "[parsePrecedence()] Consumed this token.")
 	// access prefix func from rule
 	var prefixRule ParseFn = getRule(prevTok.Type).Prefix
 	if prefixRule == nil {
 		//fmt.Println("eee")
-		msg := "Expect expression, but instead found " + getLexeme(parser.Current)
+		msg := "Expect Expr, but instead found " + getLexeme(parser.Current)
 		prevTok.Message = &msg
 		errorAtPrevious(prevTok)
 		return
@@ -432,11 +404,11 @@ func parsePrecedence(precedence Precedence) {
 
 	// get precendence rule for current token
 	for precedence <= getRule(parser.Current.Type).Precedence {
-		parser_advance() // consume it if the prec is higher / continue parsing the whole expr
+		Advance() // Consume it if the prec is higher / continue parsing the whole expr
 		var infixRule ParseFn = getRule(parser.Previous.Type).Infix
 		infixRule(canAssign)
 	}
-	if canAssign && parseMatch(TOKEN_EQUAL) {
+	if canAssign && Match(TOKEN_EQUAL) {
 		msg := "Invalid Assignment target"
 		parser.Current.Message = &msg
 		errorAtCurrent(parser.Current)
@@ -460,7 +432,7 @@ func resolveLocal(compiler *Compiler, name *Token) [4]uint8 {
 
 		if identifiersEqual(name, &local.Name) {
 			if local.Depth == -1 {
-				msg := "Cant read local variable in its own initializer"
+				msg := "Cant read local Variable in its own initializer"
 				parser.Current.Message = &msg
 				errorAtCurrent(parser.Current)
 			}
@@ -504,8 +476,11 @@ func declareVariable() {
 	addLocal(*name)
 }
 func parseVariable(errorMessage string) [4]uint8 {
-	fmt.Printf(getLexeme(parser.Current))
-	consume(TOKEN_IDENTIFIER)
+	if COMPILER_MODE {
+		fmt.Printf(getLexeme(parser.Current))
+	}
+
+	Consume(TOKEN_IDENTIFIER)
 	declareVariable()
 	if current.ScopeDepth > 0 {
 		return [4]uint8{0, 0, 0, 0}
@@ -514,7 +489,7 @@ func parseVariable(errorMessage string) [4]uint8 {
 }
 func parseVariableString(errorMessage string) string {
 	fmt.Printf(getLexeme(parser.Current))
-	consume(TOKEN_IDENTIFIER)
+	Consume(TOKEN_IDENTIFIER)
 	declareVariable()
 
 	return getLexeme(parser.Current)
@@ -531,7 +506,7 @@ func defineVariable(global [4]uint8) {
 		emitByte(global[i])
 	}
 }
-func and_(canAssign bool) {
+func And(canAssign bool) {
 	endJump := emitJump(OP_JUMP_IF_FALSE)
 	emitByte(OP_POP)
 	parsePrecedence(PREC_AND)
@@ -539,47 +514,54 @@ func and_(canAssign bool) {
 }
 
 // returns rule at TokenType index
-// called by parseBinary() to look up precedence of operator
+// called by Binary() to look up precedence of operator
 func getRule(tokenType TokenType) *ParseRule {
 	return &rules[tokenType]
 }
-func expression() {
-	parsePrecedence(PREC_ASSIGNMENT) // the whole expression since it is the lowest precedence level
+func Expr() {
+	parsePrecedence(PREC_ASSIGNMENT) // the whole Expr since it is the lowest precedence level
 }
-func block() {
+func Block() {
 	for !check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF) {
-		declaration()
+		Declaration()
 	}
-	msg := "Expect } after block but found " + getLexeme(parser.Current)
+	msg := "Expect } after Block but found " + getLexeme(parser.Current)
 	parser.Current.Message = &msg
-	consume(TOKEN_RIGHT_BRACE)
+	Consume(TOKEN_RIGHT_BRACE)
+}
+func SomeDeclaration() [][4]uint8 {
+	var someGlobals ([][4]uint8)
+	for !check(TOKEN_EQUAL) && !check(TOKEN_SEMICOLON) && !check(TOKEN_LEFT_PAREN) {
+
+		varName := parseVariable("expect Variable name")
+		someGlobals = append(someGlobals, varName)
+		Match(TOKEN_COMMA)
+	}
+	return someGlobals
 }
 func varDeclaration() {
-	fmt.Print("%")
-	global := parseVariable("Expect variable name")
+	if COMPILER_MODE {
+		fmt.Print("%")
+	}
+
+	global := parseVariable("Expect Variable name")
 
 	msg := "Expected proper type annotation or =, but instead found '" + getLexeme(parser.Current) + "'"
 	parser.Current.Message = &msg
-	if parseMatch(TOKEN_COMMA) {
+	if Match(TOKEN_COMMA) {
 
 		var globals ([][4]uint8)
 		globals = append(globals, global)
-
-		for !check(TOKEN_EQUAL) && !check(TOKEN_SEMICOLON) && !check(TOKEN_LEFT_PAREN) {
-
-			varName := parseVariable("expect variable name")
-			globals = append(globals, varName)
-			parseMatch(TOKEN_COMMA)
+		globals = append(globals, SomeDeclaration()...)
+		if Match(TOKEN_LEFT_PAREN) {
+			Advance()
+			Consume(TOKEN_RIGHT_PAREN)
 		}
-		if parseMatch(TOKEN_LEFT_PAREN) {
-			parser_advance()
-			consume(TOKEN_RIGHT_PAREN)
-		}
-		if parseMatch(TOKEN_EQUAL) {
+		if Match(TOKEN_EQUAL) {
 			for i := 0; i < len(globals); i++ {
-				expression() // expr
+				Expr() // expr
 				// ,
-				parseMatch(TOKEN_COMMA)
+				Match(TOKEN_COMMA)
 				defineVariable(globals[i])
 			}
 		} else {
@@ -590,49 +572,54 @@ func varDeclaration() {
 			}
 		}
 
-		consume(TOKEN_SEMICOLON)
+		Consume(TOKEN_SEMICOLON)
 		return
 	}
-	if parseMatch(TOKEN_TYPE) {
+	if Match(TOKEN_TYPE) {
 		// idk do something i guess
 
 	} else {
 
 	}
-	if parseMatch(TOKEN_EQUAL) {
-		fmt.Printf(" = alloca")
-		expression()
+	if Match(TOKEN_EQUAL) {
+		if COMPILER_MODE {
+			fmt.Printf(" = alloca")
+		}
+
+		Expr()
 		index := combineUInt8Array(global)
-		fmt.Print(" %", AS_STRING(currentChunk().Constants.Values[index]).chars)
+		if COMPILER_MODE {
+			fmt.Print(" %", AS_STRING(currentChunk().Constants.Values[index]).chars)
+		}
 
 	} else {
 		emitByte(OP_NIL)
 	}
 	msg = "Expected ; but found " + getLexeme(parser.Current)
 	parser.Current.Message = &msg
-	consume(TOKEN_SEMICOLON)
+	Consume(TOKEN_SEMICOLON)
 
 	defineVariable(global)
 }
 func markInitialized() {
 	current.Locals[current.LocalCount-1].Depth = current.ScopeDepth
 }
-func expressionStatement() {
-	expression()
+func ExprStatement() {
+	Expr()
 
-	consume(TOKEN_SEMICOLON)
+	Consume(TOKEN_SEMICOLON)
 	emitByte(OP_POP)
 }
-func forStatement() {
+func For() {
 	if check(TOKEN_NUMBER) {
-		expression()
+		Expr()
 
 		loopStart := currentChunk().Count
 
 		exitJump := emitJump(OP_JUMP_IF_FALSE)
 		emitByte(OP_EMIT_BREAK)
 		emitByte(OP_POP)
-		statement()
+		Statement()
 
 		emitLoop(loopStart)
 
@@ -641,41 +628,47 @@ func forStatement() {
 	}
 
 }
-func ifStatement() {
-	expression()
+func If() {
+	Expr()
+	// then statement body
 	var thenJump int = emitJump(OP_JUMP_IF_FALSE)
 	emitByte(OP_POP)
-	statement()
+	Statement()
+
+	// else statement body
 	var elseJump = emitJump(OP_JUMP)
 	patchJump(thenJump)
 	emitByte(OP_POP)
-	if parseMatch(TOKEN_ELSE) {
-		statement()
+	if Match(TOKEN_ELSE) {
+		Statement()
 	}
 	patchJump(elseJump)
 }
-func printStatement() {
+func Print() {
 	keyword := (getLexeme(parser.Previous))
 
-	expression()
-	fmt.Print("%")
-	fmt.Printf("%d = getelementptr [4 x i8], [4 x i8]* @.str, i32 0, i32 0", parser.ValCount)
+	Expr()
+	if COMPILER_MODE {
+		fmt.Print("%")
+		fmt.Printf("%d = getelementptr [4 x i8], [4 x i8]* @.str, i32 0, i32 0", parser.ValCount)
 
-	fmt.Printf("\ncall i32 (i8*, ...) @printf(i8* %%%d, i32 %%%d)", parser.ValCount, parser.ValCount-1)
-	consume(TOKEN_SEMICOLON)
+		fmt.Printf("\ncall i32 (i8*, ...) @printf(i8* %%%d, i32 %%%d)", parser.ValCount, parser.ValCount-1)
+	}
+	Consume(TOKEN_SEMICOLON)
 	if keyword == "println" {
-		// emitByte(OP_NEWLINE)
+		if !COMPILER_MODE {
+			emitByte(OP_NEWLINE)
+		}
 	} else {
 		emitByte(OP_SHOW)
 	}
-
 }
-func whileStatement() {
+func While() {
 	loopStart := currentChunk().Count
-	expression()
+	Expr()
 	exitJump := emitJump(OP_JUMP_IF_FALSE)
 	emitByte(OP_POP)
-	statement()
+	Statement()
 	emitLoop(loopStart)
 
 	patchJump(exitJump)
@@ -699,41 +692,42 @@ func synchronize() {
 		default:
 
 		}
-		parser_advance()
+		Advance()
 	}
 }
-func declaration() {
+func Declaration() {
 
-	if parseMatch(TOKEN_VAR) {
+	if Match(TOKEN_VAR) {
 
 		varDeclaration()
 	} else {
 
-		statement()
+		Statement()
 	}
 	if parser.PanicMode {
 		synchronize()
 	}
 }
-func statement() {
+func Scope() {
+	beginScope()
+	Block()
+	endScope()
+}
+func Statement() {
 
-	if parseMatch(TOKEN_PRINT) {
+	if Match(TOKEN_PRINT) {
 
-		printStatement()
-	} else if parseMatch(TOKEN_FOR) {
-		forStatement()
-	} else if parseMatch(TOKEN_IF) {
-		ifStatement()
-	} else if parseMatch(TOKEN_WHILE) {
-		whileStatement()
-	} else if parseMatch(TOKEN_LEFT_BRACE) {
-
-		beginScope()
-
-		block()
-		endScope()
+		Print()
+	} else if Match(TOKEN_FOR) {
+		For()
+	} else if Match(TOKEN_IF) {
+		If()
+	} else if Match(TOKEN_WHILE) {
+		While()
+	} else if Match(TOKEN_LEFT_BRACE) {
+		Scope()
 	} else {
-		expressionStatement()
+		ExprStatement()
 	}
 }
 func compile(source *string, c *Chunk) bool {
@@ -748,16 +742,21 @@ func compile(source *string, c *Chunk) bool {
 	parser.HadError = false
 	parser.PanicMode = false
 
-	parser_advance()
-	// expression()
+	Advance()
+	// Expr()
 	// // NEED TO CHANGE BACK TO EOF PROBABLY
-	// consume(TOKEN_SEMICOLON) // equality check for current
-	fmt.Print("@.str = private unnamed_addr constant [4 x i8] c\"%d\\0A\\00\", align 1\ndeclare i32 @printf(i8*, ...)\ndefine i32 @main() {\nentry:\n")
-	for !parseMatch(TOKEN_EOF) {
-		declaration()
+	// Consume(TOKEN_SEMICOLON) // equality check for current
+	if COMPILER_MODE {
+		fmt.Printf("@.str = private unnamed_addr constant [4 x i8] c\"%%d\\0A\\00\", align 1\ndeclare i32 @printf(i8*, ...)\ndefine i32 @main() {\nentry:\n")
 	}
 
-	fmt.Print("\nret i32 0\n}\n")
+	for !Match(TOKEN_EOF) {
+		Declaration()
+	}
+
+	if COMPILER_MODE {
+		fmt.Print("\nret i32 0\n}\n")
+	}
 
 	endCompiler()
 	return !parser.HadError
